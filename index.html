@@ -3,12 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>مینی‌اپ Evulve</title>
-  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <title>Evulve MiniApp</title>
   <style>
     :root {
       --bg: #0f172a;
-      --card: rgba(30, 41, 59, 0.9);
+      --card: rgba(30, 41, 59, 0.92);
       --accent: #38bdf8;
       --accent2: #818cf8;
       --text: #f8fafc;
@@ -26,27 +25,27 @@
     }
     .header {
       text-align: center;
-      padding: 16px 12px;
+      padding: 15px 12px;
       background: linear-gradient(135deg, rgba(56, 189, 248, 0.15), rgba(129, 140, 248, 0.15));
       border: 1px solid var(--border);
       border-radius: 18px;
       margin-bottom: 14px;
     }
-    .header h1 { font-size: 20px; background: linear-gradient(90deg, #38bdf8, #818cf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-    .header p { font-size: 12.5px; color: var(--muted); margin-top: 5px; }
+    .header h1 { font-size: 19px; background: linear-gradient(90deg, #38bdf8, #818cf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .header p { font-size: 12px; color: var(--muted); margin-top: 4px; }
     .tabs {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 8px;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 6px;
       margin-bottom: 14px;
     }
     .tab-btn {
       background: var(--card);
       border: 1px solid var(--border);
       color: var(--muted);
-      padding: 10px 6px;
+      padding: 9px 4px;
       border-radius: 12px;
-      font-size: 13px;
+      font-size: 12px;
       font-weight: 600;
       cursor: pointer;
     }
@@ -62,23 +61,22 @@
       padding: 15px;
       margin-bottom: 14px;
     }
-    .card h3 { font-size: 14.5px; margin-bottom: 12px; color: var(--accent); }
+    .card h3 { font-size: 14px; margin-bottom: 11px; color: var(--accent); }
     .info-row {
       display: flex;
       justify-content: space-between;
       align-items: center;
       padding: 9px 0;
       border-bottom: 1px solid rgba(255,255,255,0.06);
-      font-size: 13.5px;
+      font-size: 13px;
     }
     .info-row:last-child { border-bottom: none; }
     .info-label { color: var(--muted); }
-    /* اصلاح کامل راست‌چین برای نمایش درست «۱۰ سال و ۶ ماه» */
     .info-val {
       font-weight: 600;
       direction: rtl;
       text-align: left;
-      unicode-bidi: embed;
+      unicode-bidi: plaintext;
     }
     .ltr-val {
       direction: ltr;
@@ -96,7 +94,7 @@
       border: 1px solid var(--border);
       background: rgba(15, 23, 42, 0.7);
       color: var(--muted);
-      font-size: 13px;
+      font-size: 12.5px;
       font-weight: 600;
       cursor: pointer;
     }
@@ -105,7 +103,6 @@
       color: #38bdf8;
       border-color: #38bdf8;
     }
-    /* استایل چرخنده تاریخ مشابه آیفون */
     .wheel-wrapper {
       position: relative;
       height: 150px;
@@ -145,12 +142,11 @@
     .wheel-item {
       height: 30px;
       line-height: 30px;
-      font-size: 14px;
+      font-size: 13.5px;
       color: var(--muted);
       scroll-snap-align: center;
       cursor: pointer;
       user-select: none;
-      transition: color 0.15s, font-weight 0.15s;
     }
     .wheel-item.selected {
       color: #fff;
@@ -164,7 +160,7 @@
       border: 1px solid var(--border);
       background: rgba(15, 23, 42, 0.85);
       color: #fff;
-      font-size: 14px;
+      font-size: 13.5px;
       margin-bottom: 10px;
       text-align: center;
       direction: ltr;
@@ -172,12 +168,12 @@
     }
     .btn {
       width: 100%;
-      padding: 12px;
+      padding: 11px;
       border-radius: 12px;
       border: none;
       background: linear-gradient(135deg, #0284c7, #4f46e5);
       color: #fff;
-      font-size: 14px;
+      font-size: 13.5px;
       font-weight: 600;
       cursor: pointer;
       margin-top: 4px;
@@ -187,13 +183,41 @@
       border: 1px solid var(--border);
       margin-top: 8px;
     }
+    .genre-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+      margin-top: 8px;
+    }
+    .genre-btn {
+      padding: 10px 8px;
+      border-radius: 11px;
+      border: 1px solid var(--border);
+      background: rgba(15, 23, 42, 0.75);
+      color: #e2e8f0;
+      font-size: 12.5px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .genre-btn:active { background: rgba(56, 189, 248, 0.25); }
+    .movie-card {
+      background: rgba(15, 23, 42, 0.75);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 12px;
+      margin-top: 10px;
+      line-height: 1.75;
+      font-size: 13px;
+    }
+    .movie-title { color: #38bdf8; font-weight: 700; font-size: 14px; margin-bottom: 4px; }
+    .movie-meta { color: #fbbf24; font-size: 12px; margin-bottom: 6px; }
     .result-box {
       margin-top: 12px;
       padding: 12px;
       border-radius: 12px;
       background: rgba(56, 189, 248, 0.1);
       border: 1px solid rgba(56, 189, 248, 0.28);
-      font-size: 13.5px;
+      font-size: 13px;
       line-height: 1.9;
       display: none;
       direction: rtl;
@@ -219,14 +243,15 @@
 <body>
 
   <div class="header">
-    <h1>✨ مینی‌اپ هوشمند Evulve</h1>
-    <p>ابزارهای کاربردی سن اکانت و تقویم دقیق</p>
+    <h1>✨ Evulve MiniApp</h1>
+    <p>سن اکانت، تقویم هوشمند و پیشنهاد فیلم و سریال</p>
   </div>
 
   <div class="tabs">
     <button class="tab-btn active" onclick="switchTab('tab-id', this)">🪪 سن اکانت</button>
     <button class="tab-btn" onclick="switchTab('tab-cal', this)">📅 تقویم و سن</button>
-    <button class="tab-btn" onclick="switchTab('tab-links', this)">🚀 دسترسی سریع</button>
+    <button class="tab-btn" onclick="switchTab('tab-movie', this)">🎬 فیلم و سریال</button>
+    <button class="tab-btn" onclick="switchTab('tab-links', this)">🚀 لینک‌ها</button>
   </div>
 
   <!-- تب ۱: مشخصات و سن اکانت -->
@@ -236,21 +261,22 @@
       <div class="info-row"><span class="info-label">نام پروفایل:</span><span class="info-val" id="u-name">—</span></div>
       <div class="info-row"><span class="info-label">یوزرنیم:</span><span class="info-val ltr-val" id="u-user">—</span></div>
       <div class="info-row"><span class="info-label">آیدی عددی:</span><span class="info-val ltr-val" id="u-id">—</span></div>
-      <div class="info-row"><span class="info-label">سال ساخت:</span><span class="info-val" id="u-created">—</span></div>
-      <div class="info-row"><span class="info-label">عمر تقریبی:</span><span class="info-val" id="u-age">—</span></div>
+      <div class="info-row"><span class="info-label">تاریخ ساخت (شمسی):</span><span class="info-val" id="u-created-j">—</span></div>
+      <div class="info-row"><span class="info-label">تاریخ ساخت (میلادی):</span><span class="info-val ltr-val" id="u-created-g">—</span></div>
+      <div class="info-row"><span class="info-label">عمر تقریبی اکانت:</span><span class="info-val" id="u-age">—</span></div>
       <div class="info-row"><span class="info-label">وضعیت اکانت:</span><span class="info-val" id="u-badge">—</span></div>
       <button class="btn btn-outline" onclick="copyMyId()">📋 کپی آیدی عددی من</button>
     </div>
 
     <div class="card">
-      <h3>🔍 بررسی سن هر اکانت با آیدی عددی</h3>
-      <input type="text" id="custom-id-input" class="input-box" placeholder="مثال: 208574585" inputmode="numeric" />
-      <button class="btn" onclick="checkCustomId()">بررسی سن اکانت</button>
+      <h3>🔍 بررسی اکانت با آیدی عددی یا یوزرنیم</h3>
+      <input type="text" id="custom-id-input" class="input-box" placeholder="آیدی عددی (208574585) یا @username" />
+      <button class="btn" onclick="checkCustomId()">بررسی مشخصات و سن اکانت</button>
       <div id="custom-id-result" class="result-box"></div>
     </div>
   </div>
 
-  <!-- تب ۲: تقویم و محاسبه سن (چرخنده آیفونی + ورود دستی) -->
+  <!-- تب ۲: تقویم و محاسبه سن -->
   <div id="tab-cal" class="section">
     <div class="card">
       <h3>☀️ تاریخ امروز</h3>
@@ -259,17 +285,16 @@
     </div>
 
     <div class="card">
-      <h3>🎂 محاسبه دقیق سن و تبدیل تاریخ</h3>
+      <h3>🎂 محاسبه سن و تبدیل تاریخ</h3>
       <div class="cal-mode-switch">
         <button id="btn-mode-jalali" class="cal-mode-btn active" onclick="setCalMode('jalali')">☀️ تاریخ شمسی</button>
         <button id="btn-mode-greg" class="cal-mode-btn" onclick="setCalMode('greg')">🌍 تاریخ میلادی</button>
       </div>
 
-      <p style="font-size:12px; color:var(--muted); margin-bottom:8px; text-align:center;">
-        اعداد را بالا و پایین ببرید یا در کادر پایین تایپ کنید:
+      <p style="font-size:11.5px; color:var(--muted); margin-bottom:8px; text-align:center;">
+        اعداد را بالا و پایین ببرید یا مستقیم در کادر زیر تایپ کنید:
       </p>
 
-      <!-- چرخنده لمسی (روز / ماه / سال) -->
       <div class="wheel-wrapper">
         <div class="wheel-highlight"></div>
         <div id="wheel-day" class="wheel-col"></div>
@@ -277,20 +302,37 @@
         <div id="wheel-year" class="wheel-col"></div>
       </div>
 
-      <!-- کادر ورود دستی فرمت ربات -->
       <input type="text" id="birth-input" class="input-box" placeholder="1381/05/22" oninput="onManualInput()" />
-      <button class="btn" onclick="calcAge()">🧮 محاسبه سن دقیق</button>
+      <button class="btn" onclick="calcAge()">محاسبه سن و تبدیل تاریخ</button>
       <div id="age-result" class="result-box"></div>
     </div>
   </div>
 
-  <!-- تب ۳: لینک‌ها -->
+  <!-- تب ۳: پیشنهاد فیلم و سریال -->
+  <div id="tab-movie" class="section">
+    <div class="card">
+      <h3>🍿 پیشنهاد هوشمند فیلم و سریال</h3>
+      <button class="btn" onclick="showWeekendMovies()">🌟 پیشنهاد ویژه آخر هفته (تصادفی)</button>
+      <button class="btn btn-outline" onclick="fetchLiveNewSeries()">🆕 جدیدترین و داغ‌ترین‌های روز دنیا (زنده)</button>
+
+      <h3 style="margin-top:14px; margin-bottom:6px;">🎭 انتخاب بر اساس ژانر:</h3>
+      <div class="genre-grid">
+        <button class="genre-btn" onclick="showGenre('action')">🔥 اکشن و هیجانی</button>
+        <button class="genre-btn" onclick="showGenre('scifi')">🧠 علمی‌تخیلی و معمایی</button>
+        <button class="genre-btn" onclick="showGenre('horror')">😱 ترسناک و رازآلود</button>
+        <button class="genre-btn" onclick="showGenre('comedy')">😂 کمدی و حال‌خوب‌کن</button>
+        <button class="genre-btn" onclick="showGenre('crime')">🕵️‍♂️ جنایی و کارآگاهی</button>
+        <button class="genre-btn" onclick="showGenre('drama')">🎭 درام و احساسی</button>
+      </div>
+
+      <div id="movie-output" style="margin-top:12px;"></div>
+    </div>
+  </div>
+
+  <!-- تب ۴: لینک‌ها -->
   <div id="tab-links" class="section">
     <div class="card">
-      <h3>🚀 امکانات اصلی ربات Evulve</h3>
-      <p style="font-size:13px; color:var(--muted); line-height:1.8; margin-bottom:12px;">
-        برای استفاده از پیام ناشناس، مدیریت فایل و لینک، و دریافت پروکسی و کانفیگ رایگان، از دکمه‌های زیر استفاده کنید:
-      </p>
+      <h3>🚀 دسترسی سریع Evulve</h3>
       <button class="btn" onclick="openTgLink('https://t.me/exiism')">📢 ورود به کانال رسمی @exiism</button>
       <button class="btn btn-outline" onclick="openTgLink('https://t.me/Evulve')">💬 رزرو تبلیغات و ارتباط با مدیریت</button>
       <button class="btn btn-outline" onclick="closeApp()">🔙 بازگشت به محیط چت ربات</button>
@@ -300,18 +342,26 @@
   <div id="toast" class="toast">کپی شد!</div>
 
   <script>
-    const tg = window.Telegram && window.Telegram.WebApp ? window.Telegram.WebApp : null;
-    if (tg) { tg.ready(); tg.expand(); }
+    // استخراج مستقیم اطلاعات کاربر از هش آدرس (برای باز شدن فوری حتی بدون VPN و بدون نیاز به لود شدن سایت فیلترشده telegram.org)
+    function parseInitDataFromHash() {
+      try {
+        const hash = window.location.hash.slice(1);
+        const params = new URLSearchParams(hash);
+        const rawData = params.get('tgWebAppData');
+        if (rawData) {
+          const innerParams = new URLSearchParams(rawData);
+          const userStr = innerParams.get('user');
+          if (userStr) return JSON.parse(userStr);
+        }
+      } catch (e) {}
+      return null;
+    }
 
     const JALALI_MONTHS = ['', 'فروردین', 'اردیبهشت', 'خرداد', 'تیر', 'مرداد', 'شهریور', 'مهر', 'آبان', 'آذر', 'دی', 'بهمن', 'اسفند'];
     const GREG_MONTHS = ['', 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
-    function toFaDigits(str) {
-      return String(str).replace(/\d/g, d => '۰۱۲۳۴۵۶۷۸۹'[d]);
-    }
-    function toEnDigits(s) {
-      return String(s || '').replace(/[۰-۹]/g, d => '۰۱۲۳۴۵۶۷۸۹'.indexOf(d)).replace(/[٠-٩]/g, d => '٠١٢٣٤٥٦٧٨٩'.indexOf(d));
-    }
+    function toFaDigits(str) { return String(str).replace(/\d/g, d => '۰۱۲۳۴۵۶۷۸۹'[d]); }
+    function toEnDigits(s) { return String(s || '').replace(/[۰-۹]/g, d => '۰۱۲۳۴۵۶۷۸۹'.indexOf(d)).replace(/[٠-٩]/g, d => '٠١٢٣٤٥٦٧٨٩'.indexOf(d)); }
 
     function switchTab(tabId, btn) {
       document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
@@ -395,33 +445,37 @@
       else if (gy <= 2022) badge = '⭐️ میان‌رده و معتبر';
       else if (gy >= 2025) badge = '🆕 تازه‌وارد';
 
-      let ageParts = [];
-      if (yInt > 0) ageParts.push(`${toFaDigits(yInt)} سال`);
-      if (mInt > 0) ageParts.push(`${toFaDigits(mInt)} ماه`);
-      const ageText = ageParts.length > 0 ? ageParts.join(' و ') : 'کمتر از ۱ ماه';
+      // فرمت کاملاً راست‌بهچپ فارسی: «۱۰ سال و ۶ ماه»
+      let ageStr = '';
+      if (yInt > 0 && mInt > 0) ageStr = `\u200F${toFaDigits(yInt)} سال و ${toFaDigits(mInt)} ماه`;
+      else if (yInt > 0) ageStr = `\u200F${toFaDigits(yInt)} سال`;
+      else if (mInt > 0) ageStr = `\u200F${toFaDigits(mInt)} ماه`;
+      else ageStr = 'کمتر از ۱ ماه';
 
       return {
-        created: `${JALALI_MONTHS[jm]} ${toFaDigits(jy)} (${gy})`,
-        ageText,
+        jalaliStr: `\u200F${JALALI_MONTHS[jm]} ${toFaDigits(jy)}`,
+        gregStr: `${GREG_MONTHS[gm]} ${gy}`,
+        ageText: ageStr,
         badge
       };
     }
 
-    const user = tg && tg.initDataUnsafe && tg.initDataUnsafe.user ? tg.initDataUnsafe.user : null;
-    const myId = user ? user.id : 208574585;
-    document.getElementById('u-name').innerText = user ? [user.first_name, user.last_name].filter(Boolean).join(' ') : 'کاربر تلگرام';
-    document.getElementById('u-user').innerText = user && user.username ? '@' + user.username : 'ندارد';
+    const hashUser = parseInitDataFromHash();
+    const myId = hashUser ? hashUser.id : 208574585;
+    document.getElementById('u-name').innerText = hashUser ? [hashUser.first_name, hashUser.last_name].filter(Boolean).join(' ') : 'کاربر تلگرام';
+    document.getElementById('u-user').innerText = hashUser && hashUser.username ? '@' + hashUser.username : 'ندارد';
     document.getElementById('u-id').innerText = myId;
     const est = estimateAccount(myId);
     if (est) {
-      document.getElementById('u-created').innerText = est.created;
+      document.getElementById('u-created-j').innerText = est.jalaliStr;
+      document.getElementById('u-created-g').innerText = est.gregStr;
       document.getElementById('u-age').innerText = est.ageText;
       document.getElementById('u-badge').innerText = est.badge;
     }
 
     const now = new Date();
     const [tJy, tJm, tJd] = gregorianToJalali(now.getFullYear(), now.getMonth() + 1, now.getDate());
-    document.getElementById('today-jalali').innerText = `${toFaDigits(tJd)} ${JALALI_MONTHS[tJm]} ${toFaDigits(tJy)}`;
+    document.getElementById('today-jalali').innerText = `\u200F${toFaDigits(tJd)} ${JALALI_MONTHS[tJm]} ${toFaDigits(tJy)}`;
     document.getElementById('today-greg').innerText = `${now.getFullYear()}/${String(now.getMonth() + 1).padStart(2, '0')}/${String(now.getDate()).padStart(2, '0')}`;
 
     function copyMyId() {
@@ -432,24 +486,38 @@
     function checkCustomId() {
       const raw = toEnDigits(document.getElementById('custom-id-input').value).trim();
       const box = document.getElementById('custom-id-result');
-      if (!/^\d{5,15}$/.test(raw)) {
-        box.style.display = 'block';
-        box.innerText = '⚠️ لطفاً یک آیدی عددی معتبر وارد کنید.';
+      box.style.display = 'block';
+
+      // اگر آیدی عددی وارد شده باشد
+      const cleanNum = raw.replace(/^#?U_/, '');
+      if (/^\d{5,15}$/.test(cleanNum)) {
+        const res = estimateAccount(Number(cleanNum));
+        box.innerHTML =
+          `🔢 <b>آیدی عددی:</b> <span dir="ltr">${cleanNum}</span><br>` +
+          `☀️ <b>ساخت (شمسی):</b> حدود ${res.jalaliStr}<br>` +
+          `🌍 <b>ساخت (میلادی):</b> <span dir="ltr">${res.gregStr}</span><br>` +
+          `⏳ <b>عمر تقریبی:</b> ${res.ageText}<br>` +
+          `🎖 <b>وضعیت:</b> ${res.badge}<br>` +
+          `<button class="btn btn-outline" style="margin-top:8px;" onclick="openTgLink('tg://user?id=${cleanNum}')">👤 باز کردن پروفایل و مشاهده یوزرنیم</button>`;
         return;
       }
-      const res = estimateAccount(Number(raw));
-      box.style.display = 'block';
-      box.innerHTML =
-        `🔢 <b>آیدی عددی:</b> <span dir="ltr">${raw}</span><br>` +
-        `📅 <b>سال ساخت:</b> حدود ${res.created}<br>` +
-        `⏳ <b>عمر اکانت:</b> ${res.ageText}<br>` +
-        `🎖 <b>وضعیت:</b> ${res.badge}`;
+
+      // اگر یوزرنیم (@username) وارد شده باشد
+      const cleanUser = raw.replace(/^https?:\/\/t\.me\//i, '').replace(/^@/, '').trim();
+      if (/^[a-zA-Z0-9_]{4,32}$/.test(cleanUser)) {
+        box.innerHTML =
+          `🔗 <b>یوزرنیم انتخابی:</b> <span dir="ltr">@${cleanUser}</span><br>` +
+          `💡 برای دریافت آیدی عددی و سن دقیق این یوزرنیم، کافیست در بخش «🪪 آیدی عددی و سن اکانت» داخل چت ربات، یوزرنیم <b>@${cleanUser}</b> را بفرستید یا از دکمه «🔍 انتخاب با یوزرنیم» استفاده کنید.<br>` +
+          `<button class="btn btn-outline" style="margin-top:8px;" onclick="openTgLink('https://t.me/${cleanUser}')">🔗 مشاهده پروفایل @${cleanUser}</button>`;
+        return;
+      }
+
+      box.innerText = '⚠️ لطفاً یک آیدی عددی معتبر (مثلاً 208574585) یا یوزرنیم (مثلاً @username) وارد کنید.';
     }
 
-    // منطق چرخنده تاریخ آیفونی (شمسی و میلادی)
+    // چرخنده تاریخ شمسی و میلادی
     let calMode = 'jalali';
     let selY = 1381, selM = 5, selD = 22;
-    let isProgrammaticScroll = false;
 
     function buildWheelColumn(colId, items, defaultVal, onSelect) {
       const col = document.getElementById(colId);
@@ -457,25 +525,19 @@
       items.forEach((it, idx) => {
         const div = document.createElement('div');
         div.className = 'wheel-item' + (it.value === defaultVal ? ' selected' : '');
-        div.dataset.val = it.value;
         div.innerText = it.label;
-        div.onclick = () => {
-          col.scrollTo({ top: idx * 30, behavior: 'smooth' });
-        };
+        div.onclick = () => { col.scrollTo({ top: idx * 30, behavior: 'smooth' }); };
         col.appendChild(div);
       });
-
       const defIdx = Math.max(0, items.findIndex(x => x.value === defaultVal));
       setTimeout(() => { col.scrollTop = defIdx * 30; }, 20);
 
       let timer = null;
       col.onscroll = () => {
-        if (isProgrammaticScroll) return;
         clearTimeout(timer);
         timer = setTimeout(() => {
           const idx = Math.min(items.length - 1, Math.max(0, Math.round(col.scrollTop / 30)));
-          const children = col.querySelectorAll('.wheel-item');
-          children.forEach((c, i) => c.classList.toggle('selected', i === idx));
+          col.querySelectorAll('.wheel-item').forEach((c, i) => c.classList.toggle('selected', i === idx));
           if (items[idx]) {
             onSelect(items[idx].value);
             syncInputFromWheel();
@@ -486,20 +548,15 @@
 
     function initWheels() {
       const days = [];
-      for (let d = 1; d <= 31; d++) {
-        days.push({ value: d, label: calMode === 'jalali' ? toFaDigits(d) : String(d) });
-      }
+      for (let d = 1; d <= 31; d++) days.push({ value: d, label: calMode === 'jalali' ? toFaDigits(d) : String(d) });
       const months = [];
-      for (let m = 1; m <= 12; m++) {
-        months.push({ value: m, label: calMode === 'jalali' ? JALALI_MONTHS[m] : GREG_MONTHS[m] });
-      }
+      for (let m = 1; m <= 12; m++) months.push({ value: m, label: calMode === 'jalali' ? JALALI_MONTHS[m] : GREG_MONTHS[m].slice(0, 3) });
       const years = [];
       if (calMode === 'jalali') {
         for (let y = 1300; y <= tJy; y++) years.push({ value: y, label: toFaDigits(y) });
       } else {
         for (let y = 1930; y <= now.getFullYear(); y++) years.push({ value: y, label: String(y) });
       }
-
       buildWheelColumn('wheel-day', days, selD, v => { selD = v; });
       buildWheelColumn('wheel-month', months, selM, v => { selM = v; });
       buildWheelColumn('wheel-year', years, selY, v => { selY = v; });
@@ -507,8 +564,7 @@
     }
 
     function syncInputFromWheel() {
-      const inp = document.getElementById('birth-input');
-      inp.value = `${selY}/${String(selM).padStart(2, '0')}/${String(selD).padStart(2, '0')}`;
+      document.getElementById('birth-input').value = `${selY}/${String(selM).padStart(2, '0')}/${String(selD).padStart(2, '0')}`;
     }
 
     function setCalMode(mode) {
@@ -516,11 +572,8 @@
       calMode = mode;
       document.getElementById('btn-mode-jalali').classList.toggle('active', mode === 'jalali');
       document.getElementById('btn-mode-greg').classList.toggle('active', mode === 'greg');
-      if (mode === 'jalali') {
-        [selY, selM, selD] = gregorianToJalali(selY, selM, selD);
-      } else {
-        [selY, selM, selD] = jalaliToGregorian(selY, selM, selD);
-      }
+      if (mode === 'jalali') [selY, selM, selD] = gregorianToJalali(selY, selM, selD);
+      else [selY, selM, selD] = jalaliToGregorian(selY, selM, selD);
       initWheels();
       calcAge();
     }
@@ -529,9 +582,7 @@
       const raw = toEnDigits(document.getElementById('birth-input').value).trim();
       const m = raw.match(/^(\d{4})[\/\-.\s](\d{1,2})[\/\-.\s](\d{1,2})$/);
       if (!m) return;
-      const y = Number(m[1]), mo = Number(m[2]), d = Number(m[3]);
-      if (mo < 1 || mo > 12 || d < 1 || d > 31) return;
-      selY = y; selM = mo; selD = d;
+      selY = Number(m[1]); selM = Number(m[2]); selD = Number(m[3]);
     }
 
     function calcAge() {
@@ -550,13 +601,8 @@
         return;
       }
       let jy, jm, jd, gy, gm, gd;
-      if (y >= 1200 && y <= 1500) {
-        [jy, jm, jd] = [y, mo, d];
-        [gy, gm, gd] = jalaliToGregorian(jy, jm, jd);
-      } else {
-        [gy, gm, gd] = [y, mo, d];
-        [jy, jm, jd] = gregorianToJalali(gy, gm, gd);
-      }
+      if (y >= 1200 && y <= 1500) { [jy, jm, jd] = [y, mo, d]; [gy, gm, gd] = jalaliToGregorian(jy, jm, jd); }
+      else { [gy, gm, gd] = [y, mo, d]; [jy, jm, jd] = gregorianToJalali(gy, gm, gd); }
 
       const diffDays = Math.floor((Date.UTC(now.getFullYear(), now.getMonth(), now.getDate()) - Date.UTC(gy, gm - 1, gd)) / 86400000);
       if (diffDays < 0) {
@@ -571,21 +617,107 @@
 
       box.style.display = 'block';
       box.innerHTML =
-        `☀️ <b>تاریخ شمسی:</b> ${toFaDigits(jy)}/${toFaDigits(String(jm).padStart(2, '0'))}/${toFaDigits(String(jd).padStart(2, '0'))} (${toFaDigits(jd)} ${JALALI_MONTHS[jm]} ${toFaDigits(jy)})<br>` +
-        `🌍 <b>تاریخ میلادی:</b> <span dir="ltr">${gy}/${String(gm).padStart(2, '0')}/${String(gd).padStart(2, '0')}</span><br>` +
-        `🎂 <b>سن دقیق شما:</b> ${toFaDigits(years)} سال و ${toFaDigits(months)} ماه و ${toFaDigits(days)} روز (${toFaDigits(diffDays.toLocaleString())} روز)`;
+        `☀️ <b>تاریخ شمسی:</b> \u200F${toFaDigits(jd)} ${JALALI_MONTHS[jm]} ${toFaDigits(jy)} (${toFaDigits(jy)}/${toFaDigits(String(jm).padStart(2, '0'))}/${toFaDigits(String(jd).padStart(2, '0'))})<br>` +
+        `🌍 <b>تاریخ میلادی:</b> <span dir="ltr">${gy}/${String(gm).padStart(2, '0')}/${String(gd).padStart(2, '0')} (${GREG_MONTHS[gm]} ${gd}, ${gy})</span><br>` +
+        `🎂 <b>سن دقیق:</b> \u200F${toFaDigits(years)} سال و ${toFaDigits(months)} ماه و ${toFaDigits(days)} روز (${toFaDigits(diffDays.toLocaleString())} روز)`;
+    }
+
+    // بانک فیلم و سریال + اتصال به API زنده جهانی (TVMaze)
+    const MOVIES_DB = {
+      action: [
+        { t: 'The Gorge (2025)', g: 'اکشن، علمی‌تخیلی', r: '7.4', d: 'دو تک‌تیرانداز زبده در دو طرف یک دره اسرارآمیز و فوق‌محرمانه مامور نگهبانی می‌شوند اما متوجه خطری هولناک در اعماق دره می‌گردند.' },
+        { t: 'Dune: Part Two (2024)', g: 'اکشن، حماسی', r: '8.5', d: 'پل اتریدیز با فرمن‌ها متحد می‌شود تا انتقام خانواده‌اش را از توطئه‌گران بگیرد و سرنوشت کهکشان را تغییر دهد.' },
+        { t: 'The Gentlemen (2024 - سریال)', g: 'اکشن، کمدی سیاه', r: '8.1', d: 'پسر یک لرد انگلیسی پس از ارث بردن ملک پدری متوجه می‌شود زیر زمین آن بزرگ‌ترین امپراتوری خلافکارانه اروپا قرار دارد.' },
+        { t: 'Mad Max: Furiosa (2024)', g: 'اکشن، آخرالزمانی', r: '7.5', d: 'داستان ربوده شدن فیوریوسا از سرزمین سبز و نبرد نفس‌گیر او در بیابان‌های بی‌رحم برای بازگشت به خانه.' }
+      ],
+      scifi: [
+        { t: 'Severance (2022–2025 - سریال)', g: 'علمی‌تخیلی، معمایی', r: '8.7', d: 'کارمندان شرکتی که خاطرات محیط کار و زندگی شخصی‌شان با جراحی مغز کاملاً از هم جدا شده، به راز ترسناک شرکت پی می‌برند.' },
+        { t: 'Silo (2023–2025 - سریال)', g: 'علمی‌تخیلی، رازآلود', r: '8.1', d: 'ده هزار انسان در یک سیلوی زیرزمینی ۱۴۴ طبقه زندگی می‌کنند و هیچ‌کس نمی‌داند چه کسی و چرا آن را ساخته است.' },
+        { t: 'Dark Matter (2024 - سریال)', g: 'علمی‌تخیلی، هیجانی', r: '7.7', d: 'یک فیزیکدان ربوده شده و وارد نسخه موازی زندگی خودش می‌شود؛ جایی که باید برای بازگشت به خانواده واقعی‌اش بجنگد.' },
+        { t: 'Mickey 17 (2025)', g: 'علمی‌تخیلی، ماجراجویی', r: '7.6', d: 'مامور فضایی که پس از هر بار مرگ، کلون جدیدش با همان خاطرات چاپ می‌شود، ناگهان با نسخه بعدی خودش روبه‌رو می‌گردد.' }
+      ],
+      horror: [
+        { t: 'From (2022–2025 - سریال)', g: 'ترسناک، رازآلود', r: '7.8', d: 'شهرکی کابوس‌وار در آمریکا که هرکس واردش شود راه خروجی ندارد و شب‌ها موجودات ترسناک جنگل به خانه اهالی حمله می‌کنند.' },
+        { t: 'Nosferatu (2024)', g: 'ترسناک، گوتیک', r: '7.7', d: 'داستان تسخیر شدن زنی جوان توسط خون‌آشامی باستانی که وحشت را به شهری آرام می‌آورد.' },
+        { t: 'Heretic (2024)', g: 'ترسناک، روانشناختی', r: '7.1', d: 'دو دختر جوان تبلیغ‌کننده وارد خانه مردی مرموز می‌شوند و در یک بازی روانی و هزارتوی مرگبار گرفتار می‌گردند.' }
+      ],
+      comedy: [
+        { t: 'The Bear (2022–2025 - سریال)', g: 'کمدی، درام', r: '8.6', d: 'سرآشپزی جوان و نابغه از رستوران‌های لوکس دنیا برمی‌گردد تا ساندویچی کوچک و پر از بدهی برادرش را نجات دهد.' },
+        { t: 'Shrinking (2023–2025 - سریال)', g: 'کمدی، حال‌خوب‌کن', r: '8.1', d: 'روانشناسی که تصمیم می‌گیرد قوانین را کنار بگذارد و به مراجعینش دقیقاً و بدون سانسور حقیقت را بگوید!' },
+        { t: 'Anora (2024)', g: 'کمدی، درام (برنده اسکار)', r: '8.0', d: 'ازدواج ناگهانی یک دختر جوان در نیویورک با پسر یک الیگارش روس، ماجرایی پرآشوب و خنده‌دار را رقم می‌زند.' }
+      ],
+      crime: [
+        { t: 'The Penguin (2024 - سریال)', g: 'جنایی، درام', r: '8.7', d: 'خیزش خونین و هوشمندانه آزوالد کابلپات (پنگوئن) برای تصاحب قدرت در دنیای زیرزمینی شهر گاتهام.' },
+        { t: 'The Day of the Jackal (2024 - سریال)', g: 'جنایی، تعقیب و گریز', r: '8.2', d: 'یک آدمکش حرفه‌ای و تغییرچهره‌دهنده بی‌رقیب، در تعقیب و گریزی نفس‌گیر با یک افسر اطلاعاتی بریتانیا قرار می‌گیرد.' },
+        { t: 'Presumed Innocent (2024 - سریال)', g: 'جنایی، دادگاهی', r: '7.7', d: 'دادستانی برجسته ناگهان خودش متهم ردیف اول یک قتل هولناک در دادستانی می‌شود.' }
+      ],
+      drama: [
+        { t: 'Shōgun (2024 - سریال)', g: 'درام، تاریخی', r: '8.7', d: 'تلاقی سرنوشت یک دریانورد انگلیسی و یک لرد قدرتمند ژاپنی در قرن هفدهم که برنده رکورددار جوایز امی شد.' },
+        { t: 'The Brutalist (2024)', g: 'درام، تاریخی', r: '8.1', d: 'معماری نابغه پس از جنگ جهانی به آمریکا مهاجرت می‌کند تا بزرگ‌ترین شاهکار معماری مدرن را بسازد.' },
+        { t: 'Adolescence (2025 - مینی‌سریال)', g: 'درام، جنایی', r: '8.3', d: 'مینی‌سریال تحسین‌شده که هر قسمت آن در یک برداشت پیوسته (وان‌شات) فیلم‌برداری شده و خانواده‌ای را درگیر بحرانی تکان‌دهنده می‌کند.' }
+      ]
+    };
+
+    function renderMovies(list, headerTitle) {
+      const box = document.getElementById('movie-output');
+      let html = `<div style="font-size:13.5px; font-weight:700; color:#818cf8; margin-bottom:6px;">${headerTitle}</div>`;
+      list.forEach(m => {
+        html += `<div class="movie-card">
+          <div class="movie-title" dir="ltr">${m.t}</div>
+          <div class="movie-meta">⭐️ IMDb: ${m.r} | 🎭 ژانر: ${m.g}</div>
+          <div>${m.d}</div>
+        </div>`;
+      });
+      box.innerHTML = html;
+    }
+
+    function showGenre(g) {
+      const titles = { action: '🔥 بهترین‌های اکشن و هیجانی', scifi: '🧠 بهترین‌های علمی‌تخیلی و معمایی', horror: '😱 بهترین‌های ترسناک و رازآلود', comedy: '😂 بهترین‌های کمدی و حال‌خوب‌کن', crime: '🕵️‍♂️ بهترین‌های جنایی و کارآگاهی', drama: '🎭 بهترین‌های درام و احساسی' };
+      renderMovies(MOVIES_DB[g] || [], titles[g]);
+    }
+
+    function showWeekendMovies() {
+      const all = Object.values(MOVIES_DB).flat();
+      const shuffled = all.sort(() => 0.5 - Math.random()).slice(0, 3);
+      renderMovies(shuffled, '🍿 ۳ پیشنهاد ویژه برای آخر هفته شما:');
+    }
+
+    async function fetchLiveNewSeries() {
+      const box = document.getElementById('movie-output');
+      box.innerHTML = '<div class="movie-card">⏳ در حال دریافت لیست جدیدترین سریال‌های در حال پخش از API جهانی...</div>';
+      try {
+        const res = await fetch('https://api.tvmaze.com/shows?page=1');
+        const data = await res.json();
+        const topRecent = data
+          .filter(s => s.rating && s.rating.average >= 7.8)
+          .slice(-6)
+          .reverse()
+          .map(s => ({
+            t: `${s.name} (${(s.premiered || '').slice(0, 4)})`,
+            g: (s.genres || []).join('، ') || 'سریال روز',
+            r: s.rating.average,
+            d: `📡 وضعیت: ${s.status === 'Running' ? 'در حال پخش' : 'پایان‌یافته'} | شبکه: ${(s.network && s.network.name) || (s.webChannel && s.webChannel.name) || 'جهانی'}`
+          }));
+        renderMovies(topRecent, '🆕 سریال‌های برتر (دریافت زنده از API):');
+      } catch (e) {
+        showWeekendMovies();
+      }
     }
 
     function openTgLink(url) {
-      if (tg && tg.openTelegramLink) tg.openTelegramLink(url);
+      const tg = window.Telegram && window.Telegram.WebApp ? window.Telegram.WebApp : null;
+      if (tg && tg.openTelegramLink && url.startsWith('https://t.me/')) tg.openTelegramLink(url);
       else window.open(url, '_blank');
     }
 
     function closeApp() {
-      if (tg) tg.close();
+      const tg = window.Telegram && window.Telegram.WebApp ? window.Telegram.WebApp : null;
+      if (tg && tg.close) tg.close();
     }
 
     initWheels();
   </script>
+  <!-- لود غیرمسدودکننده اسکریپت تلگرام در انتهای صفحه -->
+  <script src="https://telegram.org/js/telegram-web-app.js" async defer></script>
 </body>
 </html>
