@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>مینی‌اپ Evulve</title>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --card: rgba(30, 41, 59, 0.85);
+      --accent: #38bdf8;
+      --accent2: #818cf8;
+      --text: #f8fafc;
+      --muted: #94a3b8;
+      --border: rgba(255, 255, 255, 0.1);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    body {
+      background: radial-gradient(circle at top right, #1e1b4b, #0f172a 60%);
+      color: var(--text);
+      min-height: 100vh;
+      padding: 16px;
+      padding-bottom: 40px;
+    }
+    .header {
+      text-align: center;
+      padding: 18px 12px;
+      background: linear-gradient(135deg, rgba(56, 189, 248, 0.15), rgba(129, 140, 248, 0.15));
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      margin-bottom: 16px;
+    }
+    .header h1 { font-size: 22px; background: linear-gradient(90deg, #38bdf8, #818cf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .header p { font-size: 13px; color: var(--muted); margin-top: 6px; }
+    .tabs {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+    .tab-btn {
+      background: var(--card);
+      border: 1px solid var(--border);
+      color: var(--muted);
+      padding: 10px 6px;
+      border-radius: 12px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    .tab-btn.active {
+      background: linear-gradient(135deg, #0284c7, #4f46e5);
+      color: #fff;
+      border-color: transparent;
+    }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 16px;
+      margin-bottom: 14px;
+      backdrop-filter: blur(10px);
+    }
+    .card h3 { font-size: 15px; margin-bottom: 12px; color: var(--accent); display: flex; align-items: center; gap: 6px; }
+    .info-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      font-size: 14px;
+    }
+    .info-row:last-child { border-bottom: none; }
+    .info-label { color: var(--muted); }
+    .info-val { font-weight: 600; direction: ltr; }
+    .input-box {
+      width: 100%;
+      padding: 12px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: rgba(15, 23, 42, 0.8);
+      color: #fff;
+      font-size: 14px;
+      margin-bottom: 10px;
+      text-align: center;
+      outline: none;
+    }
+    .btn {
+      width: 100%;
+      padding: 12px;
+      border-radius: 12px;
+      border: none;
+      background: linear-gradient(135deg, #0284c7, #4f46e5);
+      color: #fff;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 4px;
+    }
+    .btn-outline {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--border);
+      margin-top: 8px;
+    }
+    .result-box {
+      margin-top: 12px;
+      padding: 12px;
+      border-radius: 12px;
+      background: rgba(56, 189, 248, 0.1);
+      border: 1px solid rgba(56, 189, 248, 0.25);
+      font-size: 13.5px;
+      line-height: 1.8;
+      display: none;
+    }
+    .section { display: none; }
+    .section.active { display: block; }
+    .toast {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #10b981;
+      color: #fff;
+      padding: 8px 18px;
+      border-radius: 99px;
+      font-size: 13px;
+      display: none;
+      z-index: 999;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <h1>✨ جعبه ابزار هوشمند Evulve</h1>
+    <p id="welcome-text">به مینی‌اپ رسمی ربات خوش آمدید</p>
+  </div>
+
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab('tab-id', this)">🪪 سن اکانت</button>
+    <button class="tab-btn" onclick="switchTab('tab-cal', this)">📅 تقویم و سن</button>
+    <button class="tab-btn" onclick="switchTab('tab-links', this)">🚀 دسترسی سریع</button>
+  </div>
+
+  <!-- تب ۱: مشخصات و سن اکانت -->
+  <div id="tab-id" class="section active">
+    <div class="card">
+      <h3>🪪 مشخصات اکانت تلگرام شما</h3>
+      <div class="info-row"><span class="info-label">نام پروفایل:</span><span class="info-val" id="u-name">—</span></div>
+      <div class="info-row"><span class="info-label">یوزرنیم:</span><span class="info-val" id="u-user">—</span></div>
+      <div class="info-row"><span class="info-label">آیدی عددی:</span><span class="info-val" id="u-id">—</span></div>
+      <div class="info-row"><span class="info-label">سال ساخت:</span><span class="info-val" id="u-created">—</span></div>
+      <div class="info-row"><span class="info-label">عمر تقریبی:</span><span class="info-val" id="u-age">—</span></div>
+      <div class="info-row"><span class="info-label">وضعیت اکانت:</span><span class="info-val" id="u-badge">—</span></div>
+      <button class="btn btn-outline" onclick="copyMyId()">📋 کپی آیدی عددی من</button>
+    </div>
+
+    <div class="card">
+      <h3>🔍 بررسی سن هر اکانت با آیدی عددی</h3>
+      <input type="text" id="custom-id-input" class="input-box" placeholder="مثال: 208574585" inputmode="numeric" />
+      <button class="btn" onclick="checkCustomId()">بررسی سن اکانت</button>
+      <div id="custom-id-result" class="result-box"></div>
+    </div>
+  </div>
+
+  <!-- تب ۲: تقویم و محاسبه سن -->
+  <div id="tab-cal" class="section">
+    <div class="card">
+      <h3>☀️ تاریخ امروز</h3>
+      <div class="info-row"><span class="info-label">شمسی:</span><span class="info-val" id="today-jalali">—</span></div>
+      <div class="info-row"><span class="info-label">میلادی:</span><span class="info-val" id="today-greg">—</span></div>
+    </div>
+
+    <div class="card">
+      <h3>🎂 محاسبه دقیق سن و تبدیل تاریخ</h3>
+      <input type="text" id="birth-input" class="input-box" placeholder="تاریخ تولد (مثال: 1381/05/22)" />
+      <button class="btn" onclick="calcAge()">محاسبه سن دقیق</button>
+      <div id="age-result" class="result-box"></div>
+    </div>
+  </div>
+
+  <!-- تب ۳: لینک‌ها و امکانات ربات -->
+  <div id="tab-links" class="section">
+    <div class="card">
+      <h3>🚀 امکانات اصلی ربات Evulve</h3>
+      <p style="font-size:13px; color:var(--muted); line-height:1.7; margin-bottom:12px;">
+        برای استفاده از پیام ناشناس، آپلود فایل به لینک، و دریافت پروکسی و کانفیگ رایگان، از دکمه‌های زیر استفاده کنید:
+      </p>
+      <button class="btn" onclick="openTgLink('https://t.me/exiism')">📢 ورود به کانال رسمی @exiism</button>
+      <button class="btn btn-outline" onclick="openTgLink('https://t.me/Evulve')">💬 رزرو تبلیغات و ارتباط با مدیریت</button>
+      <button class="btn btn-outline" onclick="closeApp()">🔙 بازگشت به محیط چت ربات</button>
+    </div>
+  </div>
+
+  <div id="toast" class="toast">کپی شد!</div>
+
+  <script>
+    const tg = window.Telegram && window.Telegram.WebApp ? window.Telegram.WebApp : null;
+    if (tg) { tg.ready(); tg.expand(); }
+
+    function switchTab(tabId, btn) {
+      document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.getElementById(tabId).classList.add('active');
+      btn.classList.add('active');
+    }
+
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      t.innerText = msg;
+      t.style.display = 'block';
+      setTimeout(() => { t.style.display = 'none'; }, 2000);
+    }
+
+    const JALALI_MONTHS = ['', 'فروردین', 'اردیبهشت', 'خرداد', 'تیر', 'مرداد', 'شهریور', 'مهر', 'آبان', 'آذر', 'دی', 'بهمن', 'اسفند'];
+    const GREG_MONTHS = ['', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+    function gregorianToJalali(gy, gm, gd) {
+      const g_d_m = [0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334];
+      const gy2 = (gm > 2) ? (gy + 1) : gy;
+      let days = 355666 + (365 * gy) + Math.floor((gy2 + 3) / 4) - Math.floor((gy2 + 99) / 100) + Math.floor((gy2 + 399) / 400) + gd + g_d_m[gm - 1];
+      let jy = -1595 + (33 * Math.floor(days / 12053));
+      days %= 12053;
+      jy += 4 * Math.floor(days / 1461);
+      days %= 1461;
+      if (days > 365) { jy += Math.floor((days - 1) / 365); days = (days - 1) % 365; }
+      const jm = (days < 186) ? 1 + Math.floor(days / 31) : 7 + Math.floor((days - 186) / 30);
+      const jd = 1 + ((days < 186) ? (days % 31) : ((days - 186) % 30));
+      return [jy, jm, jd];
+    }
+
+    function jalaliToGregorian(jy, jm, jd) {
+      let jy1 = jy + 1595;
+      let days = -355668 + (365 * jy1) + (Math.floor(jy1 / 33) * 8) + Math.floor(((jy1 % 33) + 3) / 4) + jd + ((jm < 7) ? (jm - 1) * 31 : ((jm - 7) * 30) + 186);
+      let gy = 400 * Math.floor(days / 146097);
+      days %= 146097;
+      if (days > 36524) { gy += 100 * Math.floor(--days / 36524); days %= 36524; if (days >= 365) days++; }
+      gy += 4 * Math.floor(days / 1461);
+      days %= 1461;
+      if (days > 365) { gy += Math.floor((days - 1) / 365); days = (days - 1) % 365; }
+      let gd = days + 1;
+      const sal_a = [0, 31, ((gy % 4 === 0 && gy % 100 !== 0) || (gy % 400 === 0)) ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+      let gm;
+      for (gm = 0; gm < 13 && gd > sal_a[gm]; gm++) gd -= sal_a[gm];
+      return [gy, gm, gd];
+    }
+
+    const TG_ID_ANCHORS = [
+      [100000, 2013, 7], [1000000, 2013, 10], [10000000, 2014, 1], [50000000, 2014, 8],
+      [100000000, 2015, 4], [150000000, 2015, 10], [200000000, 2016, 2], [250000000, 2016, 7],
+      [300000000, 2016, 11], [400000000, 2017, 6], [500000000, 2018, 0], [650000000, 2018, 7],
+      [800000000, 2019, 1], [1000000000, 2019, 8], [1250000000, 2020, 4], [1600000000, 2021, 0],
+      [2147483647, 2021, 9], [5000000000, 2021, 10], [5400000000, 2022, 5], [5800000000, 2022, 11],
+      [6300000000, 2023, 6], [6800000000, 2024, 0], [7300000000, 2024, 7], [7800000000, 2025, 2],
+      [8300000000, 2025, 10], [8900000000, 2026, 9]
+    ];
+
+    function estimateAccount(userId) {
+      const numId = Math.abs(Number(userId));
+      if (!numId || numId < 1000) return null;
+      const toTs = r => Date.UTC(r[1], r[2], 15);
+      let estTs;
+      if (numId <= TG_ID_ANCHORS[0][0]) estTs = toTs(TG_ID_ANCHORS[0]);
+      else if (numId >= TG_ID_ANCHORS[TG_ID_ANCHORS.length - 1][0]) estTs = toTs(TG_ID_ANCHORS[TG_ID_ANCHORS.length - 1]);
+      else if (numId > 2147483647 && numId < 5000000000) estTs = Date.UTC(2021, 9, 28);
+      else {
+        for (let i = 0; i < TG_ID_ANCHORS.length - 1; i++) {
+          const a = TG_ID_ANCHORS[i], b = TG_ID_ANCHORS[i + 1];
+          if (numId >= a[0] && numId <= b[0]) {
+            estTs = toTs(a) + ((numId - a[0]) / (b[0] - a[0])) * (toTs(b) - toTs(a));
+            break;
+          }
+        }
+      }
+      const dt = new Date(estTs);
+      const gy = dt.getUTCFullYear(), gm = dt.getUTCMonth() + 1;
+      const [jy, jm] = gregorianToJalali(gy, gm, 15);
+      const diffYears = Math.max(0, (Date.now() - estTs) / (365.25 * 86400000));
+      const yInt = Math.floor(diffYears), mInt = Math.floor((diffYears - yInt) * 12);
+      let badge = '🟢 اکانت معمولی';
+      if (gy <= 2016) badge = '👑 کلکسیونی و قدیمی';
+      else if (gy <= 2019) badge = '🏅 قدیمی و باسابقه';
+      else if (gy <= 2022) badge = '⭐️ میان‌رده و معتبر';
+      else if (gy >= 2025) badge = '🆕 تازه‌وارد';
+      const ageText = yInt > 0 ? `${yInt} سال و ${mInt} ماه` : `${mInt} ماه`;
+      return { created: `${JALALI_MONTHS[jm]} ${jy} (${GREG_MONTHS[gm]} ${gy})`, ageText, badge };
+    }
+
+    // مقداردهی اولیه اطلاعات کاربر تلگرام
+    const user = tg && tg.initDataUnsafe && tg.initDataUnsafe.user ? tg.initDataUnsafe.user : null;
+    const myId = user ? user.id : 208574585;
+    document.getElementById('u-name').innerText = user ? [user.first_name, user.last_name].filter(Boolean).join(' ') : 'کاربر مهمان';
+    document.getElementById('u-user').innerText = user && user.username ? '@' + user.username : 'ندارد';
+    document.getElementById('u-id').innerText = myId;
+    const est = estimateAccount(myId);
+    if (est) {
+      document.getElementById('u-created').innerText = est.created;
+      document.getElementById('u-age').innerText = est.ageText;
+      document.getElementById('u-badge').innerText = est.badge;
+    }
+
+    // مقداردهی تاریخ امروز
+    const now = new Date();
+    const [tJy, tJm, tJd] = gregorianToJalali(now.getFullYear(), now.getMonth() + 1, now.getDate());
+    document.getElementById('today-jalali').innerText = `${tJd} ${JALALI_MONTHS[tJm]} ${tJy}`;
+    document.getElementById('today-greg').innerText = `${now.getFullYear()}/${now.getMonth() + 1}/${now.getDate()}`;
+
+    function copyMyId() {
+      navigator.clipboard.writeText(String(myId));
+      showToast('✅ آیدی عددی کپی شد!');
+    }
+
+    function toEnDigits(s) {
+      return String(s || '').replace(/[۰-۹]/g, d => '۰۱۲۳۴۵۶۷۸۹'.indexOf(d)).replace(/[٠-٩]/g, d => '٠١٢٣٤٥٦٧٨٩'.indexOf(d));
+    }
+
+    function checkCustomId() {
+      const raw = toEnDigits(document.getElementById('custom-id-input').value).trim();
+      const box = document.getElementById('custom-id-result');
+      if (!/^\d{5,15}$/.test(raw)) {
+        box.style.display = 'block';
+        box.innerText = '⚠️ لطفاً یک آیدی عددی معتبر وارد کنید.';
+        return;
+      }
+      const res = estimateAccount(Number(raw));
+      box.style.display = 'block';
+      box.innerHTML = `🔢 <b>آیدی:</b> ${raw}<br>📅 <b>ساخت:</b> حدود ${res.created}<br>⏳ <b>عمر:</b> ${res.ageText}<br>🎖 <b>وضعیت:</b> ${res.badge}`;
+    }
+
+    function calcAge() {
+      const raw = toEnDigits(document.getElementById('birth-input').value).trim();
+      const box = document.getElementById('age-result');
+      const m = raw.match(/^(\d{4})[\/\-.\s](\d{1,2})[\/\-.\s](\d{1,2})$/);
+      if (!m) {
+        box.style.display = 'block';
+        box.innerText = '⚠️ فرمت تاریخ معتبر نیست (مثال: 1381/05/22).';
+        return;
+      }
+      const y = Number(m[1]), mo = Number(m[2]), d = Number(m[3]);
+      let jy, jm, jd, gy, gm, gd;
+      if (y >= 1200 && y <= 1500) { [jy, jm, jd] = [y, mo, d]; [gy, gm, gd] = jalaliToGregorian(jy, jm, jd); }
+      else { [gy, gm, gd] = [y, mo, d]; [jy, jm, jd] = gregorianToJalali(gy, gm, gd); }
+
+      const diffDays = Math.floor((Date.now() - Date.UTC(gy, gm - 1, gd)) / 86400000);
+      let years = now.getFullYear() - gy, months = (now.getMonth() + 1) - gm, days = now.getDate() - gd;
+      if (days < 0) { months -= 1; days += 30; }
+      if (months < 0) { years -= 1; months += 12; }
+
+      box.style.display = 'block';
+      box.innerHTML =
+        `☀️ <b>شمسی:</b> ${jy}/${jm}/${jd}<br>` +
+        `🌍 <b>میلادی:</b> ${gy}/${gm}/${gd}<br>` +
+        `🎂 <b>سن دقیق:</b> ${years} سال و ${months} ماه و ${days} روز (${diffDays.toLocaleString()} روز)`;
+    }
+
+    function openTgLink(url) {
+      if (tg && tg.openTelegramLink) tg.openTelegramLink(url);
+      else window.open(url, '_blank');
+    }
+
+    function closeApp() {
+      if (tg) tg.close();
+    }
+  </script>
+</body>
+</html>
