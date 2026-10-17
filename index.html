@@ -4,6 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>Evulve MiniApp</title>
+  <!-- لود شدن فوری اسکریپت تلگرام در ابتدای صفحه برای تشخیص دقیق آیدی هر کاربر -->
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <style>
     :root {
       --bg: #0f172a;
@@ -62,6 +64,7 @@
       margin-bottom: 14px;
     }
     .card h3 { font-size: 14px; margin-bottom: 11px; color: var(--accent); }
+    .sub-hint { font-size: 11.5px; color: var(--muted); margin-bottom: 10px; line-height: 1.6; }
     .info-row {
       display: flex;
       justify-content: space-between;
@@ -193,7 +196,7 @@
     }
     .genre-btn.active {
       border-color: #38bdf8;
-      background: rgba(56, 189, 248, 0.18);
+      background: rgba(56, 189, 248, 0.22);
       color: #38bdf8;
     }
     .movie-card {
@@ -266,7 +269,7 @@
     <button class="tab-btn" onclick="switchTab('tab-links', this)">🚀 لینک‌ها</button>
   </div>
 
-  <!-- تب ۱: مشخصات و سن اکانت -->
+  <!-- تب ۱: مشخصات و سن اکانت (با تفکیک دریافت آیدی عددی و محاسبه سن) -->
   <div id="tab-id" class="section active">
     <div class="card">
       <h3>🪪 مشخصات اکانت تلگرام شما</h3>
@@ -280,11 +283,22 @@
       <button class="btn btn-outline" onclick="copyMyId()">📋 کپی آیدی عددی من</button>
     </div>
 
+    <!-- بخش ۱: دریافت آیدی عددی با یوزرنیم -->
     <div class="card">
-      <h3>🔍 بررسی اکانت با آیدی عددی یا یوزرنیم</h3>
-      <input type="text" id="custom-id-input" class="input-box" placeholder="آیدی عددی (208574585) یا @username" />
-      <button class="btn" onclick="checkCustomId()">بررسی مشخصات و سن اکانت</button>
-      <div id="custom-id-result" class="result-box"></div>
+      <h3>🔎 ۱. دریافت آیدی عددی با یوزرنیم</h3>
+      <p class="sub-hint">یوزرنیم شخص یا کانال را وارد کنید تا آیدی عددی آن توسط ربات استخراج شود، سپس آیدی عددی را در بخش پایین وارد کنید:</p>
+      <input type="text" id="username-lookup-input" class="input-box" placeholder="@username" />
+      <button class="btn" onclick="lookupIdByUsername()">دریافت آیدی عددی این یوزرنیم</button>
+      <div id="username-lookup-result" class="result-box"></div>
+    </div>
+
+    <!-- بخش ۲: محاسبه سن اکانت با آیدی عددی -->
+    <div class="card">
+      <h3>⏳ ۲. محاسبه سن اکانت با آیدی عددی</h3>
+      <p class="sub-hint">آیدی عددی اکانت را وارد کنید تا تاریخ ساخت (شمسی و میلادی) و عمر اکانت محاسبه شود:</p>
+      <input type="text" id="numeric-id-input" class="input-box" placeholder="مثال: 208574585" />
+      <button class="btn" onclick="checkAgeByNumericId()">محاسبه سن اکانت</button>
+      <div id="numeric-id-result" class="result-box"></div>
     </div>
   </div>
 
@@ -316,7 +330,7 @@
     </div>
   </div>
 
-  <!-- تب ۳: پیشنهاد فیلم و سریال (۵تایی + پوستر تضمینی + دکمه رفرش) -->
+  <!-- تب ۳: پیشنهاد فیلم و سریال (فقط بر اساس ژانر + پوستر سریع + رفرش) -->
   <div id="tab-movie" class="section">
     <div class="card">
       <h3>🎬 ابتدا فیلم یا سریال را انتخاب کنید:</h3>
@@ -325,19 +339,14 @@
         <button id="btn-type-series" class="mode-btn" onclick="setMediaType('series')">📺 سریال</button>
       </div>
 
-      <div class="mode-switch">
-        <button class="btn" style="margin:0;" onclick="selectCategory('weekend')">🍿 آخر هفته</button>
-        <button class="btn btn-outline" style="margin:0;" onclick="selectCategory('new')">🆕 جدیدترین‌ها</button>
-      </div>
-
-      <h3 style="margin-top:12px; margin-bottom:6px;">🎭 انتخاب ژانر:</h3>
+      <h3 style="margin-top:8px; margin-bottom:6px;">🎭 انتخاب ژانر:</h3>
       <div class="genre-grid">
-        <button class="genre-btn" onclick="selectCategory('action')">🔥 اکشن</button>
-        <button class="genre-btn" onclick="selectCategory('scifi')">🧠 علمی‌تخیلی</button>
-        <button class="genre-btn" onclick="selectCategory('horror')">😱 ترسناک</button>
-        <button class="genre-btn" onclick="selectCategory('comedy')">😂 کمدی</button>
-        <button class="genre-btn" onclick="selectCategory('crime')">🕵️‍♂️ جنایی</button>
-        <button class="genre-btn" onclick="selectCategory('drama')">🎭 درام</button>
+        <button class="genre-btn active" onclick="selectCategory('action', this)">🔥 اکشن</button>
+        <button class="genre-btn" onclick="selectCategory('scifi', this)">🧠 علمی‌تخیلی</button>
+        <button class="genre-btn" onclick="selectCategory('horror', this)">😱 ترسناک</button>
+        <button class="genre-btn" onclick="selectCategory('comedy', this)">😂 کمدی</button>
+        <button class="genre-btn" onclick="selectCategory('crime', this)">🕵️‍♂️ جنایی</button>
+        <button class="genre-btn" onclick="selectCategory('drama', this)">🎭 درام</button>
       </div>
 
       <div id="movie-output" style="margin-top:12px;"></div>
@@ -358,7 +367,18 @@
   <div id="toast" class="toast">کپی شد!</div>
 
   <script>
-    function parseInitDataFromHash() {
+    const tgApp = (window.Telegram && window.Telegram.WebApp) ? window.Telegram.WebApp : null;
+    if (tgApp) {
+      try { tgApp.ready(); tgApp.expand(); } catch (e) {}
+    }
+
+    // استخراج دقیق اطلاعات کاربر از ۳ مسیر (SDK رسمی تلگرام، Hash و Query)
+    function detectCurrentUser() {
+      // ۱. مسیر رسمی SDK تلگرام
+      if (tgApp && tgApp.initDataUnsafe && tgApp.initDataUnsafe.user && tgApp.initDataUnsafe.user.id) {
+        return tgApp.initDataUnsafe.user;
+      }
+      // ۲. مسیر Hash آدرس
       try {
         const hash = window.location.hash.slice(1);
         const params = new URLSearchParams(hash);
@@ -367,6 +387,18 @@
           const innerParams = new URLSearchParams(rawData);
           const userStr = innerParams.get('user');
           if (userStr) return JSON.parse(userStr);
+        }
+      } catch (e) {}
+      // ۳. مسیر پارامترهای لینک اختصاصی ساخته‌شده توسط ربات
+      try {
+        const q = new URLSearchParams(window.location.search);
+        const uid = Number(q.get('uid'));
+        if (uid > 0) {
+          return {
+            id: uid,
+            first_name: q.get('fn') || 'کاربر تلگرام',
+            username: q.get('un') || ''
+          };
         }
       } catch (e) {}
       return null;
@@ -474,30 +506,23 @@
       };
     }
 
-    // تخمین هوشمند شناسه برای زمانی که فقط یوزرنیم وارد شده است
-    function usernameToEstimatedId(cleanUser) {
-      const u = cleanUser.toLowerCase();
-      if (u === 'evulve' || u === 'exiism') return 208574585;
-      let hash = 0;
-      for (let i = 0; i < u.length; i++) {
-        hash = ((hash << 5) - hash) + u.charCodeAt(i);
-        hash |= 0;
-      }
-      const absH = Math.abs(hash);
-      return 150000000 + (absH % 5800000000);
-    }
+    const currentUser = detectCurrentUser();
+    const myId = currentUser ? currentUser.id : null;
 
-    const hashUser = parseInitDataFromHash();
-    const myId = hashUser ? hashUser.id : 208574585;
-    document.getElementById('u-name').innerText = hashUser ? [hashUser.first_name, hashUser.last_name].filter(Boolean).join(' ') : 'کاربر تلگرام';
-    document.getElementById('u-user').innerText = hashUser && hashUser.username ? '@' + hashUser.username : 'ندارد';
-    document.getElementById('u-id').innerText = myId;
-    const est = estimateAccount(myId);
-    if (est) {
-      document.getElementById('u-created-j').innerText = est.jalaliStr;
-      document.getElementById('u-created-g').innerText = est.gregStr;
-      document.getElementById('u-age').innerText = est.ageText;
-      document.getElementById('u-badge').innerText = est.badge;
+    if (currentUser && myId) {
+      document.getElementById('u-name').innerText = [currentUser.first_name, currentUser.last_name].filter(Boolean).join(' ') || 'کاربر تلگرام';
+      document.getElementById('u-user').innerText = currentUser.username ? '@' + currentUser.username : 'ندارد';
+      document.getElementById('u-id').innerText = myId;
+      const est = estimateAccount(myId);
+      if (est) {
+        document.getElementById('u-created-j').innerText = est.jalaliStr;
+        document.getElementById('u-created-g').innerText = est.gregStr;
+        document.getElementById('u-age').innerText = est.ageText;
+        document.getElementById('u-badge').innerText = est.badge;
+      }
+    } else {
+      document.getElementById('u-name').innerText = 'از دکمه آبی MiniApp باز کنید';
+      document.getElementById('u-id').innerText = '—';
     }
 
     const now = new Date();
@@ -506,61 +531,75 @@
     document.getElementById('today-greg').innerText = `${now.getFullYear()}/${String(now.getMonth() + 1).padStart(2, '0')}/${String(now.getDate()).padStart(2, '0')}`;
 
     function copyMyId() {
+      if (!myId) {
+        showToast('⚠️ لطفاً مینی‌اپ را از دکمه آبی کنار چت باز کنید');
+        return;
+      }
       navigator.clipboard.writeText(String(myId));
       showToast('✅ آیدی عددی کپی شد!');
     }
 
-    // بررسی مستقیم آیدی عددی یا یوزرنیم در داخل خود مینی‌اپ
-    async function checkCustomId() {
-      const raw = toEnDigits(document.getElementById('custom-id-input').value).trim();
-      const box = document.getElementById('custom-id-result');
+    // بخش ۱: استخراج آیدی عددی از طریق یوزرنیم
+    async function lookupIdByUsername() {
+      const raw = toEnDigits(document.getElementById('username-lookup-input').value).trim();
+      const box = document.getElementById('username-lookup-result');
+      box.style.display = 'block';
+
+      const cleanUser = raw.replace(/^https?:\/\/t\.me\//i, '').replace(/^@/, '').trim();
+      if (!/^[a-zA-Z0-9_]{4,32}$/.test(cleanUser)) {
+        box.innerText = '⚠️ لطفاً یک یوزرنیم معتبر (مثلاً @Evulve) وارد کنید.';
+        return;
+      }
+
+      // اگر کاربر یوزرنیم خودش را زده باشد
+      if (currentUser && currentUser.username && currentUser.username.toLowerCase() === cleanUser.toLowerCase()) {
+        document.getElementById('numeric-id-input').value = String(currentUser.id);
+        box.innerHTML =
+          `✅ <b>آیدی عددی @${cleanUser} پیدا شد:</b><br>` +
+          `🔢 <code style="font-size:15px; color:#38bdf8;">${currentUser.id}</code><br>` +
+          `💡 <i>آیدی عددی به کادر پایین منتقل شد؛ حالا دکمه «محاسبه سن اکانت» را بزنید!</i>`;
+        return;
+      }
+
+      // اگر مینی‌اپ از دکمه کیبورد باز شده باشد، مستقیم به ربات می‌فرستد تا آیدی عددی را استخراج کند
+      if (tgApp && typeof tgApp.sendData === 'function') {
+        try {
+          tgApp.sendData(JSON.stringify({ lookupUser: '@' + cleanUser }));
+          return;
+        } catch (e) {}
+      }
+
+      box.innerHTML =
+        `🔎 <b>دریافت آیدی عددی @${cleanUser}:</b><br>` +
+        `در تلگرام به دلایل امنیتی، تبدیل یوزرنیم دیگران به آیدی عددی از طریق هسته ربات انجام می‌شود.<br>` +
+        `✅ <b>راه‌حل:</b> در محیط چت ربات وارد بخش <b>«🔎 دریافت آیدی عددی با یوزرنیم»</b> شوید و <code>@${cleanUser}</code> را بفرستید تا ربات آیدی عددی‌اش را به شما بدهد!`;
+    }
+
+    // بخش ۲: محاسبه دقیق سن اکانت فقط با آیدی عددی
+    function checkAgeByNumericId() {
+      const raw = toEnDigits(document.getElementById('numeric-id-input').value).trim();
+      const box = document.getElementById('numeric-id-result');
       box.style.display = 'block';
 
       const cleanNum = raw.replace(/^#?U_/, '');
-      if (/^\d{5,15}$/.test(cleanNum)) {
-        const res = estimateAccount(Number(cleanNum));
-        box.innerHTML =
-          `🔢 <b>آیدی عددی:</b> <span dir="ltr">${cleanNum}</span><br>` +
-          `☀️ <b>ساخت (شمسی):</b> حدود ${res.jalaliStr}<br>` +
-          `🌍 <b>ساخت (میلادی):</b> <span dir="ltr">${res.gregStr}</span><br>` +
-          `⏳ <b>عمر تقریبی:</b> ${res.ageText}<br>` +
-          `🎖 <b>وضعیت:</b> ${res.badge}<br>` +
-          `<button class="btn btn-outline" style="margin-top:8px;" onclick="openTgLink('tg://user?id=${cleanNum}')">👤 باز کردن پروفایل در تلگرام</button>`;
+      if (!/^\d{5,15}$/.test(cleanNum)) {
+        box.innerText = '⚠️ لطفاً فقط «آیدی عددی» معتبر (بین ۵ تا ۱۵ رقم، مثلاً 208574585) وارد کنید.';
         return;
       }
 
-      const cleanUser = raw.replace(/^https?:\/\/t\.me\//i, '').replace(/^@/, '').trim();
-      if (/^[a-zA-Z0-9_]{4,32}$/.test(cleanUser)) {
-        box.innerHTML = '⏳ در حال بررسی مشخصات یوزرنیم...';
-        let profileName = cleanUser;
-        try {
-          const resp = await fetch('https://api.allorigins.win/raw?url=' + encodeURIComponent('https://t.me/' + cleanUser));
-          if (resp.ok) {
-            const html = await resp.text();
-            const mTitle = html.match(/property="og:title"\s+content="([^"]+)"/i);
-            if (mTitle && mTitle[1] && !mTitle[1].includes('Telegram: Contact')) {
-              profileName = mTitle[1];
-            }
-          }
-        } catch (e) {}
-
-        const targetId = (hashUser && hashUser.username && hashUser.username.toLowerCase() === cleanUser.toLowerCase())
-          ? hashUser.id
-          : usernameToEstimatedId(cleanUser);
-        const res = estimateAccount(targetId);
-
-        box.innerHTML =
-          `👤 <b>نام پروفایل:</b> ${profileName}<br>` +
-          `🔗 <b>یوزرنیم:</b> <span dir="ltr">@${cleanUser}</span><br>` +
-          `☀️ <b>ساخت (شمسی):</b> حدود ${res.jalaliStr}<br>` +
-          `🌍 <b>ساخت (میلادی):</b> <span dir="ltr">${res.gregStr}</span><br>` +
-          `⏳ <b>عمر تقریبی:</b> ${res.ageText}<br>` +
-          `🎖 <b>وضعیت:</b> ${res.badge}<br>` +
-          `<button class="btn btn-outline" style="margin-top:8px;" onclick="openTgLink('https://t.me/${cleanUser}')">🔗 باز کردن پروفایل @${cleanUser}</button>`;
+      const res = estimateAccount(Number(cleanNum));
+      if (!res) {
+        box.innerText = '⚠️ این آیدی عددی قابل بررسی نیست.';
         return;
       }
 
-      box.innerText = '⚠️ لطفاً یک آیدی عددی معتبر (مثلاً 208574585) یا یوزرنیم (مثلاً @username) وارد کنید.';
+      box.innerHTML =
+        `🔢 <b>آیدی عددی:</b> <span dir="ltr">${cleanNum}</span><br>` +
+        `☀️ <b>تاریخ ساخت (شمسی):</b> حدود ${res.jalaliStr}<br>` +
+        `🌍 <b>تاریخ ساخت (میلادی):</b> <span dir="ltr">${res.gregStr}</span><br>` +
+        `⏳ <b>عمر تقریبی اکانت:</b> ${res.ageText}<br>` +
+        `🎖 <b>وضعیت سابقه:</b> ${res.badge}<br>` +
+        `<button class="btn btn-outline" style="margin-top:8px;" onclick="openTgLink('tg://user?id=${cleanNum}')">👤 باز کردن پروفایل در تلگرام</button>`;
     }
 
     // چرخنده تاریخ شمسی و میلادی
@@ -640,7 +679,6 @@
       if (y >= 1200 && y <= 1500) { [jy, jm, jd] = [y, mo, d]; [gy, gm, gd] = jalaliToGregorian(jy, jm, jd); }
       else { [gy, gm, gd] = [y, mo, d]; [jy, jm, jd] = gregorianToJalali(gy, gm, gd); }
 
-      const diffDays = Math.floor((Date.UTC(now.getFullYear(), now.getMonth(), now.getDate()) - Date.UTC(gy, gm - 1, gd)) / 86400000);
       let years = now.getFullYear() - gy, months = (now.getMonth() + 1) - gm, days = now.getDate() - gd;
       if (days < 0) { months -= 1; days += 30; }
       if (months < 0) { years -= 1; months += 12; }
@@ -652,9 +690,9 @@
         `🎂 <b>سن دقیق:</b> \u200F${toFaDigits(years)} سال و ${toFaDigits(months)} ماه و ${toFaDigits(days)} روز`;
     }
 
-    // بانک جامع فیلم و سریال (با پوسترهای مستقیم و بدون فیلتر m.media-amazon.com + نمایش ۵تایی + دکمه رفرش)
+    // بانک فیلم و سریال (فقط بر اساس ژانر + لود سریع پوستر)
     let currentMediaType = 'movie';
-    let currentCategory = 'weekend';
+    let currentCategory = 'action';
     let currentOffset = 0;
 
     const MOVIES_DATA = [
@@ -715,7 +753,7 @@
       { g: 'crime', t: 'The Penguin (2024)', r: '8.7', gn: 'جنایی', p: 'https://m.media-amazon.com/images/M/MV5BYmI2MzI0ZTEtY2I1MS00ZGFkLWE0M2ItZTFkN2I1ZGY0YzI1XkEyXkFqcGc@._V1_SX300.jpg', d: 'خیزش هوشمندانه پنگوئن برای تصاحب قدرت در دنیای زیرزمینی شهر گاتهام.' },
       { g: 'crime', t: 'Sherlock (2010–2017)', r: '9.1', gn: 'جنایی', p: 'https://m.media-amazon.com/images/M/MV5BMWEzNTFlMTQtMzhjOS00MzQ1LWJjNjgtY2RhMjFhYjQwYjIzXkEyXkFqcGdeQXVyNDIzMzcwNjc@._V1_SX300.jpg', d: 'حل پیچیده‌ترین پرونده‌های جنایی لندن مدرن توسط شرلوک هولمز و دکتر واتسون.' },
       { g: 'crime', t: 'True Detective', r: '8.9', gn: 'جنایی', p: 'https://m.media-amazon.com/images/M/MV5BMmRlYmE0Y2UtNDk2Yi00NzczLWEwZTEtZmE2OTcyYzcxYmU5XkEyXkFqcGdeQXVyNTMxMjgxMzA@._V1_SX300.jpg', d: 'تحقیقات نفس‌گیر کارآگاهان پلیس برای کشف راز قتل‌های زنجیره‌ای مرموز.' },
-      { g: 'crime', t: 'Mindhunter (2017–2019)', r: '8.6', gn: 'جنایی', p: 'https://m.media-amazon.com/images/M/MV5WNjA1Njg4NzYxOV5BMl5BanBnXkFtZTgwODk5NjU3MzI@._V1_SX300.jpg', d: 'مصاحبه ماموران اف‌بی‌آی با قاتلان زنجیره‌ای زندانی برای کشف الگوی ذهن آن‌ها.' },
+      { g: 'crime', t: 'Mindhunter (2017–2019)', r: '8.6', gn: 'جنایی', p: 'https://m.media-amazon.com/images/M/MV5BNWNmYzQ1ZWUtYTQ3ZS00Y2UwLTlkMDctZThlOTJkMGJiNzBiXkEyXkFqcGdeQXVyNjg2NjQwMDQ@._V1_SX300.jpg', d: 'مصاحبه ماموران اف‌بی‌آی با قاتلان زنجیره‌ای زندانی برای کشف الگوی ذهن آن‌ها.' },
       { g: 'crime', t: 'Fargo (2014–2024)', r: '8.9', gn: 'جنایی', p: 'https://m.media-amazon.com/images/M/MV5BN2NiM2I5N2MtZDJhNC00ZThjLTg2NzMtMjUzMGY2OTVmOWJiXkEyXkFqcGdeQXVyMDM2NDM2MQ@@._V1_SX300.jpg', d: 'داستان‌های جنایی و کمدی سیاه در شهرهای برفی و سرد آمریکا.' },
       { g: 'drama', t: 'Breaking Bad (2008–2013)', r: '9.5', gn: 'درام', p: 'https://m.media-amazon.com/images/M/MV5BYmQ4YWMxYjUtNjZmYi00MDQ1LWFjMjMtNjA5ZDdiYjdiODU5XkEyXkFqcGdeQXVyMTMzNDExODE5._V1_SX300.jpg', d: 'تبدیل شدن یک معلم شیمی آرام به بزرگ‌ترین امپراتور مواد مخدر.' },
       { g: 'drama', t: 'Chernobyl (2019)', r: '9.3', gn: 'درام', p: 'https://m.media-amazon.com/images/M/MV5BNTdkN2QwMDItMDVhNS00ZjFiLWEzNTctMzY5ODQzYWNkMDllXkEyXkFqcGdeQXVyMTMzNDExODE5._V1_SX300.jpg', d: 'روایت تکان‌دهنده انفجار نیروگاه چرنوبیل و فداکاری برای نجات اروپا.' },
@@ -732,9 +770,13 @@
       renderCurrentPicks();
     }
 
-    function selectCategory(cat) {
+    function selectCategory(cat, btnEl) {
       currentCategory = cat;
       currentOffset = 0;
+      if (btnEl) {
+        document.querySelectorAll('.genre-btn').forEach(b => b.classList.remove('active'));
+        btnEl.classList.add('active');
+      }
       renderCurrentPicks();
     }
 
@@ -743,39 +785,42 @@
       renderCurrentPicks();
     }
 
-    async function loadFallbackPoster(queryStr, mediaType, imgId) {
+    const FALLBACK_SVG = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='80' height='120'><rect width='100%' height='100%' fill='%231e293b'/><text x='50%' y='50%' fill='%2338bdf8' font-size='24' text-anchor='middle' dominant-baseline='middle'>🎬</text></svg>";
+
+    // این تابع فقط در صورتی اجرا می‌شود که عکس اصلی لود نشود (بدون کند کردن برنامه)
+    async function handlePosterError(imgEl, queryStr, mediaType) {
+      if (imgEl.dataset.retried === '1') {
+        imgEl.src = FALLBACK_SVG;
+        return;
+      }
+      imgEl.dataset.retried = '1';
       try {
         if (mediaType === 'series') {
           const r = await fetch('https://api.tvmaze.com/singlesearch/shows?q=' + encodeURIComponent(queryStr));
           const d = await r.json();
           if (d && d.image && (d.image.medium || d.image.original)) {
-            document.getElementById(imgId).src = d.image.medium || d.image.original;
+            imgEl.src = d.image.medium || d.image.original;
+            return;
           }
         } else {
           const r = await fetch('https://itunes.apple.com/search?term=' + encodeURIComponent(queryStr) + '&media=movie&entity=movie&limit=1');
           const d = await r.json();
           if (d && d.results && d.results[0] && d.results[0].artworkUrl100) {
-            document.getElementById(imgId).src = d.results[0].artworkUrl100.replace('100x100bb', '400x600bb');
+            imgEl.src = d.results[0].artworkUrl100.replace('100x100bb', '400x600bb');
+            return;
           }
         }
       } catch (e) {}
+      imgEl.src = FALLBACK_SVG;
     }
 
     function renderCurrentPicks() {
       const src = currentMediaType === 'movie' ? MOVIES_DATA : SERIES_DATA;
       const typeLabel = currentMediaType === 'movie' ? 'فیلم سینمایی' : 'سریال';
-      let pool = [];
 
-      if (currentCategory === 'weekend') {
-        pool = src;
-      } else if (currentCategory === 'new') {
-        pool = src.filter(x => x.t.includes('2023') || x.t.includes('2024') || x.t.includes('2025'));
-        if (pool.length < 5) pool = src;
-      } else {
-        const gItems = src.filter(x => x.g === currentCategory);
-        const others = src.filter(x => x.g !== currentCategory);
-        pool = gItems.concat(others);
-      }
+      const gItems = src.filter(x => x.g === currentCategory);
+      const others = src.filter(x => x.g !== currentCategory);
+      const pool = gItems.concat(others);
 
       const selected5 = [];
       for (let i = 0; i < 5; i++) {
@@ -783,8 +828,6 @@
       }
 
       const catTitles = {
-        weekend: `🍿 ۵ ${typeLabel} پیشنهادی آخر هفته:`,
-        new: `🆕 ۵ ${typeLabel} جدید و برتر:`,
         action: `🔥 ۵ ${typeLabel} برتر ژانر اکشن:`,
         scifi: `🧠 ۵ ${typeLabel} برتر ژانر علمی‌تخیلی:`,
         horror: `😱 ۵ ${typeLabel} برتر ژانر ترسناک:`,
@@ -797,36 +840,31 @@
       let html = `<div style="font-size:13px; font-weight:700; color:#38bdf8; margin-bottom:6px;">${catTitles[currentCategory] || ''}</div>`;
 
       selected5.forEach((m, idx) => {
-        const imgId = `poster_${Date.now()}_${idx}`;
-        const cleanQuery = m.t.replace(/\(\d+.*\)/, '').trim();
+        const cleanQuery = m.t.replace(/\(\d+.*\)/, '').replace(/'/g, '').trim();
         html += `<div class="movie-card">
-          <img id="${imgId}" class="movie-poster" src="${m.p}" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\\'http://www.w3.org/2000/svg\\' width=\\'80\\' height=\\'120\\'><rect width=\\'100%\\' height=\\'100%\\' fill=\\'%231e293b\\'/><text x=\\'50%\\' y=\\'50%\\' fill=\\'%2338bdf8\\' font-size=\\'24\\' text-anchor=\\'middle\\' dominant-baseline=\\'middle\\'>🎬</text></svg>'" alt="poster" />
+          <img class="movie-poster" src="${m.p}" loading="lazy" onerror="handlePosterError(this, '${cleanQuery}', '${currentMediaType}')" alt="poster" />
           <div class="movie-info">
             <div class="movie-title" dir="ltr">${idx + 1}. ${m.t}</div>
             <div class="movie-meta">⭐️ IMDb: ${m.r} | 🎭 ${m.gn}</div>
             <div class="movie-desc">${m.d}</div>
           </div>
         </div>`;
-        setTimeout(() => loadFallbackPoster(cleanQuery, currentMediaType, imgId), 20);
       });
 
       box.innerHTML = html;
     }
 
     function openTgLink(url) {
-      const tg = window.Telegram && window.Telegram.WebApp ? window.Telegram.WebApp : null;
-      if (tg && tg.openTelegramLink && url.startsWith('https://t.me/')) tg.openTelegramLink(url);
+      if (tgApp && tgApp.openTelegramLink && url.startsWith('https://t.me/')) tgApp.openTelegramLink(url);
       else window.open(url, '_blank');
     }
 
     function closeApp() {
-      const tg = window.Telegram && window.Telegram.WebApp ? window.Telegram.WebApp : null;
-      if (tg && tg.close) tg.close();
+      if (tgApp && tgApp.close) tgApp.close();
     }
 
     initWheels();
     renderCurrentPicks();
   </script>
-  <script src="https://telegram.org/js/telegram-web-app.js" async defer></script>
 </body>
 </html>
