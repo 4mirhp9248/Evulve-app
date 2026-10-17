@@ -4,8 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>Evulve MiniApp</title>
-  <!-- لود شدن فوری اسکریپت تلگرام در ابتدای صفحه برای تشخیص دقیق آیدی هر کاربر -->
-  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <!-- بارگذاری غیرمسدودکننده (async) تا مینی‌اپ بدون VPN و فقط با پروکسی تلگرام هم درجا باز شود -->
+  <script src="https://telegram.org/js/telegram-web-app.js" async onload="onTelegramScriptLoad()"></script>
   <style>
     :root {
       --bg: #0f172a;
@@ -63,8 +63,8 @@
       padding: 15px;
       margin-bottom: 14px;
     }
-    .card h3 { font-size: 14px; margin-bottom: 11px; color: var(--accent); }
-    .sub-hint { font-size: 11.5px; color: var(--muted); margin-bottom: 10px; line-height: 1.6; }
+    .card h3 { font-size: 14px; margin-bottom: 8px; color: var(--accent); }
+    .sub-hint { font-size: 12px; color: var(--muted); margin-bottom: 12px; line-height: 1.7; }
     .info-row {
       display: flex;
       justify-content: space-between;
@@ -259,45 +259,40 @@
 
   <div class="header">
     <h1>✨ Evulve MiniApp</h1>
-    <p>سن اکانت، تقویم هوشمند و پیشنهاد فیلم و سریال</p>
+    <p>ابزارهای هوشمند سن اکانت، تقویم و پیشنهاد فیلم و سریال</p>
   </div>
 
   <div class="tabs">
     <button class="tab-btn active" onclick="switchTab('tab-id', this)">🪪 سن اکانت</button>
     <button class="tab-btn" onclick="switchTab('tab-cal', this)">📅 تقویم و سن</button>
     <button class="tab-btn" onclick="switchTab('tab-movie', this)">🎬 فیلم و سریال</button>
-    <button class="tab-btn" onclick="switchTab('tab-links', this)">🚀 لینک‌ها</button>
+    <button class="tab-btn" onclick="switchTab('tab-links', this)">🚀 راهنما</button>
   </div>
 
-  <!-- تب ۱: مشخصات و سن اکانت (با تفکیک دریافت آیدی عددی و محاسبه سن) -->
+  <!-- تب ۱: مشخصات و سن اکانت با آیدی عددی -->
   <div id="tab-id" class="section active">
     <div class="card">
-      <h3>🪪 مشخصات اکانت تلگرام شما</h3>
+      <h3>🪪 مشخصات و سن اکانت تلگرام شما</h3>
+      <p class="sub-hint">اطلاعات حساب تلگرام خودتان به همراه تخمین تاریخ ساخت و عمر اکانت:</p>
       <div class="info-row"><span class="info-label">نام پروفایل:</span><span class="info-val" id="u-name">—</span></div>
       <div class="info-row"><span class="info-label">یوزرنیم:</span><span class="info-val ltr-val" id="u-user">—</span></div>
       <div class="info-row"><span class="info-label">آیدی عددی:</span><span class="info-val ltr-val" id="u-id">—</span></div>
       <div class="info-row"><span class="info-label">تاریخ ساخت (شمسی):</span><span class="info-val" id="u-created-j">—</span></div>
       <div class="info-row"><span class="info-label">تاریخ ساخت (میلادی):</span><span class="info-val ltr-val" id="u-created-g">—</span></div>
       <div class="info-row"><span class="info-label">عمر تقریبی اکانت:</span><span class="info-val" id="u-age">—</span></div>
-      <div class="info-row"><span class="info-label">وضعیت اکانت:</span><span class="info-val" id="u-badge">—</span></div>
+      <div class="info-row"><span class="info-label">وضعیت سابقه:</span><span class="info-val" id="u-badge">—</span></div>
       <button class="btn btn-outline" onclick="copyMyId()">📋 کپی آیدی عددی من</button>
     </div>
 
-    <!-- بخش ۱: دریافت آیدی عددی با یوزرنیم -->
     <div class="card">
-      <h3>🔎 ۱. دریافت آیدی عددی با یوزرنیم</h3>
-      <p class="sub-hint">یوزرنیم شخص یا کانال را وارد کنید تا آیدی عددی آن توسط ربات استخراج شود، سپس آیدی عددی را در بخش پایین وارد کنید:</p>
-      <input type="text" id="username-lookup-input" class="input-box" placeholder="@username" />
-      <button class="btn" onclick="lookupIdByUsername()">دریافت آیدی عددی این یوزرنیم</button>
-      <div id="username-lookup-result" class="result-box"></div>
-    </div>
-
-    <!-- بخش ۲: محاسبه سن اکانت با آیدی عددی -->
-    <div class="card">
-      <h3>⏳ ۲. محاسبه سن اکانت با آیدی عددی</h3>
-      <p class="sub-hint">آیدی عددی اکانت را وارد کنید تا تاریخ ساخت (شمسی و میلادی) و عمر اکانت محاسبه شود:</p>
-      <input type="text" id="numeric-id-input" class="input-box" placeholder="مثال: 208574585" />
+      <h3>⏳ محاسبه سن هر اکانت با آیدی عددی</h3>
+      <p class="sub-hint">
+        آیدی عددی هر اکانت را وارد کنید تا تاریخ ساخت (شمسی و میلادی) و عمر آن محاسبه شود.<br>
+        💡 <b>نکته:</b> اگر آیدی عددی خودتان یا شخص دیگری را ندارید، از ربات شناخته‌شدهٔ تلگرام <b>@userinfobot</b> استفاده کنید:
+      </p>
+      <input type="text" id="numeric-id-input" class="input-box" placeholder="مثال: 208574585" inputmode="numeric" />
       <button class="btn" onclick="checkAgeByNumericId()">محاسبه سن اکانت</button>
+      <button class="btn btn-outline" onclick="openTgLink('https://t.me/userinfobot')">🤖 دریافت آیدی عددی از @userinfobot</button>
       <div id="numeric-id-result" class="result-box"></div>
     </div>
   </div>
@@ -312,6 +307,7 @@
 
     <div class="card">
       <h3>🎂 محاسبه سن و تبدیل تاریخ</h3>
+      <p class="sub-hint">نوع تاریخ (شمسی یا میلادی) را انتخاب کنید، سپس با چرخنده بالا و پایین ببرید یا دستی تایپ کنید تا هم سن دقیق محاسبه شود و هم تاریخ تبدیل گردد:</p>
       <div class="mode-switch">
         <button id="btn-mode-jalali" class="mode-btn active" onclick="setCalMode('jalali')">☀️ تاریخ شمسی</button>
         <button id="btn-mode-greg" class="mode-btn" onclick="setCalMode('greg')">🌍 تاریخ میلادی</button>
@@ -330,16 +326,16 @@
     </div>
   </div>
 
-  <!-- تب ۳: پیشنهاد فیلم و سریال (فقط بر اساس ژانر + پوستر سریع + رفرش) -->
+  <!-- تب ۳: پیشنهاد فیلم و سریال -->
   <div id="tab-movie" class="section">
     <div class="card">
-      <h3>🎬 ابتدا فیلم یا سریال را انتخاب کنید:</h3>
+      <h3>🎬 پیشنهاد فیلم و سریال بر اساس ژانر</h3>
+      <p class="sub-hint">ابتدا مشخص کنید فیلم می‌خواهید یا سریال، سپس ژانر دلخواهتان را بزنید تا ۵ اثر برتر به همراه پوستر و خلاصه یک‌خطی معرفی شوند:</p>
       <div class="mode-switch">
         <button id="btn-type-movie" class="mode-btn active" onclick="setMediaType('movie')">🎥 فیلم سینمایی</button>
         <button id="btn-type-series" class="mode-btn" onclick="setMediaType('series')">📺 سریال</button>
       </div>
 
-      <h3 style="margin-top:8px; margin-bottom:6px;">🎭 انتخاب ژانر:</h3>
       <div class="genre-grid">
         <button class="genre-btn active" onclick="selectCategory('action', this)">🔥 اکشن</button>
         <button class="genre-btn" onclick="selectCategory('scifi', this)">🧠 علمی‌تخیلی</button>
@@ -354,31 +350,43 @@
     </div>
   </div>
 
-  <!-- تب ۴: لینک‌ها -->
+  <!-- تب ۴: راهنما و لینک‌ها -->
   <div id="tab-links" class="section">
     <div class="card">
-      <h3>🚀 دسترسی سریع Evulve</h3>
+      <h3>📌 راهنمای امکانات چت‌بات Evulve</h3>
+      <p class="sub-hint">
+        • <b>💌 پیام ناشناس:</b> ارسال متن، ویس، آهنگ و عکس بدون نمایش نام شما به مدیر.<br>
+        • <b>📥 پروکسی و کانفیگ:</b> دریافت و اشتراک‌گذاری رایگان پروکسی تلگرام و کانفیگ فیلترشکن در بخش جعبه ابزار.<br>
+        • <b>☁️ تبدیل فایل به لینک:</b> با یک‌بار آپلود فایل در جعبه ابزار ربات، لینک اشتراک‌گذاری تلگرامی بگیرید تا هرکس روی آن زد، فایل را مستقیماً از ربات تحویل بگیرد و نیازی به آپلود چندباره نباشد.
+      </p>
       <button class="btn" onclick="openTgLink('https://t.me/exiism')">📢 ورود به کانال رسمی @exiism</button>
-      <button class="btn btn-outline" onclick="openTgLink('https://t.me/Evulve')">💬 رزرو تبلیغات و ارتباط با مدیریت</button>
-      <button class="btn btn-outline" onclick="closeApp()">🔙 بازگشت به محیط چت ربات</button>
+      <button class="btn btn-outline" onclick="openTgLink('https://t.me/Evulve')">💬 رزرو تبلیغات (@Evulve)</button>
+      <button class="btn btn-outline" onclick="openTgLink('https://t.me/userinfobot')">🤖 ربات دریافت آیدی عددی (@userinfobot)</button>
+      <button class="btn btn-outline" onclick="closeApp()">🔙 بستن مینی‌اپ و بازگشت به چت ربات</button>
     </div>
   </div>
 
   <div id="toast" class="toast">کپی شد!</div>
 
   <script>
-    const tgApp = (window.Telegram && window.Telegram.WebApp) ? window.Telegram.WebApp : null;
-    if (tgApp) {
-      try { tgApp.ready(); tgApp.expand(); } catch (e) {}
+    function getTgApp() {
+      return (window.Telegram && window.Telegram.WebApp) ? window.Telegram.WebApp : null;
     }
 
-    // استخراج دقیق اطلاعات کاربر از ۳ مسیر (SDK رسمی تلگرام، Hash و Query)
-    function detectCurrentUser() {
-      // ۱. مسیر رسمی SDK تلگرام
-      if (tgApp && tgApp.initDataUnsafe && tgApp.initDataUnsafe.user && tgApp.initDataUnsafe.user.id) {
-        return tgApp.initDataUnsafe.user;
+    function onTelegramScriptLoad() {
+      const tg = getTgApp();
+      if (tg) {
+        try { tg.ready(); tg.expand(); } catch (e) {}
+        renderUserProfile();
       }
-      // ۲. مسیر Hash آدرس
+    }
+
+    // تشخیص ۳ لایه‌ای اکانت کاربر (بدون وابستگی به لود شدن اسکریپت فیلترشده telegram.org)
+    function detectCurrentUser() {
+      const tg = getTgApp();
+      if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user && tg.initDataUnsafe.user.id) {
+        return tg.initDataUnsafe.user;
+      }
       try {
         const hash = window.location.hash.slice(1);
         const params = new URLSearchParams(hash);
@@ -389,7 +397,6 @@
           if (userStr) return JSON.parse(userStr);
         }
       } catch (e) {}
-      // ۳. مسیر پارامترهای لینک اختصاصی ساخته‌شده توسط ربات
       try {
         const q = new URLSearchParams(window.location.search);
         const uid = Number(q.get('uid'));
@@ -506,24 +513,29 @@
       };
     }
 
-    const currentUser = detectCurrentUser();
-    const myId = currentUser ? currentUser.id : null;
+    let myId = null;
 
-    if (currentUser && myId) {
-      document.getElementById('u-name').innerText = [currentUser.first_name, currentUser.last_name].filter(Boolean).join(' ') || 'کاربر تلگرام';
-      document.getElementById('u-user').innerText = currentUser.username ? '@' + currentUser.username : 'ندارد';
-      document.getElementById('u-id').innerText = myId;
-      const est = estimateAccount(myId);
-      if (est) {
-        document.getElementById('u-created-j').innerText = est.jalaliStr;
-        document.getElementById('u-created-g').innerText = est.gregStr;
-        document.getElementById('u-age').innerText = est.ageText;
-        document.getElementById('u-badge').innerText = est.badge;
+    function renderUserProfile() {
+      const currentUser = detectCurrentUser();
+      if (currentUser && currentUser.id) {
+        myId = currentUser.id;
+        document.getElementById('u-name').innerText = [currentUser.first_name, currentUser.last_name].filter(Boolean).join(' ') || 'کاربر تلگرام';
+        document.getElementById('u-user').innerText = currentUser.username ? '@' + currentUser.username : 'ندارد';
+        document.getElementById('u-id').innerText = myId;
+        const est = estimateAccount(myId);
+        if (est) {
+          document.getElementById('u-created-j').innerText = est.jalaliStr;
+          document.getElementById('u-created-g').innerText = est.gregStr;
+          document.getElementById('u-age').innerText = est.ageText;
+          document.getElementById('u-badge').innerText = est.badge;
+        }
+      } else {
+        document.getElementById('u-name').innerText = 'از دکمه آبی MiniApp باز کنید';
+        document.getElementById('u-id').innerText = '—';
       }
-    } else {
-      document.getElementById('u-name').innerText = 'از دکمه آبی MiniApp باز کنید';
-      document.getElementById('u-id').innerText = '—';
     }
+
+    renderUserProfile();
 
     const now = new Date();
     const [tJy, tJm, tJd] = gregorianToJalali(now.getFullYear(), now.getMonth() + 1, now.getDate());
@@ -532,50 +544,14 @@
 
     function copyMyId() {
       if (!myId) {
-        showToast('⚠️ لطفاً مینی‌اپ را از دکمه آبی کنار چت باز کنید');
+        showToast('⚠️ لطفاً از دکمه آبی MiniApp وارد شوید');
         return;
       }
       navigator.clipboard.writeText(String(myId));
-      showToast('✅ آیدی عددی کپی شد!');
+      showToast('✅ آیدی عددی شما کپی شد!');
     }
 
-    // بخش ۱: استخراج آیدی عددی از طریق یوزرنیم
-    async function lookupIdByUsername() {
-      const raw = toEnDigits(document.getElementById('username-lookup-input').value).trim();
-      const box = document.getElementById('username-lookup-result');
-      box.style.display = 'block';
-
-      const cleanUser = raw.replace(/^https?:\/\/t\.me\//i, '').replace(/^@/, '').trim();
-      if (!/^[a-zA-Z0-9_]{4,32}$/.test(cleanUser)) {
-        box.innerText = '⚠️ لطفاً یک یوزرنیم معتبر (مثلاً @Evulve) وارد کنید.';
-        return;
-      }
-
-      // اگر کاربر یوزرنیم خودش را زده باشد
-      if (currentUser && currentUser.username && currentUser.username.toLowerCase() === cleanUser.toLowerCase()) {
-        document.getElementById('numeric-id-input').value = String(currentUser.id);
-        box.innerHTML =
-          `✅ <b>آیدی عددی @${cleanUser} پیدا شد:</b><br>` +
-          `🔢 <code style="font-size:15px; color:#38bdf8;">${currentUser.id}</code><br>` +
-          `💡 <i>آیدی عددی به کادر پایین منتقل شد؛ حالا دکمه «محاسبه سن اکانت» را بزنید!</i>`;
-        return;
-      }
-
-      // اگر مینی‌اپ از دکمه کیبورد باز شده باشد، مستقیم به ربات می‌فرستد تا آیدی عددی را استخراج کند
-      if (tgApp && typeof tgApp.sendData === 'function') {
-        try {
-          tgApp.sendData(JSON.stringify({ lookupUser: '@' + cleanUser }));
-          return;
-        } catch (e) {}
-      }
-
-      box.innerHTML =
-        `🔎 <b>دریافت آیدی عددی @${cleanUser}:</b><br>` +
-        `در تلگرام به دلایل امنیتی، تبدیل یوزرنیم دیگران به آیدی عددی از طریق هسته ربات انجام می‌شود.<br>` +
-        `✅ <b>راه‌حل:</b> در محیط چت ربات وارد بخش <b>«🔎 دریافت آیدی عددی با یوزرنیم»</b> شوید و <code>@${cleanUser}</code> را بفرستید تا ربات آیدی عددی‌اش را به شما بدهد!`;
-    }
-
-    // بخش ۲: محاسبه دقیق سن اکانت فقط با آیدی عددی
+    // محاسبه سن اکانت با آیدی عددی + راهنمایی @userinfobot
     function checkAgeByNumericId() {
       const raw = toEnDigits(document.getElementById('numeric-id-input').value).trim();
       const box = document.getElementById('numeric-id-result');
@@ -583,7 +559,9 @@
 
       const cleanNum = raw.replace(/^#?U_/, '');
       if (!/^\d{5,15}$/.test(cleanNum)) {
-        box.innerText = '⚠️ لطفاً فقط «آیدی عددی» معتبر (بین ۵ تا ۱۵ رقم، مثلاً 208574585) وارد کنید.';
+        box.innerHTML =
+          `⚠️ <b>لطفاً فقط «آیدی عددی» معتبر وارد کنید</b> (مثال: 208574585).<br>` +
+          `💡 اگر آیدی عددی شخص را ندارید، روی دکمه <b>«🤖 دریافت آیدی عددی از @userinfobot»</b> بزنید.`;
         return;
       }
 
@@ -673,7 +651,7 @@
       const raw = toEnDigits(document.getElementById('birth-input').value).trim();
       const box = document.getElementById('age-result');
       const m = raw.match(/^(\d{4})[\/\-.\s](\d{1,2})[\/\-.\s](\d{1,2})$/);
-      if (!m) { box.style.display = 'block'; box.innerText = '⚠️ فرمت تاریخ معتبر نیست.'; return; }
+      if (!m) { box.style.display = 'block'; box.innerText = '⚠️ فرمت تاریخ معتبر نیست (مثال: 1381/05/22).'; return; }
       const y = Number(m[1]), mo = Number(m[2]), d = Number(m[3]);
       let jy, jm, jd, gy, gm, gd;
       if (y >= 1200 && y <= 1500) { [jy, jm, jd] = [y, mo, d]; [gy, gm, gd] = jalaliToGregorian(jy, jm, jd); }
@@ -685,12 +663,12 @@
 
       box.style.display = 'block';
       box.innerHTML =
-        `☀️ <b>شمسی:</b> \u200F${toFaDigits(jd)} ${JALALI_MONTHS[jm]} ${toFaDigits(jy)}<br>` +
-        `🌍 <b>میلادی:</b> <span dir="ltr">${gy}/${String(gm).padStart(2, '0')}/${String(gd).padStart(2, '0')} (${GREG_MONTHS[gm]} ${gd}, ${gy})</span><br>` +
+        `☀️ <b>معادل شمسی:</b> \u200F${toFaDigits(jd)} ${JALALI_MONTHS[jm]} ${toFaDigits(jy)} (${toFaDigits(jy)}/${toFaDigits(String(jm).padStart(2, '0'))}/${toFaDigits(String(jd).padStart(2, '0'))})<br>` +
+        `🌍 <b>معادل میلادی:</b> <span dir="ltr">${gy}/${String(gm).padStart(2, '0')}/${String(gd).padStart(2, '0')} (${GREG_MONTHS[gm]} ${gd}, ${gy})</span><br>` +
         `🎂 <b>سن دقیق:</b> \u200F${toFaDigits(years)} سال و ${toFaDigits(months)} ماه و ${toFaDigits(days)} روز`;
     }
 
-    // بانک فیلم و سریال (فقط بر اساس ژانر + لود سریع پوستر)
+    // بانک فیلم و سریال (۵ پیشنهاد در هر بار + پوستر + رفرش)
     let currentMediaType = 'movie';
     let currentCategory = 'action';
     let currentOffset = 0;
@@ -787,7 +765,6 @@
 
     const FALLBACK_SVG = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='80' height='120'><rect width='100%' height='100%' fill='%231e293b'/><text x='50%' y='50%' fill='%2338bdf8' font-size='24' text-anchor='middle' dominant-baseline='middle'>🎬</text></svg>";
 
-    // این تابع فقط در صورتی اجرا می‌شود که عکس اصلی لود نشود (بدون کند کردن برنامه)
     async function handlePosterError(imgEl, queryStr, mediaType) {
       if (imgEl.dataset.retried === '1') {
         imgEl.src = FALLBACK_SVG;
@@ -855,12 +832,14 @@
     }
 
     function openTgLink(url) {
-      if (tgApp && tgApp.openTelegramLink && url.startsWith('https://t.me/')) tgApp.openTelegramLink(url);
+      const tg = getTgApp();
+      if (tg && tg.openTelegramLink && url.startsWith('https://t.me/')) tg.openTelegramLink(url);
       else window.open(url, '_blank');
     }
 
     function closeApp() {
-      if (tgApp && tgApp.close) tgApp.close();
+      const tg = getTgApp();
+      if (tg && tg.close) tg.close();
     }
 
     initWheels();
