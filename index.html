@@ -8,36 +8,37 @@
   <style>
     :root {
       --bg: #0f172a;
-      --card: rgba(30, 41, 59, 0.85);
+      --card: rgba(30, 41, 59, 0.9);
       --accent: #38bdf8;
       --accent2: #818cf8;
       --text: #f8fafc;
       --muted: #94a3b8;
-      --border: rgba(255, 255, 255, 0.1);
+      --border: rgba(255, 255, 255, 0.12);
     }
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Tahoma, sans-serif; }
     body {
-      background: radial-gradient(circle at top right, #1e1b4b, #0f172a 60%);
+      background: radial-gradient(circle at top right, #1e1b4b, #0f172a 65%);
       color: var(--text);
       min-height: 100vh;
-      padding: 16px;
+      padding: 14px;
       padding-bottom: 40px;
+      direction: rtl;
     }
     .header {
       text-align: center;
-      padding: 18px 12px;
+      padding: 16px 12px;
       background: linear-gradient(135deg, rgba(56, 189, 248, 0.15), rgba(129, 140, 248, 0.15));
       border: 1px solid var(--border);
-      border-radius: 20px;
-      margin-bottom: 16px;
+      border-radius: 18px;
+      margin-bottom: 14px;
     }
-    .header h1 { font-size: 22px; background: linear-gradient(90deg, #38bdf8, #818cf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-    .header p { font-size: 13px; color: var(--muted); margin-top: 6px; }
+    .header h1 { font-size: 20px; background: linear-gradient(90deg, #38bdf8, #818cf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .header p { font-size: 12.5px; color: var(--muted); margin-top: 5px; }
     .tabs {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 8px;
-      margin-bottom: 16px;
+      margin-bottom: 14px;
     }
     .tab-btn {
       background: var(--card);
@@ -48,7 +49,6 @@
       font-size: 13px;
       font-weight: 600;
       cursor: pointer;
-      transition: 0.2s;
     }
     .tab-btn.active {
       background: linear-gradient(135deg, #0284c7, #4f46e5);
@@ -59,31 +59,115 @@
       background: var(--card);
       border: 1px solid var(--border);
       border-radius: 18px;
-      padding: 16px;
+      padding: 15px;
       margin-bottom: 14px;
-      backdrop-filter: blur(10px);
     }
-    .card h3 { font-size: 15px; margin-bottom: 12px; color: var(--accent); display: flex; align-items: center; gap: 6px; }
+    .card h3 { font-size: 14.5px; margin-bottom: 12px; color: var(--accent); }
     .info-row {
       display: flex;
       justify-content: space-between;
-      padding: 10px 0;
+      align-items: center;
+      padding: 9px 0;
       border-bottom: 1px solid rgba(255,255,255,0.06);
-      font-size: 14px;
+      font-size: 13.5px;
     }
     .info-row:last-child { border-bottom: none; }
     .info-label { color: var(--muted); }
-    .info-val { font-weight: 600; direction: ltr; }
+    /* اصلاح کامل راست‌چین برای نمایش درست «۱۰ سال و ۶ ماه» */
+    .info-val {
+      font-weight: 600;
+      direction: rtl;
+      text-align: left;
+      unicode-bidi: embed;
+    }
+    .ltr-val {
+      direction: ltr;
+      unicode-bidi: embed;
+    }
+    .cal-mode-switch {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+    .cal-mode-btn {
+      padding: 9px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: rgba(15, 23, 42, 0.7);
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .cal-mode-btn.active {
+      background: rgba(56, 189, 248, 0.2);
+      color: #38bdf8;
+      border-color: #38bdf8;
+    }
+    /* استایل چرخنده تاریخ مشابه آیفون */
+    .wheel-wrapper {
+      position: relative;
+      height: 150px;
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      display: grid;
+      grid-template-columns: 1fr 1.3fr 1fr;
+      overflow: hidden;
+      margin-bottom: 12px;
+      direction: rtl;
+    }
+    .wheel-highlight {
+      position: absolute;
+      top: 60px;
+      left: 8px;
+      right: 8px;
+      height: 30px;
+      background: rgba(56, 189, 248, 0.16);
+      border-top: 1px solid rgba(56, 189, 248, 0.45);
+      border-bottom: 1px solid rgba(56, 189, 248, 0.45);
+      border-radius: 8px;
+      pointer-events: none;
+      z-index: 1;
+    }
+    .wheel-col {
+      height: 150px;
+      overflow-y: scroll;
+      scroll-snap-type: y mandatory;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+      padding: 60px 0;
+      text-align: center;
+      z-index: 2;
+    }
+    .wheel-col::-webkit-scrollbar { display: none; }
+    .wheel-item {
+      height: 30px;
+      line-height: 30px;
+      font-size: 14px;
+      color: var(--muted);
+      scroll-snap-align: center;
+      cursor: pointer;
+      user-select: none;
+      transition: color 0.15s, font-weight 0.15s;
+    }
+    .wheel-item.selected {
+      color: #fff;
+      font-weight: 700;
+      font-size: 15px;
+    }
     .input-box {
       width: 100%;
-      padding: 12px;
+      padding: 11px;
       border-radius: 12px;
       border: 1px solid var(--border);
-      background: rgba(15, 23, 42, 0.8);
+      background: rgba(15, 23, 42, 0.85);
       color: #fff;
       font-size: 14px;
       margin-bottom: 10px;
       text-align: center;
+      direction: ltr;
       outline: none;
     }
     .btn {
@@ -108,10 +192,12 @@
       padding: 12px;
       border-radius: 12px;
       background: rgba(56, 189, 248, 0.1);
-      border: 1px solid rgba(56, 189, 248, 0.25);
+      border: 1px solid rgba(56, 189, 248, 0.28);
       font-size: 13.5px;
-      line-height: 1.8;
+      line-height: 1.9;
       display: none;
+      direction: rtl;
+      text-align: right;
     }
     .section { display: none; }
     .section.active { display: block; }
@@ -133,8 +219,8 @@
 <body>
 
   <div class="header">
-    <h1>✨ جعبه ابزار هوشمند Evulve</h1>
-    <p id="welcome-text">به مینی‌اپ رسمی ربات خوش آمدید</p>
+    <h1>✨ مینی‌اپ هوشمند Evulve</h1>
+    <p>ابزارهای کاربردی سن اکانت و تقویم دقیق</p>
   </div>
 
   <div class="tabs">
@@ -148,8 +234,8 @@
     <div class="card">
       <h3>🪪 مشخصات اکانت تلگرام شما</h3>
       <div class="info-row"><span class="info-label">نام پروفایل:</span><span class="info-val" id="u-name">—</span></div>
-      <div class="info-row"><span class="info-label">یوزرنیم:</span><span class="info-val" id="u-user">—</span></div>
-      <div class="info-row"><span class="info-label">آیدی عددی:</span><span class="info-val" id="u-id">—</span></div>
+      <div class="info-row"><span class="info-label">یوزرنیم:</span><span class="info-val ltr-val" id="u-user">—</span></div>
+      <div class="info-row"><span class="info-label">آیدی عددی:</span><span class="info-val ltr-val" id="u-id">—</span></div>
       <div class="info-row"><span class="info-label">سال ساخت:</span><span class="info-val" id="u-created">—</span></div>
       <div class="info-row"><span class="info-label">عمر تقریبی:</span><span class="info-val" id="u-age">—</span></div>
       <div class="info-row"><span class="info-label">وضعیت اکانت:</span><span class="info-val" id="u-badge">—</span></div>
@@ -164,28 +250,46 @@
     </div>
   </div>
 
-  <!-- تب ۲: تقویم و محاسبه سن -->
+  <!-- تب ۲: تقویم و محاسبه سن (چرخنده آیفونی + ورود دستی) -->
   <div id="tab-cal" class="section">
     <div class="card">
       <h3>☀️ تاریخ امروز</h3>
-      <div class="info-row"><span class="info-label">شمسی:</span><span class="info-val" id="today-jalali">—</span></div>
-      <div class="info-row"><span class="info-label">میلادی:</span><span class="info-val" id="today-greg">—</span></div>
+      <div class="info-row"><span class="info-label">خورشیدی (شمسی):</span><span class="info-val" id="today-jalali">—</span></div>
+      <div class="info-row"><span class="info-label">میلادی:</span><span class="info-val ltr-val" id="today-greg">—</span></div>
     </div>
 
     <div class="card">
       <h3>🎂 محاسبه دقیق سن و تبدیل تاریخ</h3>
-      <input type="text" id="birth-input" class="input-box" placeholder="تاریخ تولد (مثال: 1381/05/22)" />
-      <button class="btn" onclick="calcAge()">محاسبه سن دقیق</button>
+      <div class="cal-mode-switch">
+        <button id="btn-mode-jalali" class="cal-mode-btn active" onclick="setCalMode('jalali')">☀️ تاریخ شمسی</button>
+        <button id="btn-mode-greg" class="cal-mode-btn" onclick="setCalMode('greg')">🌍 تاریخ میلادی</button>
+      </div>
+
+      <p style="font-size:12px; color:var(--muted); margin-bottom:8px; text-align:center;">
+        اعداد را بالا و پایین ببرید یا در کادر پایین تایپ کنید:
+      </p>
+
+      <!-- چرخنده لمسی (روز / ماه / سال) -->
+      <div class="wheel-wrapper">
+        <div class="wheel-highlight"></div>
+        <div id="wheel-day" class="wheel-col"></div>
+        <div id="wheel-month" class="wheel-col"></div>
+        <div id="wheel-year" class="wheel-col"></div>
+      </div>
+
+      <!-- کادر ورود دستی فرمت ربات -->
+      <input type="text" id="birth-input" class="input-box" placeholder="1381/05/22" oninput="onManualInput()" />
+      <button class="btn" onclick="calcAge()">🧮 محاسبه سن دقیق</button>
       <div id="age-result" class="result-box"></div>
     </div>
   </div>
 
-  <!-- تب ۳: لینک‌ها و امکانات ربات -->
+  <!-- تب ۳: لینک‌ها -->
   <div id="tab-links" class="section">
     <div class="card">
       <h3>🚀 امکانات اصلی ربات Evulve</h3>
-      <p style="font-size:13px; color:var(--muted); line-height:1.7; margin-bottom:12px;">
-        برای استفاده از پیام ناشناس، آپلود فایل به لینک، و دریافت پروکسی و کانفیگ رایگان، از دکمه‌های زیر استفاده کنید:
+      <p style="font-size:13px; color:var(--muted); line-height:1.8; margin-bottom:12px;">
+        برای استفاده از پیام ناشناس، مدیریت فایل و لینک، و دریافت پروکسی و کانفیگ رایگان، از دکمه‌های زیر استفاده کنید:
       </p>
       <button class="btn" onclick="openTgLink('https://t.me/exiism')">📢 ورود به کانال رسمی @exiism</button>
       <button class="btn btn-outline" onclick="openTgLink('https://t.me/Evulve')">💬 رزرو تبلیغات و ارتباط با مدیریت</button>
@@ -198,6 +302,16 @@
   <script>
     const tg = window.Telegram && window.Telegram.WebApp ? window.Telegram.WebApp : null;
     if (tg) { tg.ready(); tg.expand(); }
+
+    const JALALI_MONTHS = ['', 'فروردین', 'اردیبهشت', 'خرداد', 'تیر', 'مرداد', 'شهریور', 'مهر', 'آبان', 'آذر', 'دی', 'بهمن', 'اسفند'];
+    const GREG_MONTHS = ['', 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+
+    function toFaDigits(str) {
+      return String(str).replace(/\d/g, d => '۰۱۲۳۴۵۶۷۸۹'[d]);
+    }
+    function toEnDigits(s) {
+      return String(s || '').replace(/[۰-۹]/g, d => '۰۱۲۳۴۵۶۷۸۹'.indexOf(d)).replace(/[٠-٩]/g, d => '٠١٢٣٤٥٦٧٨٩'.indexOf(d));
+    }
 
     function switchTab(tabId, btn) {
       document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
@@ -212,9 +326,6 @@
       t.style.display = 'block';
       setTimeout(() => { t.style.display = 'none'; }, 2000);
     }
-
-    const JALALI_MONTHS = ['', 'فروردین', 'اردیبهشت', 'خرداد', 'تیر', 'مرداد', 'شهریور', 'مهر', 'آبان', 'آذر', 'دی', 'بهمن', 'اسفند'];
-    const GREG_MONTHS = ['', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
     function gregorianToJalali(gy, gm, gd) {
       const g_d_m = [0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334];
@@ -283,14 +394,22 @@
       else if (gy <= 2019) badge = '🏅 قدیمی و باسابقه';
       else if (gy <= 2022) badge = '⭐️ میان‌رده و معتبر';
       else if (gy >= 2025) badge = '🆕 تازه‌وارد';
-      const ageText = yInt > 0 ? `${yInt} سال و ${mInt} ماه` : `${mInt} ماه`;
-      return { created: `${JALALI_MONTHS[jm]} ${jy} (${GREG_MONTHS[gm]} ${gy})`, ageText, badge };
+
+      let ageParts = [];
+      if (yInt > 0) ageParts.push(`${toFaDigits(yInt)} سال`);
+      if (mInt > 0) ageParts.push(`${toFaDigits(mInt)} ماه`);
+      const ageText = ageParts.length > 0 ? ageParts.join(' و ') : 'کمتر از ۱ ماه';
+
+      return {
+        created: `${JALALI_MONTHS[jm]} ${toFaDigits(jy)} (${gy})`,
+        ageText,
+        badge
+      };
     }
 
-    // مقداردهی اولیه اطلاعات کاربر تلگرام
     const user = tg && tg.initDataUnsafe && tg.initDataUnsafe.user ? tg.initDataUnsafe.user : null;
     const myId = user ? user.id : 208574585;
-    document.getElementById('u-name').innerText = user ? [user.first_name, user.last_name].filter(Boolean).join(' ') : 'کاربر مهمان';
+    document.getElementById('u-name').innerText = user ? [user.first_name, user.last_name].filter(Boolean).join(' ') : 'کاربر تلگرام';
     document.getElementById('u-user').innerText = user && user.username ? '@' + user.username : 'ندارد';
     document.getElementById('u-id').innerText = myId;
     const est = estimateAccount(myId);
@@ -300,19 +419,14 @@
       document.getElementById('u-badge').innerText = est.badge;
     }
 
-    // مقداردهی تاریخ امروز
     const now = new Date();
     const [tJy, tJm, tJd] = gregorianToJalali(now.getFullYear(), now.getMonth() + 1, now.getDate());
-    document.getElementById('today-jalali').innerText = `${tJd} ${JALALI_MONTHS[tJm]} ${tJy}`;
-    document.getElementById('today-greg').innerText = `${now.getFullYear()}/${now.getMonth() + 1}/${now.getDate()}`;
+    document.getElementById('today-jalali').innerText = `${toFaDigits(tJd)} ${JALALI_MONTHS[tJm]} ${toFaDigits(tJy)}`;
+    document.getElementById('today-greg').innerText = `${now.getFullYear()}/${String(now.getMonth() + 1).padStart(2, '0')}/${String(now.getDate()).padStart(2, '0')}`;
 
     function copyMyId() {
       navigator.clipboard.writeText(String(myId));
       showToast('✅ آیدی عددی کپی شد!');
-    }
-
-    function toEnDigits(s) {
-      return String(s || '').replace(/[۰-۹]/g, d => '۰۱۲۳۴۵۶۷۸۹'.indexOf(d)).replace(/[٠-٩]/g, d => '٠١٢٣٤٥٦٧٨٩'.indexOf(d));
     }
 
     function checkCustomId() {
@@ -325,7 +439,99 @@
       }
       const res = estimateAccount(Number(raw));
       box.style.display = 'block';
-      box.innerHTML = `🔢 <b>آیدی:</b> ${raw}<br>📅 <b>ساخت:</b> حدود ${res.created}<br>⏳ <b>عمر:</b> ${res.ageText}<br>🎖 <b>وضعیت:</b> ${res.badge}`;
+      box.innerHTML =
+        `🔢 <b>آیدی عددی:</b> <span dir="ltr">${raw}</span><br>` +
+        `📅 <b>سال ساخت:</b> حدود ${res.created}<br>` +
+        `⏳ <b>عمر اکانت:</b> ${res.ageText}<br>` +
+        `🎖 <b>وضعیت:</b> ${res.badge}`;
+    }
+
+    // منطق چرخنده تاریخ آیفونی (شمسی و میلادی)
+    let calMode = 'jalali';
+    let selY = 1381, selM = 5, selD = 22;
+    let isProgrammaticScroll = false;
+
+    function buildWheelColumn(colId, items, defaultVal, onSelect) {
+      const col = document.getElementById(colId);
+      col.innerHTML = '';
+      items.forEach((it, idx) => {
+        const div = document.createElement('div');
+        div.className = 'wheel-item' + (it.value === defaultVal ? ' selected' : '');
+        div.dataset.val = it.value;
+        div.innerText = it.label;
+        div.onclick = () => {
+          col.scrollTo({ top: idx * 30, behavior: 'smooth' });
+        };
+        col.appendChild(div);
+      });
+
+      const defIdx = Math.max(0, items.findIndex(x => x.value === defaultVal));
+      setTimeout(() => { col.scrollTop = defIdx * 30; }, 20);
+
+      let timer = null;
+      col.onscroll = () => {
+        if (isProgrammaticScroll) return;
+        clearTimeout(timer);
+        timer = setTimeout(() => {
+          const idx = Math.min(items.length - 1, Math.max(0, Math.round(col.scrollTop / 30)));
+          const children = col.querySelectorAll('.wheel-item');
+          children.forEach((c, i) => c.classList.toggle('selected', i === idx));
+          if (items[idx]) {
+            onSelect(items[idx].value);
+            syncInputFromWheel();
+          }
+        }, 60);
+      };
+    }
+
+    function initWheels() {
+      const days = [];
+      for (let d = 1; d <= 31; d++) {
+        days.push({ value: d, label: calMode === 'jalali' ? toFaDigits(d) : String(d) });
+      }
+      const months = [];
+      for (let m = 1; m <= 12; m++) {
+        months.push({ value: m, label: calMode === 'jalali' ? JALALI_MONTHS[m] : GREG_MONTHS[m] });
+      }
+      const years = [];
+      if (calMode === 'jalali') {
+        for (let y = 1300; y <= tJy; y++) years.push({ value: y, label: toFaDigits(y) });
+      } else {
+        for (let y = 1930; y <= now.getFullYear(); y++) years.push({ value: y, label: String(y) });
+      }
+
+      buildWheelColumn('wheel-day', days, selD, v => { selD = v; });
+      buildWheelColumn('wheel-month', months, selM, v => { selM = v; });
+      buildWheelColumn('wheel-year', years, selY, v => { selY = v; });
+      syncInputFromWheel();
+    }
+
+    function syncInputFromWheel() {
+      const inp = document.getElementById('birth-input');
+      inp.value = `${selY}/${String(selM).padStart(2, '0')}/${String(selD).padStart(2, '0')}`;
+    }
+
+    function setCalMode(mode) {
+      if (calMode === mode) return;
+      calMode = mode;
+      document.getElementById('btn-mode-jalali').classList.toggle('active', mode === 'jalali');
+      document.getElementById('btn-mode-greg').classList.toggle('active', mode === 'greg');
+      if (mode === 'jalali') {
+        [selY, selM, selD] = gregorianToJalali(selY, selM, selD);
+      } else {
+        [selY, selM, selD] = jalaliToGregorian(selY, selM, selD);
+      }
+      initWheels();
+      calcAge();
+    }
+
+    function onManualInput() {
+      const raw = toEnDigits(document.getElementById('birth-input').value).trim();
+      const m = raw.match(/^(\d{4})[\/\-.\s](\d{1,2})[\/\-.\s](\d{1,2})$/);
+      if (!m) return;
+      const y = Number(m[1]), mo = Number(m[2]), d = Number(m[3]);
+      if (mo < 1 || mo > 12 || d < 1 || d > 31) return;
+      selY = y; selM = mo; selD = d;
     }
 
     function calcAge() {
@@ -338,20 +544,36 @@
         return;
       }
       const y = Number(m[1]), mo = Number(m[2]), d = Number(m[3]);
+      if (mo < 1 || mo > 12 || d < 1 || d > 31) {
+        box.style.display = 'block';
+        box.innerText = '⚠️ ماه یا روز واردشده معتبر نیست.';
+        return;
+      }
       let jy, jm, jd, gy, gm, gd;
-      if (y >= 1200 && y <= 1500) { [jy, jm, jd] = [y, mo, d]; [gy, gm, gd] = jalaliToGregorian(jy, jm, jd); }
-      else { [gy, gm, gd] = [y, mo, d]; [jy, jm, jd] = gregorianToJalali(gy, gm, gd); }
+      if (y >= 1200 && y <= 1500) {
+        [jy, jm, jd] = [y, mo, d];
+        [gy, gm, gd] = jalaliToGregorian(jy, jm, jd);
+      } else {
+        [gy, gm, gd] = [y, mo, d];
+        [jy, jm, jd] = gregorianToJalali(gy, gm, gd);
+      }
 
-      const diffDays = Math.floor((Date.now() - Date.UTC(gy, gm - 1, gd)) / 86400000);
+      const diffDays = Math.floor((Date.UTC(now.getFullYear(), now.getMonth(), now.getDate()) - Date.UTC(gy, gm - 1, gd)) / 86400000);
+      if (diffDays < 0) {
+        box.style.display = 'block';
+        box.innerText = `⏳ این تاریخ مربوط به ${toFaDigits(Math.abs(diffDays))} روز آینده است.`;
+        return;
+      }
+
       let years = now.getFullYear() - gy, months = (now.getMonth() + 1) - gm, days = now.getDate() - gd;
       if (days < 0) { months -= 1; days += 30; }
       if (months < 0) { years -= 1; months += 12; }
 
       box.style.display = 'block';
       box.innerHTML =
-        `☀️ <b>شمسی:</b> ${jy}/${jm}/${jd}<br>` +
-        `🌍 <b>میلادی:</b> ${gy}/${gm}/${gd}<br>` +
-        `🎂 <b>سن دقیق:</b> ${years} سال و ${months} ماه و ${days} روز (${diffDays.toLocaleString()} روز)`;
+        `☀️ <b>تاریخ شمسی:</b> ${toFaDigits(jy)}/${toFaDigits(String(jm).padStart(2, '0'))}/${toFaDigits(String(jd).padStart(2, '0'))} (${toFaDigits(jd)} ${JALALI_MONTHS[jm]} ${toFaDigits(jy)})<br>` +
+        `🌍 <b>تاریخ میلادی:</b> <span dir="ltr">${gy}/${String(gm).padStart(2, '0')}/${String(gd).padStart(2, '0')}</span><br>` +
+        `🎂 <b>سن دقیق شما:</b> ${toFaDigits(years)} سال و ${toFaDigits(months)} ماه و ${toFaDigits(days)} روز (${toFaDigits(diffDays.toLocaleString())} روز)`;
     }
 
     function openTgLink(url) {
@@ -362,6 +584,8 @@
     function closeApp() {
       if (tg) tg.close();
     }
+
+    initWheels();
   </script>
 </body>
 </html>
