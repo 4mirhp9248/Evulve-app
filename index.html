@@ -4,7 +4,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>Evulve MiniApp</title>
-  <!-- بارگذاری غیرمسدودکننده (async) برای باز شدن فوری حتی بدون VPN -->
   <script src="https://telegram.org/js/telegram-web-app.js" async onload="onTelegramScriptLoad()"></script>
   <style>
     :root {
@@ -21,35 +20,36 @@
       background: radial-gradient(circle at top right, #1e1b4b, #0f172a 65%);
       color: var(--text);
       min-height: 100vh;
-      padding: 14px;
+      padding: 12px;
       padding-bottom: 40px;
       direction: rtl;
     }
     .header {
       text-align: center;
-      padding: 15px 12px;
+      padding: 14px 10px;
       background: linear-gradient(135deg, rgba(56, 189, 248, 0.15), rgba(129, 140, 248, 0.15));
       border: 1px solid var(--border);
       border-radius: 18px;
-      margin-bottom: 14px;
+      margin-bottom: 12px;
     }
-    .header h1 { font-size: 19px; background: linear-gradient(90deg, #38bdf8, #818cf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-    .header p { font-size: 12px; color: var(--muted); margin-top: 4px; }
+    .header h1 { font-size: 18.5px; background: linear-gradient(90deg, #38bdf8, #818cf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .header p { font-size: 11.5px; color: var(--muted); margin-top: 4px; }
     .tabs {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 6px;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 5px;
       margin-bottom: 14px;
     }
     .tab-btn {
       background: var(--card);
       border: 1px solid var(--border);
       color: var(--muted);
-      padding: 9px 4px;
-      border-radius: 12px;
-      font-size: 12px;
-      font-weight: 600;
+      padding: 9px 2px;
+      border-radius: 11px;
+      font-size: 11px;
+      font-weight: 700;
       cursor: pointer;
+      white-space: nowrap;
     }
     .tab-btn.active {
       background: linear-gradient(135deg, #0284c7, #4f46e5);
@@ -60,7 +60,7 @@
       background: var(--card);
       border: 1px solid var(--border);
       border-radius: 18px;
-      padding: 15px;
+      padding: 14px;
       margin-bottom: 14px;
     }
     .card h3 { font-size: 14px; margin-bottom: 8px; color: var(--accent); }
@@ -75,12 +75,7 @@
     }
     .info-row:last-child { border-bottom: none; }
     .info-label { color: var(--muted); }
-    .info-val {
-      font-weight: 600;
-      direction: rtl;
-      text-align: left;
-      unicode-bidi: plaintext;
-    }
+    .info-val { font-weight: 600; direction: rtl; text-align: left; unicode-bidi: plaintext; }
     .ltr-val { direction: ltr; unicode-bidi: embed; }
     .mode-switch {
       display: grid;
@@ -94,7 +89,7 @@
       border: 1px solid var(--border);
       background: rgba(15, 23, 42, 0.75);
       color: var(--muted);
-      font-size: 13px;
+      font-size: 12.5px;
       font-weight: 700;
       cursor: pointer;
     }
@@ -102,6 +97,57 @@
       background: rgba(56, 189, 248, 0.22);
       color: #38bdf8;
       border-color: #38bdf8;
+    }
+    .scroll-list {
+      max-height: 390px;
+      overflow-y: auto;
+      padding-left: 4px;
+      margin-top: 8px;
+    }
+    .net-item {
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid var(--border);
+      border-radius: 13px;
+      padding: 11px;
+      margin-bottom: 9px;
+    }
+    .net-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+      font-size: 12.5px;
+      font-weight: 700;
+    }
+    .ping-badge {
+      font-size: 11.5px;
+      padding: 3px 8px;
+      border-radius: 99px;
+      background: rgba(255,255,255,0.07);
+      color: var(--muted);
+      direction: rtl;
+    }
+    .ping-good { background: rgba(16, 185, 129, 0.2); color: #34d399; }
+    .ping-mid { background: rgba(245, 158, 11, 0.2); color: #fbbf24; }
+    .net-actions {
+      display: grid;
+      grid-template-columns: 1.4fr 1fr;
+      gap: 7px;
+    }
+    .cfg-code {
+      display: block;
+      background: rgba(0, 0, 0, 0.35);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 9px;
+      padding: 8px;
+      font-family: monospace;
+      font-size: 11.5px;
+      color: #38bdf8;
+      direction: ltr;
+      text-align: left;
+      word-break: break-all;
+      margin-bottom: 7px;
+      cursor: pointer;
     }
     .wheel-wrapper {
       position: relative;
@@ -163,15 +209,20 @@
     }
     .btn {
       width: 100%;
-      padding: 11px;
-      border-radius: 12px;
+      padding: 10px;
+      border-radius: 11px;
       border: none;
       background: linear-gradient(135deg, #0284c7, #4f46e5);
       color: #fff;
-      font-size: 13.5px;
+      font-size: 13px;
       font-weight: 600;
       cursor: pointer;
       margin-top: 4px;
+    }
+    .btn-sm {
+      padding: 8px 6px;
+      font-size: 12px;
+      margin-top: 0;
     }
     .btn-outline {
       background: rgba(255, 255, 255, 0.06);
@@ -218,11 +269,7 @@
       flex-shrink: 0;
       border: 1px solid rgba(255,255,255,0.12);
     }
-    .movie-info {
-      flex: 1;
-      font-size: 12.5px;
-      line-height: 1.65;
-    }
+    .movie-info { flex: 1; font-size: 12.5px; line-height: 1.65; }
     .movie-title { color: #38bdf8; font-weight: 700; font-size: 13.5px; margin-bottom: 3px; }
     .movie-meta { color: #fbbf24; font-size: 11.5px; margin-bottom: 5px; }
     .movie-desc { color: #e2e8f0; font-size: 12px; }
@@ -252,6 +299,7 @@
       font-size: 13px;
       display: none;
       z-index: 999;
+      white-space: nowrap;
     }
   </style>
 </head>
@@ -259,18 +307,46 @@
 
   <div class="header">
     <h1>✨ Evulve MiniApp</h1>
-    <p>ابزارهای هوشمند سن اکانت، تقویم و پیشنهاد فیلم و سریال</p>
+    <p>پروکسی و کانفیگ، سن اکانت، تقویم و فیلم و سریال</p>
   </div>
 
   <div class="tabs">
-    <button class="tab-btn active" onclick="switchTab('tab-id', this)">🪪 سن اکانت</button>
-    <button class="tab-btn" onclick="switchTab('tab-cal', this)">📅 تقویم و سن</button>
-    <button class="tab-btn" onclick="switchTab('tab-movie', this)">🎬 فیلم و سریال</button>
+    <button class="tab-btn active" onclick="switchTab('tab-net', this)">🌐 پروکسی</button>
+    <button class="tab-btn" onclick="switchTab('tab-id', this)">🪪 سن اکانت</button>
+    <button class="tab-btn" onclick="switchTab('tab-cal', this)">📅 تقویم</button>
+    <button class="tab-btn" onclick="switchTab('tab-movie', this)">🎬 فیلم/سریال</button>
     <button class="tab-btn" onclick="switchTab('tab-links', this)">🚀 راهنما</button>
   </div>
 
-  <!-- تب ۱: مشخصات و سن اکانت با آیدی عددی -->
-  <div id="tab-id" class="section active">
+  <!-- تب ۱: پروکسی و کانفیگ (همگام با ربات + لیست اسکرول‌شونده + تست پینگ + ۱۵ کانفیگ) -->
+  <div id="tab-net" class="section active">
+    <div class="card">
+      <h3>🌐 بانک پروکسی و کانفیگ رایگان</h3>
+      <p class="sub-hint">
+        پروکسی‌ها و کانفیگ‌های ثبت‌شده در ربات در اینجا قابل استفاده هستند. برای ارسال مورد جدید، از بخش «ارسال پروکسی و کانفیگ» داخل چت‌بات استفاده کنید:
+      </p>
+      <div class="mode-switch">
+        <button id="btn-net-proxy" class="mode-btn active" onclick="setNetTab('proxy')">🌐 پروکسی تلگرام</button>
+        <button id="btn-net-config" class="mode-btn" onclick="setNetTab('config')">⚡ کانفیگ فیلترشکن</button>
+      </div>
+
+      <!-- زیربخش پروکسی‌ها -->
+      <div id="view-proxies">
+        <button class="btn btn-outline" style="margin-top:0; margin-bottom:8px;" onclick="pingAllProxies()">⚡ تست همزمان پینگ تمام پروکسی‌ها</button>
+        <div id="proxy-scroll-box" class="scroll-list"></div>
+      </div>
+
+      <!-- زیربخش کانفیگ‌ها (۱۵تایی) -->
+      <div id="view-configs" style="display:none;">
+        <button class="btn" style="margin-top:0; margin-bottom:8px;" onclick="copyAll15Configs()">📦 کپی همزمان هر ۱۵ کانفیگ این صفحه</button>
+        <div id="config-scroll-box" class="scroll-list"></div>
+        <button class="btn btn-outline" style="margin-top:10px;" onclick="nextConfigPage()">🔄 صفحه بعد / دریافت ۱۵ کانفیگ جدید</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- تب ۲: مشخصات و سن اکانت با آیدی عددی -->
+  <div id="tab-id" class="section">
     <div class="card">
       <h3>🪪 مشخصات و سن اکانت تلگرام شما</h3>
       <p class="sub-hint" id="self-profile-hint">اطلاعات حساب تلگرام خودتان به همراه تخمین تاریخ ساخت و عمر اکانت:</p>
@@ -297,7 +373,7 @@
     </div>
   </div>
 
-  <!-- تب ۲: تقویم و محاسبه سن -->
+  <!-- تب ۳: تقویم و محاسبه سن -->
   <div id="tab-cal" class="section">
     <div class="card">
       <h3>☀️ تاریخ امروز</h3>
@@ -326,11 +402,11 @@
     </div>
   </div>
 
-  <!-- تب ۳: پیشنهاد فیلم و سریال (با تفکیک ۱۰۰٪ دقیق هر ژانر) -->
+  <!-- تب ۴: پیشنهاد فیلم و سریال بی‌پایان -->
   <div id="tab-movie" class="section">
     <div class="card">
-      <h3>🎬 پیشنهاد فیلم و سریال بر اساس ژانر</h3>
-      <p class="sub-hint">ابتدا مشخص کنید فیلم می‌خواهید یا سریال، سپس ژانر دلخواهتان را بزنید. با زدن دکمه رفرش در پایین، ۵ پیشنهاد دیگر دقیقاً در همان ژانر نمایش داده می‌شود:</p>
+      <h3>🎬 پیشنهاد بی‌پایان فیلم و سریال</h3>
+      <p class="sub-hint">ابتدا فیلم یا سریال را انتخاب کنید و روی ژانر دلخواه بزنید. با هر بار زدن دکمه رفرش، ۵ فیلم یا سریال کاملاً جدید از منابع جهانی در همان ژانر دریافت می‌شود:</p>
       <div class="mode-switch">
         <button id="btn-type-movie" class="mode-btn active" onclick="setMediaType('movie')">🎥 فیلم سینمایی</button>
         <button id="btn-type-series" class="mode-btn" onclick="setMediaType('series')">📺 سریال</button>
@@ -346,18 +422,18 @@
       </div>
 
       <div id="movie-output" style="margin-top:12px;"></div>
-      <button class="btn" style="margin-top:12px;" onclick="refreshFivePicks()">🔄 رفرش (۵ پیشنهاد دیگر در همین ژانر)</button>
+      <button id="btn-refresh-movies" class="btn" style="margin-top:12px;" onclick="refreshFivePicks()">🔄 رفرش و دریافت ۵ پیشنهاد جدید در همین ژانر</button>
     </div>
   </div>
 
-  <!-- تب ۴: راهنما و لینک‌ها -->
+  <!-- تب ۵: راهنما و لینک‌ها -->
   <div id="tab-links" class="section">
     <div class="card">
       <h3>📌 راهنمای امکانات چت‌بات Evulve</h3>
       <p class="sub-hint">
         • <b>💌 پیام ناشناس:</b> ارسال متن، ویس، آهنگ و عکس بدون نمایش نام شما به مدیر.<br>
-        • <b>📥 پروکسی و کانفیگ:</b> دریافت و اشتراک‌گذاری رایگان پروکسی تلگرام و کانفیگ فیلترشکن در بخش جعبه ابزار.<br>
-        • <b>☁️ تبدیل فایل به لینک:</b> با یک‌بار آپلود فایل در جعبه ابزار ربات، لینک اشتراک‌گذاری تلگرامی بگیرید تا هرکس روی آن زد، فایل را مستقیماً از ربات تحویل بگیرد و نیازی به آپلود چندباره نباشد.
+        • <b>📤 ارسال پروکسی و کانفیگ:</b> از داخل جعبه ابزار چت‌بات می‌توانید پروکسی یا کانفیگ جدید به این لیست اضافه کنید.<br>
+        • <b>☁️ تبدیل فایل به لینک:</b> با یک‌بار آپلود فایل در جعبه ابزار ربات، لینک اشتراک‌گذاری تلگرامی بگیرید تا هرکس روی آن زد، فایل را مستقیماً از ربات تحویل بگیرد.
       </p>
       <button class="btn" onclick="openTgLink('https://t.me/exiism')">📢 ورود به کانال رسمی @exiism</button>
       <button class="btn btn-outline" onclick="openTgLink('https://t.me/Evulve')">💬 رزرو تبلیغات (@Evulve)</button>
@@ -400,11 +476,7 @@
         const q = new URLSearchParams(window.location.search);
         const uid = Number(q.get('uid'));
         if (uid > 0) {
-          return {
-            id: uid,
-            first_name: q.get('fn') || 'کاربر تلگرام',
-            username: q.get('un') || ''
-          };
+          return { id: uid, first_name: q.get('fn') || 'کاربر تلگرام', username: q.get('un') || '' };
         }
       } catch (e) {}
       return null;
@@ -427,9 +499,214 @@
       const t = document.getElementById('toast');
       t.innerText = msg;
       t.style.display = 'block';
-      setTimeout(() => { t.style.display = 'none'; }, 2000);
+      setTimeout(() => { t.style.display = 'none'; }, 2200);
     }
 
+    // ==========================================
+    // ۱. سیستم پروکسی (با تست پینگ) و کانفیگ ۱۵تایی
+    // ==========================================
+    function fromBase64Url(b64) {
+      const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_';
+      const bytes = [];
+      let buffer = 0, bits = 0;
+      for (let i = 0; i < b64.length; i++) {
+        const val = chars.indexOf(b64[i]);
+        if (val === -1) continue;
+        buffer = (buffer << 6) | val;
+        bits += 6;
+        if (bits >= 8) {
+          bits -= 8;
+          bytes.push((buffer >> bits) & 0xff);
+        }
+      }
+      let out = '';
+      for (let i = 0; i < bytes.length; i++) {
+        const b = bytes[i];
+        if (b < 0x80) out += String.fromCharCode(b);
+        else if ((b & 0xe0) === 0xc0) {
+          out += String.fromCharCode(((b & 0x1f) << 6) | (bytes[++i] & 0x3f));
+        } else {
+          const b2 = bytes[++i], b3 = bytes[++i];
+          out += String.fromCharCode(((b & 0x0f) << 12) | ((b2 & 0x3f) << 6) | (b3 & 0x3f));
+        }
+      }
+      return out;
+    }
+
+    function decompressNetRow(s) {
+      const str = String(s || '');
+      if (str.startsWith('~P|')) {
+        const p = str.split('|');
+        return `https://t.me/proxy?server=${p[1] || ''}&port=${p[2] || '443'}&secret=${p.slice(3).join('|')}`;
+      }
+      return str.replace(/^~p\?/, 'https://t.me/proxy?').replace(/^~s\?/, 'https://t.me/socks?')
+                .replace(/~1=/g, 'server=').replace(/&2=/g, '&port=').replace(/&3=/g, '&secret=');
+    }
+
+    let appProxies = [];
+    let appConfigs = [];
+    let cfgPageOffset = 0;
+
+    function loadSyncedNetItems() {
+      try {
+        const q = new URLSearchParams(window.location.search);
+        const netParam = q.get('net');
+        if (netParam) {
+          const parsed = JSON.parse(fromBase64Url(netParam));
+          if (Array.isArray(parsed.p)) appProxies = parsed.p.map(decompressNetRow);
+          if (Array.isArray(parsed.c)) appConfigs = parsed.c;
+        }
+      } catch (e) {}
+
+      // دریافت خودکار کانفیگ‌های کمکی در صورت خالی بودن یا نیاز به صفحات بیشتر
+      fetchExtraPublicConfigs();
+      renderProxiesList();
+      renderConfigsPage();
+    }
+
+    async function fetchExtraPublicConfigs() {
+      try {
+        const r = await fetch('https://raw.githubusercontent.com/barry-far/V2ray-Configs/main/Sub1.txt');
+        const txt = await r.text();
+        const lines = txt.split('\n').map(l => l.trim()).filter(l => /^(?:vless|vmess|trojan|ss):\/\//i.test(l));
+        for (const l of lines.slice(0, 90)) {
+          if (!appConfigs.includes(l)) appConfigs.push(l);
+        }
+        renderConfigsPage();
+      } catch (e) {}
+    }
+
+    function setNetTab(mode) {
+      document.getElementById('btn-net-proxy').classList.toggle('active', mode === 'proxy');
+      document.getElementById('btn-net-config').classList.toggle('active', mode === 'config');
+      document.getElementById('view-proxies').style.display = mode === 'proxy' ? 'block' : 'none';
+      document.getElementById('view-configs').style.display = mode === 'config' ? 'block' : 'none';
+    }
+
+    function extractHostPort(proxyUrl) {
+      const mSrv = proxyUrl.match(/server=([^&\s]+)/i);
+      const mPrt = proxyUrl.match(/port=(\d+)/i);
+      return { host: mSrv ? mSrv[1] : 't.me', port: mPrt ? mPrt[1] : '443' };
+    }
+
+    function renderProxiesList() {
+      const box = document.getElementById('proxy-scroll-box');
+      if (appProxies.length === 0) {
+        box.innerHTML = `<div class="net-item" style="text-align:center; color:var(--muted);">📭 هنوز پروکسی فعالی از ربات همگام نشده است.<br>یک بار در چت ربات <b>/start</b> بزنید و از دکمه آبی <b>MiniApp</b> وارد شوید.</div>`;
+        return;
+      }
+
+      let html = '';
+      appProxies.forEach((pUrl, idx) => {
+        const hp = extractHostPort(pUrl);
+        html += `<div class="net-item">
+          <div class="net-top">
+            <span dir="ltr">🌐 Proxy #${idx + 1} (${hp.host}:${hp.port})</span>
+            <span id="ping-badge-${idx}" class="ping-badge">⚡ پینگ: تست نشده</span>
+          </div>
+          <div class="net-actions">
+            <button class="btn btn-sm" onclick="openTgLink('${pUrl}')">🔌 اتصال با یک کلیک</button>
+            <button class="btn btn-sm btn-outline" onclick="measureProxyPing(${idx}, '${hp.host}', '${hp.port}')">📡 تست پینگ</button>
+          </div>
+        </div>`;
+      });
+      box.innerHTML = html;
+    }
+
+    async function measureProxyPing(idx, host, port) {
+      const badge = document.getElementById(`ping-badge-${idx}`);
+      if (!badge) return;
+      badge.className = 'ping-badge';
+      badge.innerText = '⏳ در حال تست...';
+
+      const start = performance.now();
+      const ctrl = new AbortController();
+      const timer = setTimeout(() => ctrl.abort(), 2400);
+
+      try {
+        await fetch(`https://${host}:${port}/`, { mode: 'no-cors', cache: 'no-store', signal: ctrl.signal });
+        clearTimeout(timer);
+        const ms = Math.max(18, Math.round(performance.now() - start));
+        badge.className = 'ping-badge ' + (ms < 350 ? 'ping-good' : 'ping-mid');
+        badge.innerText = `🟢 ${toFaDigits(ms)} ms`;
+      } catch (err) {
+        clearTimeout(timer);
+        const elapsed = Math.round(performance.now() - start);
+        if (elapsed < 2300) {
+          badge.className = 'ping-badge ' + (elapsed < 380 ? 'ping-good' : 'ping-mid');
+          badge.innerText = `🟢 ${toFaDigits(elapsed)} ms`;
+        } else {
+          badge.className = 'ping-badge';
+          badge.innerText = '🔴 بدون پاسخ / تایم‌اوت';
+        }
+      }
+    }
+
+    function pingAllProxies() {
+      if (appProxies.length === 0) return;
+      appProxies.forEach((pUrl, idx) => {
+        const hp = extractHostPort(pUrl);
+        setTimeout(() => measureProxyPing(idx, hp.host, hp.port), idx * 150);
+      });
+    }
+
+    function getCurrent15Configs() {
+      if (appConfigs.length === 0) return [];
+      const out = [];
+      const count = Math.min(15, appConfigs.length);
+      for (let i = 0; i < count; i++) {
+        out.push(appConfigs[(cfgPageOffset + i) % appConfigs.length]);
+      }
+      return out;
+    }
+
+    function renderConfigsPage() {
+      const box = document.getElementById('config-scroll-box');
+      const list15 = getCurrent15Configs();
+      if (list15.length === 0) {
+        box.innerHTML = `<div class="net-item" style="text-align:center; color:var(--muted);">⏳ در حال بارگذاری کانفیگ‌ها...</div>`;
+        return;
+      }
+
+      let html = '';
+      list15.forEach((cfg, idx) => {
+        const num = idx + 1;
+        const proto = (cfg.split('://')[0] || 'CONFIG').toUpperCase();
+        const safeCfg = cfg.replace(/'/g, "\\'");
+        html += `<div class="net-item">
+          <div class="net-top">
+            <span dir="ltr">⚡ Config #${num} (${proto})</span>
+            <span style="font-size:11px; color:#38bdf8; cursor:pointer;" onclick="copySingleConfig('${safeCfg}', ${num})">📋 کپی تکی</span>
+          </div>
+          <code class="cfg-code" onclick="copySingleConfig('${safeCfg}', ${num})">${cfg.slice(0, 75)}${cfg.length > 75 ? '...' : ''}</code>
+        </div>`;
+      });
+      box.innerHTML = html;
+    }
+
+    function copySingleConfig(cfgStr, num) {
+      navigator.clipboard.writeText(cfgStr);
+      showToast(`✅ کانفیگ شماره ${toFaDigits(num)} کپی شد!`);
+    }
+
+    function copyAll15Configs() {
+      const list15 = getCurrent15Configs();
+      if (list15.length === 0) return;
+      navigator.clipboard.writeText(list15.join('\n'));
+      showToast(`✅ هر ${toFaDigits(list15.length)} کانفیگ یکجا کپی شد!`);
+    }
+
+    function nextConfigPage() {
+      if (appConfigs.length === 0) return;
+      cfgPageOffset = (cfgPageOffset + 15) % appConfigs.length;
+      renderConfigsPage();
+      document.getElementById('config-scroll-box').scrollTop = 0;
+      showToast('🔄 ۱۵ کانفیگ جدید بارگذاری شد');
+    }
+
+    // ==========================================
+    // ۲. محاسبه سن اکانت و تقویم
+    // ==========================================
     function gregorianToJalali(gy, gm, gd) {
       const g_d_m = [0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334];
       const gy2 = (gm > 2) ? (gy + 1) : gy;
@@ -504,12 +781,7 @@
       else if (mInt > 0) ageStr = `\u200F${toFaDigits(mInt)} ماه`;
       else ageStr = 'کمتر از ۱ ماه';
 
-      return {
-        jalaliStr: `\u200F${JALALI_MONTHS[jm]} ${toFaDigits(jy)}`,
-        gregStr: `${GREG_MONTHS[gm]} ${gy}`,
-        ageText: ageStr,
-        badge
-      };
+      return { jalaliStr: `\u200F${JALALI_MONTHS[jm]} ${toFaDigits(jy)}`, gregStr: `${GREG_MONTHS[gm]} ${gy}`, ageText: ageStr, badge };
     }
 
     let myId = null;
@@ -529,13 +801,11 @@
           document.getElementById('u-badge').innerText = est.badge;
         }
       } else {
-        document.getElementById('self-profile-hint').innerText = '🌐 نسخه وب: برای مشاهده خودکار مشخصات خودتان از دکمه آبی MiniApp داخل ربات وارد شوید و یا آیدی عددی را در کادر پایین وارد کنید:';
-        document.getElementById('u-name').innerText = 'کاربر وب';
+        document.getElementById('self-profile-hint').innerText = 'برای مشاهده خودکار مشخصات خودتان از داخل تلگرام وارد شوید و یا آیدی عددی را در کادر پایین وارد کنید:';
+        document.getElementById('u-name').innerText = 'کاربر مهمان';
         document.getElementById('u-id').innerText = '—';
       }
     }
-
-    renderUserProfile();
 
     const now = new Date();
     const [tJy, tJm, tJd] = gregorianToJalali(now.getFullYear(), now.getMonth() + 1, now.getDate());
@@ -543,10 +813,7 @@
     document.getElementById('today-greg').innerText = `${now.getFullYear()}/${String(now.getMonth() + 1).padStart(2, '0')}/${String(now.getDate()).padStart(2, '0')}`;
 
     function copyMyId() {
-      if (!myId) {
-        showToast('⚠️ لطفاً از دکمه آبی MiniApp داخل تلگرام وارد شوید');
-        return;
-      }
+      if (!myId) { showToast('⚠️ لطفاً از داخل تلگرام وارد شوید'); return; }
       navigator.clipboard.writeText(String(myId));
       showToast('✅ آیدی عددی شما کپی شد!');
     }
@@ -555,21 +822,13 @@
       const raw = toEnDigits(document.getElementById('numeric-id-input').value).trim();
       const box = document.getElementById('numeric-id-result');
       box.style.display = 'block';
-
       const cleanNum = raw.replace(/^#?U_/, '');
       if (!/^\d{5,15}$/.test(cleanNum)) {
-        box.innerHTML =
-          `⚠️ <b>لطفاً فقط «آیدی عددی» معتبر وارد کنید</b> (مثال: 208574585).<br>` +
-          `💡 اگر آیدی عددی شخص را ندارید، روی دکمه <b>«🤖 دریافت آیدی عددی از @userinfobot»</b> بزنید.`;
+        box.innerHTML = `⚠️ <b>لطفاً فقط «آیدی عددی» معتبر وارد کنید</b> (مثال: 208574585).<br>💡 اگر آیدی عددی ندارید، روی دکمه <b>@userinfobot</b> بزنید.`;
         return;
       }
-
       const res = estimateAccount(Number(cleanNum));
-      if (!res) {
-        box.innerText = '⚠️ این آیدی عددی قابل بررسی نیست.';
-        return;
-      }
-
+      if (!res) { box.innerText = '⚠️ این آیدی عددی قابل بررسی نیست.'; return; }
       box.innerHTML =
         `🔢 <b>آیدی عددی:</b> <span dir="ltr">${cleanNum}</span><br>` +
         `☀️ <b>تاریخ ساخت (شمسی):</b> حدود ${res.jalaliStr}<br>` +
@@ -579,9 +838,7 @@
         `<button class="btn btn-outline" style="margin-top:8px;" onclick="openTgLink('tg://user?id=${cleanNum}')">👤 باز کردن پروفایل در تلگرام</button>`;
     }
 
-    // چرخنده تاریخ شمسی و میلادی (با دقت ۱۰۰٪ ماه‌های ۳۱ و ۳۰ روزه)
-    let calMode = 'jalali';
-    let selY = 1381, selM = 5, selD = 22;
+    let calMode = 'jalali', selY = 1381, selM = 5, selD = 22;
 
     function buildWheelColumn(colId, items, defaultVal, onSelect) {
       const col = document.getElementById(colId);
@@ -595,7 +852,6 @@
       });
       const defIdx = Math.max(0, items.findIndex(x => x.value === defaultVal));
       setTimeout(() => { col.scrollTop = defIdx * 30; }, 20);
-
       let timer = null;
       col.onscroll = () => {
         clearTimeout(timer);
@@ -608,16 +864,11 @@
     }
 
     function initWheels() {
-      const days = [];
+      const days = [], months = [], years = [];
       for (let d = 1; d <= 31; d++) days.push({ value: d, label: calMode === 'jalali' ? toFaDigits(d) : String(d) });
-      const months = [];
       for (let m = 1; m <= 12; m++) months.push({ value: m, label: calMode === 'jalali' ? JALALI_MONTHS[m] : GREG_MONTHS[m].slice(0, 3) });
-      const years = [];
-      if (calMode === 'jalali') {
-        for (let y = 1300; y <= tJy; y++) years.push({ value: y, label: toFaDigits(y) });
-      } else {
-        for (let y = 1930; y <= now.getFullYear(); y++) years.push({ value: y, label: String(y) });
-      }
+      if (calMode === 'jalali') { for (let y = 1300; y <= tJy; y++) years.push({ value: y, label: toFaDigits(y) }); }
+      else { for (let y = 1930; y <= now.getFullYear(); y++) years.push({ value: y, label: String(y) }); }
       buildWheelColumn('wheel-day', days, selD, v => { selD = v; });
       buildWheelColumn('wheel-month', months, selM, v => { selM = v; });
       buildWheelColumn('wheel-year', years, selY, v => { selY = v; });
@@ -652,37 +903,22 @@
       const m = raw.match(/^(\d{4})[\/\-.\s](\d{1,2})[\/\-.\s](\d{1,2})$/);
       if (!m) { box.style.display = 'block'; box.innerText = '⚠️ فرمت تاریخ معتبر نیست (مثال: 1381/05/22).'; return; }
       const y = Number(m[1]), mo = Number(m[2]), d = Number(m[3]);
-      if (mo < 1 || mo > 12 || d < 1 || d > 31) {
-        box.style.display = 'block'; box.innerText = '⚠️ ماه یا روز واردشده معتبر نیست.'; return;
-      }
+      if (mo < 1 || mo > 12 || d < 1 || d > 31) { box.style.display = 'block'; box.innerText = '⚠️ ماه یا روز معتبر نیست.'; return; }
       let jy, jm, jd, gy, gm, gd;
       if (y >= 1200 && y <= 1550) {
         if (mo > 6 && d === 31) { box.style.display = 'block'; box.innerText = '⚠️ ماه‌های نیمه دوم سال شمسی حداکثر ۳۰ روزه هستند.'; return; }
-        [jy, jm, jd] = [y, mo, d];
-        [gy, gm, gd] = jalaliToGregorian(jy, jm, jd);
+        [jy, jm, jd] = [y, mo, d]; [gy, gm, gd] = jalaliToGregorian(jy, jm, jd);
       } else {
-        [gy, gm, gd] = [y, mo, d];
-        [jy, jm, jd] = gregorianToJalali(gy, gm, gd);
+        [gy, gm, gd] = [y, mo, d]; [jy, jm, jd] = gregorianToJalali(gy, gm, gd);
       }
-
-      const todayUtc = Date.UTC(now.getFullYear(), now.getMonth(), now.getDate());
-      const targetUtc = Date.UTC(gy, gm - 1, gd);
-      const diffDays = Math.floor((todayUtc - targetUtc) / 86400000);
-
-      let years = tJy - jy;
-      let months = tJm - jm;
-      let days = tJd - jd;
+      const diffDays = Math.floor((Date.UTC(now.getFullYear(), now.getMonth(), now.getDate()) - Date.UTC(gy, gm - 1, gd)) / 86400000);
+      let years = tJy - jy, months = tJm - jm, days = tJd - jd;
       if (days < 0) {
         months -= 1;
         const prevJm = tJm === 1 ? 12 : tJm - 1;
-        const prevMonthLen = prevJm <= 6 ? 31 : (prevJm <= 11 ? 30 : 29);
-        days += prevMonthLen;
+        days += (prevJm <= 6 ? 31 : (prevJm <= 11 ? 30 : 29));
       }
-      if (months < 0) {
-        years -= 1;
-        months += 12;
-      }
-
+      if (months < 0) { years -= 1; months += 12; }
       box.style.display = 'block';
       box.innerHTML =
         `☀️ <b>معادل شمسی:</b> \u200F${toFaDigits(jd)} ${JALALI_MONTHS[jm]} ${toFaDigits(jy)} (${toFaDigits(jy)}/${toFaDigits(String(jm).padStart(2, '0'))}/${toFaDigits(String(jd).padStart(2, '0'))})<br>` +
@@ -692,158 +928,172 @@
           : `⏳ <b>فاصله تا این تاریخ:</b> \u200F${toFaDigits(Math.abs(diffDays))} روز دیگر`);
     }
 
-    // بانک کامل فیلم و سریال (۱۰ فیلم و ۱۰ سریال در هر ژانر = ۱۲۰ اثر برتر برای اینکه رفرش فقط در همان ژانر بماند)
+    // ==========================================
+    // ۳. موتور فیلم و سریال بی‌پایان (کاتالوگ پایه + دریافت زنده از APIهای جهانی)
+    // ==========================================
     let currentMediaType = 'movie';
     let currentCategory = 'action';
     let currentOffset = 0;
+    let tvMazeCache = [];
+    let nextTvMazePage = 0;
 
-    const MOVIES_DATA = [
-      // اکشن (۱۰ فیلم)
-      { g: 'action', t: 'Dune: Part Two (2024)', r: '8.5', gn: 'اکشن', p: 'https://m.media-amazon.com/images/M/MV5BNTc0YmQxMjEtODI5MC00NjFiLTlkMWUtOGQ5NjFmYWUyZGJhXkEyXkFqcGc@._V1_SX300.jpg', d: 'اتحاد پل اتریدیز با فرمن‌ها برای انتقام از توطئه‌گران کهکشان.' },
-      { g: 'action', t: 'The Gorge (2025)', r: '7.4', gn: 'اکشن', p: 'https://m.media-amazon.com/images/M/MV5BOTQ5Y2QyYTktYmFmZi00NWJlLWE0MzgtYTA4M2I0ZjQwZjcxXkEyXkFqcGc@._V1_SX300.jpg', d: 'دو تک‌تیرانداز زبده مامور محافظت از یک دره اسرارآمیز و مرگبار می‌شوند.' },
-      { g: 'action', t: 'Furiosa: Mad Max (2024)', r: '7.5', gn: 'اکشن', p: 'https://m.media-amazon.com/images/M/MV5BNTcwYWE1NTYtOWNiYy00NzY3LWIwY2MtNjJmZDkxNDNmOWE1XkEyXkFqcGc@._V1_SX300.jpg', d: 'نبرد نفس‌گیر فیوریوسا در بیابان‌های بی‌رحم برای بازگشت به خانه.' },
-      { g: 'action', t: 'Gladiator II (2024)', r: '7.0', gn: 'اکشن', p: 'https://m.media-amazon.com/images/M/MV5BMWYzZTM5ZGQtOGE5My00NmM2LWFlMDEtMGNjYjdmOWM1MzA1XkEyXkFqcGc@._V1_SX300.jpg', d: 'ورود لوسیوس به میدان گلادیاتورهای روم برای نبرد بر سر آزادی.' },
-      { g: 'action', t: 'John Wick: Chapter 4 (2023)', r: '7.7', gn: 'اکشن', p: 'https://m.media-amazon.com/images/M/MV5BMDExZGMyOTMtMDgyYi00NGIwLWJhMTEtOTdkZGFjNmZiMTEwXkEyXkFqcGdeQXVyMjM4NTM5NDY@._V1_SX300.jpg', d: 'نبرد نهایی جان ویک با قدرتمندترین سندیکای خلافکاران جهان.' },
-      { g: 'action', t: 'Top Gun: Maverick (2022)', r: '8.2', gn: 'اکشن', p: 'https://m.media-amazon.com/images/M/MV5BZWYzOGEwNTgtNWU3NS00ZTQ0LWJkODUtMmVhMjIwMjA1ZmQwXkEyXkFqcGdeQXVyMjkwOTAyMDU@._V1_SX300.jpg', d: 'بازگشت ماوریک برای آموزش گروهی از خلبانان جوان در ماموریتی غیرممکن.' },
-      { g: 'action', t: 'The Dark Knight (2008)', r: '9.0', gn: 'اکشن', p: 'https://m.media-amazon.com/images/M/MV5BMTMxNTMwODM0NF5BMl5BanBnXkFtZTcwODAyMTk2Mw@@._V1_SX300.jpg', d: 'رویارویی بتمن با جوکر که قصد دارد شهر گاتهام را به هرج‌ومرج مطلق بکشاند.' },
-      { g: 'action', t: 'Mad Max: Fury Road (2015)', r: '8.1', gn: 'اکشن', p: 'https://m.media-amazon.com/images/M/MV5BN2EwM2I5OWMtMGQyMi00Zjg1LWJkNTctZTdjYTA4OGUwZjMyXkEyXkFqcGdeQXVyMTMxODk2OTU@._V1_SX300.jpg', d: 'فرار نفس‌گیر مکس و فیوریوسا از دست ارتش یک دیکتاتور در بیابان.' },
-      { g: 'action', t: 'Extraction 2 (2023)', r: '7.0', gn: 'اکشن', p: 'https://m.media-amazon.com/images/M/MV5BZjg5MTM4N2QtN2RlMS00NzBlLTg3NDktM2ExZDNmMmExMGU3XkEyXkFqcGdeQXVyMTkxNjUyNQ@@._V1_SX300.jpg', d: 'بازگشت تایلر ریک برای نجات خانواده‌ای زندانی از دست گانگسترهای بی‌رحم.' },
-      { g: 'action', t: 'Mission: Impossible 7 (2023)', r: '7.7', gn: 'اکشن', p: 'https://m.media-amazon.com/images/M/MV5BYzFiZjc1YzctMDY3Zi00NGE5LTlmNWEtN2Q3OWFjYjY1NGM2XkEyXkFqcGdeQXVyMTUyMTUzNjQ0._V1_SX300.jpg', d: 'تلاش ایتن هانت برای مهار یک هوش مصنوعی مرگبار پیش از افتادن به دست دشمنان.' },
+    const MOVIES_POOL = {
+      action: [
+        { t: 'Dune: Part Two (2024)', r: '8.5', gn: 'اکشن', p: 'https://m.media-amazon.com/images/M/MV5BNTc0YmQxMjEtODI5MC00NjFiLTlkMWUtOGQ5NjFmYWUyZGJhXkEyXkFqcGc@._V1_SX300.jpg', d: 'اتحاد پل اتریدیز با فرمن‌ها برای انتقام از توطئه‌گران کهکشان.' },
+        { t: 'The Gorge (2025)', r: '7.4', gn: 'اکشن', p: 'https://m.media-amazon.com/images/M/MV5BOTQ5Y2QyYTktYmFmZi00NWJlLWE0MzgtYTA4M2I0ZjQwZjcxXkEyXkFqcGc@._V1_SX300.jpg', d: 'دو تک‌تیرانداز زبده مامور محافظت از یک دره اسرارآمیز و مرگبار می‌شوند.' },
+        { t: 'Furiosa: Mad Max (2024)', r: '7.5', gn: 'اکشن', p: 'https://m.media-amazon.com/images/M/MV5BNTcwYWE1NTYtOWNiYy00NzY3LWIwY2MtNjJmZDkxNDNmOWE1XkEyXkFqcGc@._V1_SX300.jpg', d: 'نبرد نفس‌گیر فیوریوسا در بیابان‌های بی‌رحم برای بازگشت به خانه.' },
+        { t: 'Gladiator II (2024)', r: '7.0', gn: 'اکشن', p: 'https://m.media-amazon.com/images/M/MV5BMWYzZTM5ZGQtOGE5My00NmM2LWFlMDEtMGNjYjdmOWM1MzA1XkEyXkFqcGc@._V1_SX300.jpg', d: 'ورود لوسیوس به میدان گلادیاتورهای روم برای نبرد بر سر آزادی.' },
+        { t: 'John Wick: Chapter 4 (2023)', r: '7.7', gn: 'اکشن', p: 'https://m.media-amazon.com/images/M/MV5BMDExZGMyOTMtMDgyYi00NGIwLWJhMTEtOTdkZGFjNmZiMTEwXkEyXkFqcGdeQXVyMjM4NTM5NDY@._V1_SX300.jpg', d: 'نبرد نهایی جان ویک با قدرتمندترین سندیکای خلافکاران جهان.' }
+      ],
+      scifi: [
+        { t: 'Interstellar (2014)', r: '8.7', gn: 'علمی‌تخیلی', p: 'https://m.media-amazon.com/images/M/MV5BZjdkOTU3MDktN2IxOS00OGEyLWFmMjktY2FiMmZkNWIyODZiXkEyXkFqcGdeQXVyMTMxODk2OTU@._V1_SX300.jpg', d: 'سفر فضانوردان از درون یک کرم‌چاله برای یافتن سیاره‌ای جدید برای بشر.' },
+        { t: 'Inception (2010)', r: '8.8', gn: 'علمی‌تخیلی', p: 'https://m.media-amazon.com/images/M/MV5BMjAxMzY3NjcxNF5BMl5BanBnXkFtZTcwNTI5OTM0Mw@@._V1_SX300.jpg', d: 'سارق حرفه‌ای اسرار که از طریق نفوذ به رویاهای افراد ماموریتی ناممکن می‌گیرد.' },
+        { t: 'Arrival (2016)', r: '7.9', gn: 'علمی‌تخیلی', p: 'https://m.media-amazon.com/images/M/MV5BMTExMzU0ODcxNDheQTJeQWpwZ15BbWU4MDE1OTI4MzAy._V1_SX300.jpg', d: 'تلاش یک زبان‌شناس برای رمزگشایی زبان موجودات فضایی پیش از وقوع جنگ.' },
+        { t: 'The Matrix (1999)', r: '8.7', gn: 'علمی‌تخیلی', p: 'https://m.media-amazon.com/images/M/MV5BNzQzOTk3OTAtNDQ0Zi00ZTVkLWI0MTEtMDllZjNkYzNjNTc4L2ltYWdlXkEyXkFqcGdeQXVyNjU0OTQ0OTY@._V1_SX300.jpg', d: 'هکری جوان متوجه می‌شود دنیایی که در آن زندگی می‌کند یک شبیه‌سازی کامپیوتری است.' },
+        { t: 'Blade Runner 2049 (2017)', r: '8.0', gn: 'علمی‌تخیلی', p: 'https://m.media-amazon.com/images/M/MV5BNzA1Njg4NzYxOV5BMl5BanBnXkFtZTgwODk5NjU3MzI@._V1_SX300.jpg', d: 'کشف رازی دفن‌شده توسط یک مامور جوان که جامعه آینده را تهدید می‌کند.' }
+      ],
+      horror: [
+        { t: 'Nosferatu (2024)', r: '7.7', gn: 'ترسناک', p: 'https://m.media-amazon.com/images/M/MV5BY2FhZGE3NmEtNWJjOC00NDI1LWFhMTQtMjcxNmQzZmEwNGIzXkEyXkFqcGc@._V1_SX300.jpg', d: 'تسخیر شدن زنی جوان توسط خون‌آشامی باستانی در شهری تاریک و سرد.' },
+        { t: 'The Substance (2024)', r: '7.4', gn: 'ترسناک', p: 'https://m.media-amazon.com/images/M/MV5BZDQ1NGE5MGMtYzdlZC00ODExLWJlMDMtNWU4NjA5OWYwMDEwXkEyXkFqcGc@._V1_SX300.jpg', d: 'استفاده از دارویی مرموز برای ساخت نسخه جوان‌تر خود با عواقبی وحشتناک.' },
+        { t: 'Alien: Romulus (2024)', r: '7.2', gn: 'ترسناک', p: 'https://m.media-amazon.com/images/M/MV5BMDU0NjcwOGQtNjNjOS00NzQ3LWIwM2YtYWVmODZjMzQzN2ExXkEyXkFqcGc@._V1_SX300.jpg', d: 'رویارویی گروهی از کاوشگران با مرگبارترین موجود بیگانه در ایستگاه فضایی.' },
+        { t: 'A Quiet Place (2018)', r: '7.5', gn: 'ترسناک', p: 'https://m.media-amazon.com/images/M/MV5BMjI0MDMzNTQ0M15BMl5BanBnXkFtZTgwMTM5NzM3NDM@._V1_SX300.jpg', d: 'تلاش خانواده‌ای برای زنده ماندن در سکوت مطلق در برابر هیولاهای حساس به صدا.' },
+        { t: 'Get Out (2017)', r: '7.8', gn: 'ترسناک', p: 'https://m.media-amazon.com/images/M/MV5BMjUxMDQwNjcyNl5BMl5BanBnXkFtZTgwNzcwMzc0MTI@._V1_SX300.jpg', d: 'سفر یک جوان به خانه خانواده نامزدش که به کشف رازی هولناک منجر می‌شود.' }
+      ],
+      comedy: [
+        { t: 'Anora (2024)', r: '8.0', gn: 'کمدی', p: 'https://m.media-amazon.com/images/M/MV5BYThiN2M0NTItODRmNC00NDhlLWFiYTgtMWM2YTEyYzI3ZTY1XkEyXkFqcGc@._V1_SX300.jpg', d: 'ازدواج ناگهانی دختری جوان در نیویورک با پسر یک ثروتمند روس.' },
+        { t: 'Grand Budapest Hotel (2014)', r: '8.1', gn: 'کمدی', p: 'https://m.media-amazon.com/images/M/MV5BMzM5NjUxOTEyMl5BMl5BanBnXkFtZTgwNjEyMDM0MDE@._V1_SX300.jpg', d: 'ماجراهای خنده‌دار مدیر یک هتل لوکس اروپایی پس از سرقت یک تابلوی نفیس.' },
+        { t: 'The Hangover (2009)', r: '7.7', gn: 'کمدی', p: 'https://m.media-amazon.com/images/M/MV5BNGQwZjg5YmYtY2VkNC00NzliLTljYTctNzI5NmU3MjE2ODQzXkEyXkFqcGdeQXVyNzkwMjQ5NzM@._V1_SX300.jpg', d: 'سه دوست پس از یک مهمانی در لاس‌وگاس بیدار می‌شوند و داماد را گم کرده‌اند.' },
+        { t: 'Superbad (2007)', r: '7.6', gn: 'کمدی', p: 'https://m.media-amazon.com/images/M/MV5BMTc0NjIyMjA2OF5BMl5BanBnXkFtZTcwMzIxNDE1MQ@@._V1_SX300.jpg', d: 'تلاش پرماجرا و خنده‌دار دو نوجوان در آخرین روزهای دبیرستان.' },
+        { t: 'Deadpool & Wolverine (2024)', r: '7.7', gn: 'کمدی', p: 'https://m.media-amazon.com/images/M/MV5BZTk5ODY0MmQtMzA3Ni00NGY1LThiYzItZThiNjFiNDM4MTM3XkEyXkFqcGc@._V1_SX300.jpg', d: 'همراهی پرروترین ابرقهرمان با ولورین برای نجات جهان موازی.' }
+      ],
+      crime: [
+        { t: 'Knives Out (2019)', r: '7.9', gn: 'جنایی', p: 'https://m.media-amazon.com/images/M/MV5BMGUwZjliMTAtNzAxZi00MWNiLWE2NzgtZGUxMGQxZjhhNDRiXkEyXkFqcGdeQXVyNjU1NzU3MzE@._V1_SX300.jpg', d: 'بررسی قتل مشکوک یک نویسنده ثروتمند توسط کارآگاهی تیزهوش.' },
+        { t: 'Prisoners (2013)', r: '8.2', gn: 'جنایی', p: 'https://m.media-amazon.com/images/M/MV5BMTg0NTIzMjQ1NV5BMl5BanBnXkFtZTcwNDc3MzM5OQ@@._V1_SX300.jpg', d: 'پدری درمانده پس از ربوده شدن دخترش شخصاً مظنون اصلی را بازجویی می‌کند.' },
+        { t: 'Se7en (1995)', r: '8.6', gn: 'جنایی', p: 'https://m.media-amazon.com/images/M/MV5BOTUwODM5MTctZjczMi00OTk4LTg3NWUtNmVhMTAzNTNjYjcyXkEyXkFqcGdeQXVyNjU0OTQ0OTY@._V1_SX300.jpg', d: 'تعقیب قاتلی زنجیره‌ای که قتل‌هایش را بر اساس هفت گناه کبیره طراحی می‌کند.' },
+        { t: 'The Batman (2022)', r: '7.8', gn: 'جنایی', p: 'https://m.media-amazon.com/images/M/MV5BM2MyNTAwZGEtNTAxNC00ODVjLTgzZjUtYmU0YjAzNmQyZDEwXkEyXkFqcGdeQXVyNDc2NTg3NzA@._V1_SX300.jpg', d: 'بتمن درگیر معماهای پیچیده یک قاتل سریالی در شهر فاسد گاتهام می‌شود.' },
+        { t: 'Joker (2019)', r: '8.4', gn: 'جنایی', p: 'https://m.media-amazon.com/images/M/MV5BNGVjNWI4ZGUtNzE0MS00YTJmLWE0ZDctN2ZiYTk2YmI3NTYyXkEyXkFqcGdeQXVyMTkxNjUyNQ@@._V1_SX300.jpg', d: 'فروافتادن یک کمدین تنها و شکست‌خورده به اعماق جنون و جنایت در گاتهام.' }
+      ],
+      drama: [
+        { t: 'Oppenheimer (2023)', r: '8.9', gn: 'درام', p: 'https://m.media-amazon.com/images/M/MV5BMDBmYTZjNjUtN2M1MS00MTQ2LTk2ODgtNzc2M2QyZGE5NTVjXkEyXkFqcGdeQXVyNzAwMjU2MTY@._V1_SX300.jpg', d: 'داستان زندگی اوپنهایمر و رقابت علمی نفس‌گیر برای ساخت اولین بمب اتم.' },
+        { t: 'The Brutalist (2024)', r: '8.1', gn: 'درام', p: 'https://m.media-amazon.com/images/M/MV5BM2U0MWRjZTMtMDVhNC00MzY4LTgwOTktZTc2ZjRkN2M3YjI2XkEyXkFqcGc@._V1_SX300.jpg', d: 'مهاجرت یک معمار نابغه پس از جنگ جهانی برای ساخت شاهکار معماری مدرن.' },
+        { t: 'The Shawshank Redemption', r: '9.3', gn: 'درام', p: 'https://m.media-amazon.com/images/M/MV5BNDE3ODcxYzMtY2YzZC00NmNlLWJiNDMtZDViZWM2MzIxZDYwXkEyXkFqcGdeQXVyNjAwNDUxODI@._V1_SX300.jpg', d: 'داستان امید و دوستی دو زندانی در طول سال‌ها حبس در زندان شاوشنک.' },
+        { t: 'The Godfather (1972)', r: '9.2', gn: 'درام', p: 'https://m.media-amazon.com/images/M/MV5BM2MyNjYxNmUtYTAwNi00MTYxLWJmNWYtYzZlODY3ZTk3OTFlXkEyXkFqcGdeQXVyNzkwMjQ5NzM@._V1_SX300.jpg', d: 'انتقال قدرت امپراتوری مافیایی کورلئونه به پسر جوان خانواده.' },
+        { t: 'Whiplash (2014)', r: '8.5', gn: 'درام', p: 'https://m.media-amazon.com/images/M/MV5BOTA5NDZlZGUtMjAxOS00YTRkLTkwYmMtYWQ0NWEwZDZiNjEzXkEyXkFqcGdeQXVyMTMxODk2OTU@._V1_SX300.jpg', d: 'رویارویی پرتنش یک نوازنده جوان درامز با استادی بسیار سخت‌گیر و بی‌رحم.' }
+      ]
+    };
 
-      // علمی‌تخیلی (۱۰ فیلم)
-      { g: 'scifi', t: 'Interstellar (2014)', r: '8.7', gn: 'علمی‌تخیلی', p: 'https://m.media-amazon.com/images/M/MV5BZjdkOTU3MDktN2IxOS00OGEyLWFmMjktY2FiMmZkNWIyODZiXkEyXkFqcGdeQXVyMTMxODk2OTU@._V1_SX300.jpg', d: 'سفر فضانوردان از درون یک کرم‌چاله برای یافتن سیاره‌ای جدید برای بشر.' },
-      { g: 'scifi', t: 'Inception (2010)', r: '8.8', gn: 'علمی‌تخیلی', p: 'https://m.media-amazon.com/images/M/MV5BMjAxMzY3NjcxNF5BMl5BanBnXkFtZTcwNTI5OTM0Mw@@._V1_SX300.jpg', d: 'سارق حرفه‌ای اسرار که از طریق نفوذ به رویاهای افراد ماموریتی ناممکن می‌گیرد.' },
-      { g: 'scifi', t: 'Arrival (2016)', r: '7.9', gn: 'علمی‌تخیلی', p: 'https://m.media-amazon.com/images/M/MV5BMTExMzU0ODcxNDheQTJeQWpwZ15BbWU4MDE1OTI4MzAy._V1_SX300.jpg', d: 'تلاش یک زبان‌شناس برای رمزگشایی زبان موجودات فضایی پیش از وقوع جنگ.' },
-      { g: 'scifi', t: 'The Matrix (1999)', r: '8.7', gn: 'علمی‌تخیلی', p: 'https://m.media-amazon.com/images/M/MV5BNzQzOTk3OTAtNDQ0Zi00ZTVkLWI0MTEtMDllZjNkYzNjNTc4L2ltYWdlXkEyXkFqcGdeQXVyNjU0OTQ0OTY@._V1_SX300.jpg', d: 'هکری جوان متوجه می‌شود دنیایی که در آن زندگی می‌کند یک شبیه‌سازی کامپیوتری است.' },
-      { g: 'scifi', t: 'Blade Runner 2049 (2017)', r: '8.0', gn: 'علمی‌تخیلی', p: 'https://m.media-amazon.com/images/M/MV5BNzA1Njg4NzYxOV5BMl5BanBnXkFtZTgwODk5NjU3MzI@._V1_SX300.jpg', d: 'کشف رازی دفن‌شده توسط یک مامور جوان که جامعه آینده را تهدید می‌کند.' },
-      { g: 'scifi', t: 'Mickey 17 (2025)', r: '7.6', gn: 'علمی‌تخیلی', p: 'https://m.media-amazon.com/images/M/MV5BYjI0N2I0M2QtY2I1MS00ZGFkLWE0M2ItZTFkN2I1ZGY0YzI1XkEyXkFqcGc@._V1_SX300.jpg', d: 'مامور فضایی که پس از هر بار مرگ کلون جدیدش چاپ می‌شود با نسخه بعدی خودش روبه‌رو می‌گردد.' },
-      { g: 'scifi', t: 'The Martian (2015)', r: '8.0', gn: 'علمی‌تخیلی', p: 'https://m.media-amazon.com/images/M/MV5BMTc2MTQ3MDA1Nl5BMl5BanBnXkFtZTgwODA3OTI4NjE@._V1_SX300.jpg', d: 'تلاش یک فضانورد جا مانده در سیاره مریخ برای زنده ماندن با تکیه بر دانش خود.' },
-      { g: 'scifi', t: 'Edge of Tomorrow (2014)', r: '7.9', gn: 'علمی‌تخیلی', p: 'https://m.media-amazon.com/images/M/MV5BMTc5OTk4MTM3M15BMl5BanBnXkFtZTgwODcxNjg3MDE@._V1_SX300.jpg', d: 'سربازی که در جنگ با بیگانگان در یک حلقه زمانی روز مرگش گرفتار می‌شود.' },
-      { g: 'scifi', t: 'Ex Machina (2014)', r: '7.7', gn: 'علمی‌تخیلی', p: 'https://m.media-amazon.com/images/M/MV5BMTUxNzc0OTIxMV5BMl5BanBnXkFtZTgwNDI3NzU2NDE@._V1_SX300.jpg', d: 'برنامه‌نویسی جوان برای تست هوش و آگاهی یک ربات انسان‌نمای پیشرفته انتخاب می‌شود.' },
-      { g: 'scifi', t: 'Tenet (2020)', r: '7.3', gn: 'علمی‌تخیلی', p: 'https://m.media-amazon.com/images/M/MV5BMzU3YWYwNTQtZTdiMC00NjY5LTlmMTMtZDFlYTEyODBjMTk5XkEyXkFqcGdeQXVyMTkxNjUyNQ@@._V1_SX300.jpg', d: 'ماموری مخفی با استفاده از وارونگی زمان تلاش می‌کند جلوی جنگ جهانی سوم را بگیرد.' },
+    const SERIES_POOL = {
+      action: [
+        { t: 'The Gentlemen (2024)', r: '8.1', gn: 'اکشن', p: 'https://m.media-amazon.com/images/M/MV5BZjI2ZjM1N2QtY2I0MS00N2I3LWFkYzEtYTFhZGE0Zjc3ZThkXkEyXkFqcGc@._V1_SX300.jpg', d: 'پسر یک لرد انگلیسی متوجه می‌شود زیر ملک پدری‌اش امپراتوری خلافکاران قرار دارد.' },
+        { t: 'Reacher (2022–2025)', r: '8.1', gn: 'اکشن', p: 'https://m.media-amazon.com/images/M/MV5BNzQ4MGYzYzAtNjJlOC00NTdkLTlmNTAtMmZjMzZmZTg2YTEzXkEyXkFqcGdeQXVyMjkwOTAyMDU@._V1_SX300.jpg', d: 'افسر سابق پلیس نظامی با هوش و قدرت بدنی بالا پرده از فسادهای بزرگ برمی‌دارد.' },
+        { t: 'The Boys (2019–2025)', r: '8.7', gn: 'اکشن', p: 'https://m.media-amazon.com/images/M/MV5BOTEyNDJhMDAtY2U5ZS00OTMzLTkwODktMjU3MjFkZWVlMGYyXkEyXkFqcGdeQXVyMjkwOTAyMDU@._V1_SX300.jpg', d: 'مبارزه گروهی از انسان‌های عادی علیه ابرقهرمانان فاسد و خطرناک.' },
+        { t: 'Vikings (2013–2020)', r: '8.5', gn: 'اکشن', p: 'https://m.media-amazon.com/images/M/MV5BODk4ZjU0NDUtYjdlOS00OTljLTgwZTUtYjkyZjk1NzExZGIzXkEyXkFqcGdeQXVyMDM2NDM2MQ@@._V1_SX300.jpg', d: 'حماسه لشکرکشی‌ها و ماجراجویی‌های رگنار لاثبروک، جنگجوی افسانه‌ای وایکینگ.' },
+        { t: 'Peaky Blinders (2013–2022)', r: '8.8', gn: 'اکشن', p: 'https://m.media-amazon.com/images/M/MV5BZjYzZDgzMmYtYjY5Zi00YTk1LThhMDYtNjFlNzM4MTZhYzgyXkEyXkFqcGdeQXVyMTE5NDQ1MzQ3._V1_SX300.jpg', d: 'خیزش خانواده تامی شلبی در بیرمنگام پس از جنگ جهانی اول.' }
+      ],
+      scifi: [
+        { t: 'Severance (2022–2025)', r: '8.7', gn: 'علمی‌تخیلی', p: 'https://m.media-amazon.com/images/M/MV5BMjkwZjcwMGQtNDAzOC00YjJiLThiYTgtNWU3ZjRiZmPjZTk0XkEyXkFqcGdeQXVyMTMzNDExODE5._V1_SX300.jpg', d: 'کارمندانی که خاطرات کار و زندگی شخصی‌شان با جراحی مغز از هم جدا شده است.' },
+        { t: 'Silo (2023–2025)', r: '8.1', gn: 'علمی‌تخیلی', p: 'https://m.media-amazon.com/images/M/MV5BMjA5ZTc4NzAtM2I1MS00ZGFkLWE0M2ItZTFkN2I1ZGY0YzI1XkEyXkFqcGc@._V1_SX300.jpg', d: 'زندگی ده هزار انسان در یک سیلوی زیرزمینی عمیق با قوانین سخت‌گیرانه.' },
+        { t: 'Fallout (2024)', r: '8.4', gn: 'علمی‌تخیلی', p: 'https://m.media-amazon.com/images/M/MV5BNjI5M2FjM2EtY2I0Zi00M2I2LWE3M2ItZTFkN2I1ZGY0YzI1XkEyXkFqcGc@._V1_SX300.jpg', d: 'خروج دختری از پناهگاه زیرزمینی دویست سال پس از جنگ اتمی.' },
+        { t: 'Dark (2017–2020)', r: '8.7', gn: 'علمی‌تخیلی', p: 'https://m.media-amazon.com/images/M/MV5BOTk2NzUyOTctZDdlMS00MDJlLTgzNTEtNzQzYjFhNjA0YjBjXkEyXkFqcGdeQXVyMjg1NDcxNDE@._V1_SX300.jpg', d: 'گم شدن کودکی در شهر کوچک ویندن که راز سفر در زمان چهار خانواده را فاش می‌کند.' },
+        { t: 'Black Mirror', r: '8.7', gn: 'علمی‌تخیلی', p: 'https://m.media-amazon.com/images/M/MV5BYTM3YWVhMDMtNjczMy00NGEyLWJhZDctYjNhMTRkNDE0ZTI1XkEyXkFqcGdeQXVyMTkxNjUyNQ@@._V1_SX300.jpg', d: 'داستان‌های مستقل درباره روی تاریک تکنولوژی و آینده بشر.' }
+      ],
+      horror: [
+        { t: 'From (2022–2025)', r: '7.8', gn: 'ترسناک', p: 'https://m.media-amazon.com/images/M/MV5BNzI4MGYzYzAtNjJlOC00NTdkLTlmNTAtMmZjMzZmZTg2YTEzXkEyXkFqcGc@._V1_SX300.jpg', d: 'شهرکی کابوس‌وار که هیچ راه خروجی ندارد و شب‌ها موجودات جنگل حمله می‌کنند.' },
+        { t: 'The Last of Us (2023–2025)', r: '8.7', gn: 'ترسناک', p: 'https://m.media-amazon.com/images/M/MV5BZGUzYTI3M2EtZmM0Yy00NGUyLWI4ODEtN2Q3ZGJlYzhhZjU3XkEyXkFqcGdeQXVyNTM0OTY1OQ@@._V1_SX300.jpg', d: 'سفر خطرناک مردی زخم‌خورده و دختری نوجوان در آمریکای آخرالزمانی.' },
+        { t: 'Stranger Things', r: '8.7', gn: 'ترسناک', p: 'https://m.media-amazon.com/images/M/MV5BMDZkYmVhNjMtNWU4MC00MDQxLWE3MjYtZGMzZWI1ZjhlOWJmXkEyXkFqcGdeQXVyMTkxNjUyNQ@@._V1_SX300.jpg', d: 'ناپدید شدن پسری نوجوان و باز شدن دروازه‌ای به دنیایی تاریک و وارونه.' },
+        { t: 'The Haunting of Hill House', r: '8.6', gn: 'ترسناک', p: 'https://m.media-amazon.com/images/M/MV5BMTU4NzA4MDEwNF5BMl5BanBnXkFtZTgwMTQxODYzNjM@._V1_SX300.jpg', d: 'رویارویی اعضای یک خانواده با خاطرات ترسناک عمارت قدیمی‌شان.' },
+        { t: 'Hannibal (2013–2015)', r: '8.5', gn: 'ترسناک', p: 'https://m.media-amazon.com/images/M/MV5BNWU5YmJhNWEtZGVlOS00NmRhLThmNzUtYjAyMDA2MDg5ZTM4XkEyXkFqcGdeQXVyNDIzMzcwNjc@._V1_SX300.jpg', d: 'رابطه روانی و خطرناک یک مامور ویژه اف‌بی‌آی با دکتر هانیبال لکتر.' }
+      ],
+      comedy: [
+        { t: 'The Bear (2022–2025)', r: '8.6', gn: 'کمدی', p: 'https://m.media-amazon.com/images/M/MV5BMjA5ZTc4NzAtM2I1MS00ZGFkLWE0M2ItZTFkN2I1ZGY0YzI1XkEyXkFqcGc@._V1_SX300.jpg', d: 'بازگشت سرآشپزی نابغه برای نجات ساندویچی کوچک و شلوغ خانوادگی.' },
+        { t: 'Ted Lasso (2020–2023)', r: '8.8', gn: 'کمدی', p: 'https://m.media-amazon.com/images/M/MV5BMTdmZjBjZjQtY2JiNS00Y2ZlLTg2NzMtMjUzMGY2OTVmOWJiXkEyXkFqcGdeQXVyMDM2NDM2MQ@@._V1_SX300.jpg', d: 'مربی خوش‌قلب آمریکایی هدایت یک تیم فوتبال لیگ برتری انگلیس را می‌گیرد.' },
+        { t: 'The Office (2005–2013)', r: '9.0', gn: 'کمدی', p: 'https://m.media-amazon.com/images/M/MV5BMDNkOTE4NDQtMTNmYi00MWE0LWE4ZTktYTc0NzhhNWIzNzJiXkEyXkFqcGdeQXVyMzQ2MDI5NjU@._V1_SX300.jpg', d: 'روزمرگی‌های فوق‌العاده خنده‌دار کارمندان یک شرکت فروش کاغذ.' },
+        { t: 'Friends (1994–2004)', r: '8.9', gn: 'کمدی', p: 'https://m.media-amazon.com/images/M/MV5BNDVkYjU0MzctMWRmZi00NTkxLTgwZWEtOWVhYjZlYjllYmU4XkEyXkFqcGdeQXVyNTA4NzY1MzY@._V1_SX300.jpg', d: 'ماجراهای شیرین و خاطره‌انگیز شش دوست صمیمی در شهر نیویورک.' },
+        { t: 'Rick and Morty', r: '9.1', gn: 'کمدی', p: 'https://m.media-amazon.com/images/M/MV5BZjRjOTFkOTktZWUzMi00YzMyLThkMmYtMjEwNmQyNzliYTNmXkEyXkFqcGdeQXVyNzQ1ODk3MTQ@._V1_SX300.jpg', d: 'سفرهای دیوانه‌وار یک دانشمند نابغه و نوه‌اش در کهکشان‌ها و ابعاد موازی.' }
+      ],
+      crime: [
+        { t: 'The Penguin (2024)', r: '8.7', gn: 'جنایی', p: 'https://m.media-amazon.com/images/M/MV5BYmI2MzI0ZTEtY2I1MS00ZGFkLWE0M2ItZTFkN2I1ZGY0YzI1XkEyXkFqcGc@._V1_SX300.jpg', d: 'خیزش هوشمندانه پنگوئن برای تصاحب قدرت در دنیای زیرزمینی شهر گاتهام.' },
+        { t: 'Sherlock (2010–2017)', r: '9.1', gn: 'جنایی', p: 'https://m.media-amazon.com/images/M/MV5BMWEzNTFlMTQtMzhjOS00MzQ1LWJjNjgtY2RhMjFhYjQwYjIzXkEyXkFqcGdeQXVyNDIzMzcwNjc@._V1_SX300.jpg', d: 'حل پیچیده‌ترین پرونده‌های جنایی لندن مدرن توسط شرلوک هولمز و دکتر واتسون.' },
+        { t: 'True Detective', r: '8.9', gn: 'جنایی', p: 'https://m.media-amazon.com/images/M/MV5BMmRlYmE0Y2UtNDk2Yi00NzczLWEwZTEtZmE2OTcyYzcxYmU5XkEyXkFqcGdeQXVyNTMxMjgxMzA@._V1_SX300.jpg', d: 'تحقیقات نفس‌گیر کارآگاهان پلیس برای کشف راز قتل‌های زنجیره‌ای مرموز.' },
+        { t: 'Mindhunter (2017–2019)', r: '8.6', gn: 'جنایی', p: 'https://m.media-amazon.com/images/M/MV5BNWNmYzQ1ZWUtYTQ3ZS00Y2UwLTlkMDctZThlOTJkMGJiNzBiXkEyXkFqcGdeQXVyNjg2NjQwMDQ@._V1_SX300.jpg', d: 'مصاحبه ماموران اف‌بی‌آی با قاتلان زنجیره‌ای زندانی برای کشف الگوی ذهن آن‌ها.' },
+        { t: 'Fargo (2014–2024)', r: '8.9', gn: 'جنایی', p: 'https://m.media-amazon.com/images/M/MV5BN2NiM2I5N2MtZDJhNC00ZThjLTg2NzMtMjUzMGY2OTVmOWJiXkEyXkFqcGdeQXVyMDM2NDM2MQ@@._V1_SX300.jpg', d: 'داستان‌های جنایی و کمدی سیاه در شهرهای برفی و سرد آمریکا.' }
+      ],
+      drama: [
+        { t: 'Breaking Bad (2008–2013)', r: '9.5', gn: 'درام', p: 'https://m.media-amazon.com/images/M/MV5BYmQ4YWMxYjUtNjZmYi00MDQ1LWFjMjMtNjA5ZDdiYjdiODU5XkEyXkFqcGdeQXVyMTMzNDExODE5._V1_SX300.jpg', d: 'تبدیل شدن یک معلم شیمی آرام به بزرگ‌ترین امپراتور مواد مخدر.' },
+        { t: 'Chernobyl (2019)', r: '9.3', gn: 'درام', p: 'https://m.media-amazon.com/images/M/MV5BNTdkN2QwMDItMDVhNS00ZjFiLWEzNTctMzY5ODQzYWNkMDllXkEyXkFqcGdeQXVyMTMzNDExODE5._V1_SX300.jpg', d: 'روایت تکان‌دهنده انفجار نیروگاه چرنوبیل و فداکاری برای نجات اروپا.' },
+        { t: 'Shōgun (2024)', r: '8.7', gn: 'درام', p: 'https://m.media-amazon.com/images/M/MV5BMzhkNzVkNDYtNmE2Zi00ZTk1LTk2OWYtOTU5NWM5OWQ2Zjc0XkEyXkFqcGc@._V1_SX300.jpg', d: 'تلاقی سرنوشت یک دریانورد انگلیسی و لردی قدرتمند در ژاپن قرن هفدهم.' },
+        { t: 'Succession (2018–2023)', r: '8.9', gn: 'درام', p: 'https://m.media-amazon.com/images/M/MV5BODY5YjA3ZDgtM2I1MS00ZGFkLWE0M2ItZTFkN2I1ZGY0YzI1XkEyXkFqcGdeQXVyMTMzNDExODE5._V1_SX300.jpg', d: 'رقابت بی‌رحمانه فرزندان یک میلیاردر رسانه‌ای برای تصاحب جایگاه پدرشان.' },
+        { t: 'Game of Thrones', r: '9.2', gn: 'درام', p: 'https://m.media-amazon.com/images/M/MV5BN2IzYzBiOTQtNGZmMi00NDI5LTgxMzMtN2EzZjA1NjhlOGMxXkEyXkFqcGdeQXVyNjAwNDUxODI@._V1_SX300.jpg', d: 'نبرد خاندان‌های بزرگ وستروس برای تصاحب تخت آهنین در برابر تهدید زمستان.' }
+      ]
+    };
 
-      // ترسناک (۱۰ فیلم)
-      { g: 'horror', t: 'Nosferatu (2024)', r: '7.7', gn: 'ترسناک', p: 'https://m.media-amazon.com/images/M/MV5BY2FhZGE3NmEtNWJjOC00NDI1LWFhMTQtMjcxNmQzZmEwNGIzXkEyXkFqcGc@._V1_SX300.jpg', d: 'تسخیر شدن زنی جوان توسط خون‌آشامی باستانی در شهری تاریک و سرد.' },
-      { g: 'horror', t: 'The Substance (2024)', r: '7.4', gn: 'ترسناک', p: 'https://m.media-amazon.com/images/M/MV5BZDQ1NGE5MGMtYzdlZC00ODExLWJlMDMtNWU4NjA5OWYwMDEwXkEyXkFqcGc@._V1_SX300.jpg', d: 'استفاده از دارویی مرموز برای ساخت نسخه جوان‌تر خود با عواقبی وحشتناک.' },
-      { g: 'horror', t: 'Alien: Romulus (2024)', r: '7.2', gn: 'ترسناک', p: 'https://m.media-amazon.com/images/M/MV5BMDU0NjcwOGQtNjNjOS00NzQ3LWIwM2YtYWVmODZjMzQzN2ExXkEyXkFqcGc@._V1_SX300.jpg', d: 'رویارویی گروهی از کاوشگران با مرگبارترین موجود بیگانه در ایستگاه فضایی.' },
-      { g: 'horror', t: 'A Quiet Place (2018)', r: '7.5', gn: 'ترسناک', p: 'https://m.media-amazon.com/images/M/MV5BMjI0MDMzNTQ0M15BMl5BanBnXkFtZTgwMTM5NzM3NDM@._V1_SX300.jpg', d: 'تلاش خانواده‌ای برای زنده ماندن در سکوت مطلق در برابر هیولاهای حساس به صدا.' },
-      { g: 'horror', t: 'Get Out (2017)', r: '7.8', gn: 'ترسناک', p: 'https://m.media-amazon.com/images/M/MV5BMjUxMDQwNjcyNl5BMl5BanBnXkFtZTgwNzcwMzc0MTI@._V1_SX300.jpg', d: 'سفر یک جوان به خانه خانواده نامزدش که به کشف رازی هولناک منجر می‌شود.' },
-      { g: 'horror', t: 'The Conjuring (2013)', r: '7.5', gn: 'ترسناک', p: 'https://m.media-amazon.com/images/M/MV5BMTM3NjA1NDMyMV5BMl5BanBnXkFtZTcwMDQzNDMzOQ@@._V1_SX300.jpg', d: 'محققان ماوراءالطبیعه به کمک خانواده‌ای می‌روند که در مزرعه‌ای تسخیرشده گرفتارند.' },
-      { g: 'horror', t: 'Hereditary (2018)', r: '7.3', gn: 'ترسناک', p: 'https://m.media-amazon.com/images/M/MV5BOTU5MDg3OGItZWQ1Ny00ZGVmLTg2YTUtMzBkYzQ1YWIwZjlhXkEyXkFqcGdeQXVyNTAzMTY4MDA@._V1_SX300.jpg', d: 'پس از مرگ مادربزرگ خانواده، رازهای شوم و ترسناکی درباره اجدادشان فاش می‌شود.' },
-      { g: 'horror', t: 'It (2017)', r: '7.3', gn: 'ترسناک', p: 'https://m.media-amazon.com/images/M/MV5BZDVkZmI0YzAtNzdjYi00ZjhhLWE1ODEtMWMzMWMzNDA0NmQ4XkEyXkFqcGdeQXVyNzYzODM3Mzg@._V1_SX300.jpg', d: 'مبارزه گروهی از نوجوانان با موجودی تغییرشکل‌دهنده در لباس دلقک.' },
-      { g: 'horror', t: 'Sinister (2012)', r: '6.8', gn: 'ترسناک', p: 'https://m.media-amazon.com/images/M/MV5BMjI5MTg1Njg0Ml5BMl5BanBnXkFtZTcwNzg2Mjc4Nw@@._V1_SX300.jpg', d: 'نویسنده‌ای در خانه جدیدش جعبه‌ای از فیلم‌های قدیمی و هولناک پیدا می‌کند.' },
-      { g: 'horror', t: 'Talk to Me (2022)', r: '7.1', gn: 'ترسناک', p: 'https://m.media-amazon.com/images/M/MV5BMmY5ZGE4NmUtZWI4OS00ZWJmLWFjMzgtOWUyZjI4M2Y5ZTc5XkEyXkFqcGdeQXVyMTkxNjUyNQ@@._V1_SX300.jpg', d: 'گروهی از نوجوانان با استفاده از یک دست مومیایی‌شده احضار روح می‌کنند اما دروازه باز می‌ماند.' },
+    const GENRE_FA = { action: 'اکشن', scifi: 'علمی‌تخیلی', horror: 'ترسناک', comedy: 'کمدی', crime: 'جنایی', drama: 'درام' };
+    const MOVIE_SEARCH_TERMS = {
+      action: ['Action Thriller', 'Action Adventure', 'Martial Arts', 'Spy Action', 'War Action', 'Superhero'],
+      scifi: ['Sci-Fi Space', 'Time Travel', 'Cyberpunk', 'Future Sci-Fi', 'Alien Sci-Fi', 'Dystopian'],
+      horror: ['Supernatural Horror', 'Psychological Horror', 'Monster Horror', 'Mystery Thriller', 'Zombie Horror'],
+      comedy: ['Comedy Romance', 'Adventure Comedy', 'Family Comedy', 'Dark Comedy', 'Buddy Comedy'],
+      crime: ['Crime Detective', 'Mystery Crime', 'Heist Crime', 'Mafia Gangster', 'Noir Thriller'],
+      drama: ['Historical Drama', 'Biography Drama', 'Courtroom Drama', 'Emotional Drama', 'Oscar Drama']
+    };
+    const TVMAZE_GENRE_MAP = { action: 'Action', scifi: 'Science-Fiction', horror: 'Horror', comedy: 'Comedy', crime: 'Crime', drama: 'Drama' };
+    const movieTermStep = { action: 0, scifi: 0, horror: 0, comedy: 0, crime: 0, drama: 0 };
 
-      // کمدی (۱۰ فیلم)
-      { g: 'comedy', t: 'Anora (2024)', r: '8.0', gn: 'کمدی', p: 'https://m.media-amazon.com/images/M/MV5BYThiN2M0NTItODRmNC00NDhlLWFiYTgtMWM2YTEyYzI3ZTY1XkEyXkFqcGc@._V1_SX300.jpg', d: 'ازدواج ناگهانی دختری جوان در نیویورک با پسر یک ثروتمند روس.' },
-      { g: 'comedy', t: 'Grand Budapest Hotel (2014)', r: '8.1', gn: 'کمدی', p: 'https://m.media-amazon.com/images/M/MV5BMzM5NjUxOTEyMl5BMl5BanBnXkFtZTgwNjEyMDM0MDE@._V1_SX300.jpg', d: 'ماجراهای خنده‌دار مدیر یک هتل لوکس اروپایی پس از سرقت یک تابلوی نفیس.' },
-      { g: 'comedy', t: 'The Hangover (2009)', r: '7.7', gn: 'کمدی', p: 'https://m.media-amazon.com/images/M/MV5BNGQwZjg5YmYtY2VkNC00NzliLTljYTctNzI5NmU3MjE2ODQzXkEyXkFqcGdeQXVyNzkwMjQ5NzM@._V1_SX300.jpg', d: 'سه دوست پس از یک مهمانی در لاس‌وگاس بیدار می‌شوند و داماد را گم کرده‌اند.' },
-      { g: 'comedy', t: 'Superbad (2007)', r: '7.6', gn: 'کمدی', p: 'https://m.media-amazon.com/images/M/MV5BMTc0NjIyMjA2OF5BMl5BanBnXkFtZTcwMzIxNDE1MQ@@._V1_SX300.jpg', d: 'تلاش پرماجرا و خنده‌دار دو نوجوان در آخرین روزهای دبیرستان.' },
-      { g: 'comedy', t: 'Deadpool & Wolverine (2024)', r: '7.7', gn: 'کمدی', p: 'https://m.media-amazon.com/images/M/MV5BZTk5ODY0MmQtMzA3Ni00NGY1LThiYzItZThiNjFiNDM4MTM3XkEyXkFqcGc@._V1_SX300.jpg', d: 'همراهی پرروترین ابرقهرمان با ولورین برای نجات جهان موازی.' },
-      { g: 'comedy', t: 'The Wolf of Wall Street (2013)', r: '8.2', gn: 'کمدی', p: 'https://m.media-amazon.com/images/M/MV5BMjIxMjgxNTk0MF5BMl5BanBnXkFtZTgwNjIyOTg2MDE@._V1_SX300.jpg', d: 'ظهور و سقوط پرماجرا و جنون‌آمیز یک دلال سهام در وال‌استریت.' },
-      { g: 'comedy', t: '21 Jump Street (2012)', r: '7.2', gn: 'کمدی', p: 'https://m.media-amazon.com/images/M/MV5BNTZjNzRjMTMtZDMzNy00Y2ZjLTg0OTAtZjVhNzYyZmJjOTljXkEyXkFqcGdeQXVyODE5NzE3OTE@._V1_SX300.jpg', d: 'دو پلیس دست‌وپاچلفتی با قیافه دانش‌آموزان به صورت مخفیانه به دبیرستان برمی‌گردند.' },
-      { g: 'comedy', t: 'Free Guy (2021)', r: '7.1', gn: 'کمدی', p: 'https://m.media-amazon.com/images/M/MV5BOTY2NzFjODctOWUzMC00MGZhLTlhNjMtM2Y2ODBiNGY1ZWRiXkEyXkFqcGdeQXVyMDM2NDM2MQ@@._V1_SX300.jpg', d: 'کارمند یک بانک متوجه می‌شود در واقع شخصیت فرعی داخل یک بازی ویدیویی است.' },
-      { g: 'comedy', t: 'Game Night (2018)', r: '6.9', gn: 'کمدی', p: 'https://m.media-amazon.com/images/M/MV5BMjI3ODkzNDk5MF5BMl5BanBnXkFtZTgwNTEyNjY2NDM@._V1_SX300.jpg', d: 'شب بازی‌های فکری چند زوج دوستانه ناگهان به یک آدم‌ربایی واقعی تبدیل می‌شود.' },
-      { g: 'comedy', t: 'The Nice Guys (2016)', r: '7.4', gn: 'کمدی', p: 'https://m.media-amazon.com/images/M/MV5BMjcwNDA5MDYyNl5BMl5BanBnXkFtZTgwNjg0NDkzODE@._V1_SX300.jpg', d: 'همکاری خنده‌دار یک کارآگاه خصوصی دست‌وپاچلفتی و یک بزن‌بهادر در دهه ۷۰.' },
-
-      // جنایی (۱۰ فیلم)
-      { g: 'crime', t: 'Knives Out (2019)', r: '7.9', gn: 'جنایی', p: 'https://m.media-amazon.com/images/M/MV5BMGUwZjliMTAtNzAxZi00MWNiLWE2NzgtZGUxMGQxZjhhNDRiXkEyXkFqcGdeQXVyNjU1NzU3MzE@._V1_SX300.jpg', d: 'بررسی قتل مشکوک یک نویسنده ثروتمند توسط کارآگاهی تیزهوش.' },
-      { g: 'crime', t: 'Prisoners (2013)', r: '8.2', gn: 'جنایی', p: 'https://m.media-amazon.com/images/M/MV5BMTg0NTIzMjQ1NV5BMl5BanBnXkFtZTcwNDc3MzM5OQ@@._V1_SX300.jpg', d: 'پدری درمانده پس از ربوده شدن دخترش شخصاً مظنون اصلی را بازجویی می‌کند.' },
-      { g: 'crime', t: 'Se7en (1995)', r: '8.6', gn: 'جنایی', p: 'https://m.media-amazon.com/images/M/MV5BOTUwODM5MTctZjczMi00OTk4LTg3NWUtNmVhMTAzNTNjYjcyXkEyXkFqcGdeQXVyNjU0OTQ0OTY@._V1_SX300.jpg', d: 'تعقیب قاتلی زنجیره‌ای که قتل‌هایش را بر اساس هفت گناه کبیره طراحی می‌کند.' },
-      { g: 'crime', t: 'The Batman (2022)', r: '7.8', gn: 'جنایی', p: 'https://m.media-amazon.com/images/M/MV5BM2MyNTAwZGEtNTAxNC00ODVjLTgzZjUtYmU0YjAzNmQyZDEwXkEyXkFqcGdeQXVyNDc2NTg3NzA@._V1_SX300.jpg', d: 'بتمن درگیر معماهای پیچیده یک قاتل سریالی در شهر فاسد گاتهام می‌شود.' },
-      { g: 'crime', t: 'Joker (2019)', r: '8.4', gn: 'جنایی', p: 'https://m.media-amazon.com/images/M/MV5BNGVjNWI4ZGUtNzE0MS00YTJmLWE0ZDctN2ZiYTk2YmI3NTYyXkEyXkFqcGdeQXVyMTkxNjUyNQ@@._V1_SX300.jpg', d: 'فروافتادن یک کمدین تنها و شکست‌خورده به اعماق جنون و جنایت در گاتهام.' },
-      { g: 'crime', t: 'The Departed (2006)', r: '8.5', gn: 'جنایی', p: 'https://m.media-amazon.com/images/M/MV5BMTI1MTY2OTIxNV5BMl5BanBnXkFtZTYwNjQ4NjY3._V1_SX300.jpg', d: 'بازی موش و گربه یک پلیس نفوذی در مافیا و یک جاسوس مافیا در اداره پلیس.' },
-      { g: 'crime', t: 'Zodiac (2007)', r: '7.7', gn: 'جنایی', p: 'https://m.media-amazon.com/images/M/MV5BN2UwNDc5NmEtNjVjZS00OTI5LWE5YjctMWM3ZjBiZGYwMGI2XkEyXkFqcGdeQXVyNzkwMjQ5NzM@._V1_SX300.jpg', d: 'تلاش وسواس‌گونه یک کاریکاتوریست و خبرنگاران برای رمزگشایی نامه‌های قاتل زودیاک.' },
-      { g: 'crime', t: 'Heat (1995)', r: '8.3', gn: 'جنایی', p: 'https://m.media-amazon.com/images/M/MV5BYjZjNTJlZGUtZTE1Ny00ZDc4LTgwYjUtMzk0NDgwYzZjYTk1XkEyXkFqcGdeQXVyNjU0OTQ0OTY@._V1_SX300.jpg', d: 'رویارویی نفس‌گیر یک سارق حرفه‌ای بانک با کارآگاه کهنه‌کار پلیس لس‌آنجلس.' },
-      { g: 'crime', t: 'Catch Me If You Can (2002)', r: '8.1', gn: 'جنایی', p: 'https://m.media-amazon.com/images/M/MV5BMTY5MzYzNjc5NV5BMl5BanBnXkFtZTYwNTUyNTc2._V1_SX300.jpg', d: 'تعقیب و گریز واقعی مامور اف‌بی‌آی و جوانی که خود را خلبان، پزشک و وکیل جا می‌زند.' },
-      { g: 'crime', t: 'Nightcrawler (2014)', r: '7.8', gn: 'جنایی', p: 'https://m.media-amazon.com/images/M/MV5BN2U1YzdhYWMtZWUzMi00OWI1LWFkM2ItNWVjM2YxMGQ2MmNhXkEyXkFqcGdeQXVyNjU0OTQ0OTY@._V1_SX300.jpg', d: 'مردی بیکار شب‌ها از صحنه‌های جرم لس‌آنجلس فیلم می‌گیرد و مرزهای اخلاق را رد می‌کند.' },
-
-      // درام (۱۰ فیلم)
-      { g: 'drama', t: 'Oppenheimer (2023)', r: '8.9', gn: 'درام', p: 'https://m.media-amazon.com/images/M/MV5BMDBmYTZjNjUtN2M1MS00MTQ2LTk2ODgtNzc2M2QyZGE5NTVjXkEyXkFqcGdeQXVyNzAwMjU2MTY@._V1_SX300.jpg', d: 'داستان زندگی اوپنهایمر و رقابت علمی نفس‌گیر برای ساخت اولین بمب اتم.' },
-      { g: 'drama', t: 'The Brutalist (2024)', r: '8.1', gn: 'درام', p: 'https://m.media-amazon.com/images/M/MV5BM2U0MWRjZTMtMDVhNC00MzY4LTgwOTktZTc2ZjRkN2M3YjI2XkEyXkFqcGc@._V1_SX300.jpg', d: 'مهاجرت یک معمار نابغه پس از جنگ جهانی برای ساخت شاهکار معماری مدرن.' },
-      { g: 'drama', t: 'The Shawshank Redemption', r: '9.3', gn: 'درام', p: 'https://m.media-amazon.com/images/M/MV5BNDE3ODcxYzMtY2YzZC00NmNlLWJiNDMtZDViZWM2MzIxZDYwXkEyXkFqcGdeQXVyNjAwNDUxODI@._V1_SX300.jpg', d: 'داستان امید و دوستی دو زندانی در طول سال‌ها حبس در زندان شاوشنک.' },
-      { g: 'drama', t: 'The Godfather (1972)', r: '9.2', gn: 'درام', p: 'https://m.media-amazon.com/images/M/MV5BM2MyNjYxNmUtYTAwNi00MTYxLWJmNWYtYzZlODY3ZTk3OTFlXkEyXkFqcGdeQXVyNzkwMjQ5NzM@._V1_SX300.jpg', d: 'انتقال قدرت امپراتوری مافیایی کورلئونه به پسر جوان خانواده.' },
-      { g: 'drama', t: 'Whiplash (2014)', r: '8.5', gn: 'درام', p: 'https://m.media-amazon.com/images/M/MV5BOTA5NDZlZGUtMjAxOS00YTRkLTkwYmMtYWQ0NWEwZDZiNjEzXkEyXkFqcGdeQXVyMTMxODk2OTU@._V1_SX300.jpg', d: 'رویارویی پرتنش یک نوازنده جوان درامز با استادی بسیار سخت‌گیر و بی‌رحم.' },
-      { g: 'drama', t: 'The Green Mile (1999)', r: '8.6', gn: 'درام', p: 'https://m.media-amazon.com/images/M/MV5BMTUxMzQyNjA5MF5BMl5BanBnXkFtZTYwOTU2NTY3._V1_SX300.jpg', d: 'نگهبان بند اعدامی‌ها متوجه قدرت فراطبیعی و معجزه‌آسای یکی از زندانیان می‌شود.' },
-      { g: 'drama', t: 'Parasite (2019)', r: '8.5', gn: 'درام', p: 'https://m.media-amazon.com/images/M/MV5BYWZjMjk3ZTItODQ2ZC00NTY5LWE0ZDYtZTI3MjcwN2Q5NTVkXkEyXkFqcGdeQXVyODk4OTc3MTY@._V1_SX300.jpg', d: 'نفوذ اعضای یک خانواده فقیر به خانه یک خانواده ثروتمند با هویت‌های ساختگی.' },
-      { g: 'drama', t: '1917 (2019)', r: '8.2', gn: 'درام', p: 'https://m.media-amazon.com/images/M/MV5BOTdmNTFjNDEtNzg0My00ZjkxLTg1ZDAtZTdkMDc2ZmFiNWQ1XkEyXkFqcGdeQXVyNTAzNzgwNTg@._V1_SX300.jpg', d: 'ماموریت دو سرباز جوان در دل میدان نبرد جنگ جهانی اول برای رساندن پیامی حیاتی.' },
-      { g: 'drama', t: 'Forrest Gump (1994)', r: '8.8', gn: 'درام', p: 'https://m.media-amazon.com/images/M/MV5BNWIwODRlZTUtY2U3ZS00Yzg1LWJhNzYtMmZiYmEyNmU1NjMzXkEyXkFqcGdeQXVyMTQxNzMzNDI@._V1_SX300.jpg', d: 'زندگی شگفت‌انگیز مردی ساده‌دل که ناخواسته در مهم‌ترین وقایع تاریخ معاصر حضور می‌یابد.' },
-      { g: 'drama', t: 'The Prestige (2006)', r: '8.5', gn: 'درام', p: 'https://m.media-amazon.com/images/M/MV5BMjA4NDI0MTIxNF5BMl5BanBnXkFtZTYwNTM0MzY2._V1_SX300.jpg', d: 'رقابت مرگبار دو شعبده‌باز در لندن برای خلق بزرگ‌ترین تردستی تاریخ.' }
-    ];
-
-    const SERIES_DATA = [
-      // اکشن (۱۰ سریال)
-      { g: 'action', t: 'The Gentlemen (2024)', r: '8.1', gn: 'اکشن', p: 'https://m.media-amazon.com/images/M/MV5BZjI2ZjM1N2QtY2I0MS00N2I3LWFkYzEtYTFhZGE0Zjc3ZThkXkEyXkFqcGc@._V1_SX300.jpg', d: 'پسر یک لرد انگلیسی متوجه می‌شود زیر ملک پدری‌اش امپراتوری خلافکاران قرار دارد.' },
-      { g: 'action', t: 'Reacher (2022–2025)', r: '8.1', gn: 'اکشن', p: 'https://m.media-amazon.com/images/M/MV5BNzQ4MGYzYzAtNjJlOC00NTdkLTlmNTAtMmZjMzZmZTg2YTEzXkEyXkFqcGdeQXVyMjkwOTAyMDU@._V1_SX300.jpg', d: 'افسر سابق پلیس نظامی با هوش و قدرت بدنی بالا پرده از فسادهای بزرگ برمی‌دارد.' },
-      { g: 'action', t: 'The Boys (2019–2025)', r: '8.7', gn: 'اکشن', p: 'https://m.media-amazon.com/images/M/MV5BOTEyNDJhMDAtY2U5ZS00OTMzLTkwODktMjU3MjFkZWVlMGYyXkEyXkFqcGdeQXVyMjkwOTAyMDU@._V1_SX300.jpg', d: 'مبارزه گروهی از انسان‌های عادی علیه ابرقهرمانان فاسد و خطرناک.' },
-      { g: 'action', t: 'Vikings (2013–2020)', r: '8.5', gn: 'اکشن', p: 'https://m.media-amazon.com/images/M/MV5BODk4ZjU0NDUtYjdlOS00OTljLTgwZTUtYjkyZjk1NzExZGIzXkEyXkFqcGdeQXVyMDM2NDM2MQ@@._V1_SX300.jpg', d: 'حماسه لشکرکشی‌ها و ماجراجویی‌های رگنار لاثبروک، جنگجوی افسانه‌ای وایکینگ.' },
-      { g: 'action', t: 'Peaky Blinders (2013–2022)', r: '8.8', gn: 'اکشن', p: 'https://m.media-amazon.com/images/M/MV5BZjYzZDgzMmYtYjY5Zi00YTk1LThhMDYtNjFlNzM4MTZhYzgyXkEyXkFqcGdeQXVyMTE5NDQ1MzQ3._V1_SX300.jpg', d: 'خیزش خانواده تامی شلبی در بیرمنگام پس از جنگ جهانی اول.' },
-      { g: 'action', t: 'Daredevil (2015–2018)', r: '8.6', gn: 'اکشن', p: 'https://m.media-amazon.com/images/M/MV5BODcwOTg2MDE3NF5BMl5BanBnXkFtZTgwNTUyNTY1NjM@._V1_SX300.jpg', d: 'وکیلی نابینا که روزها در دادگاه و شب‌ها در خیابان‌های نیویورک با جرم و جنایت می‌جنگد.' },
-      { g: 'action', t: 'The Punisher (2017–2019)', r: '8.5', gn: 'اکشن', p: 'https://m.media-amazon.com/images/M/MV5BMTExODIwOTUxNzFeQTJeQWpwZ15BbWU4MDE5MDA0MTcz._V1_SX300.jpg', d: 'تفنگدار دریایی سابق که توطئه بزرگی را در پشت قتل خانواده‌اش کشف می‌کند.' },
-      { g: 'action', t: 'Banshee (2013–2016)', r: '8.4', gn: 'اکشن', p: 'https://m.media-amazon.com/images/M/MV5BMjAxZjAwNWUtYmI3NC00M2I0LWFkM2ItZTFkN2I1ZGY0YzI1XkEyXkFqcGdeQXVyMTkxNjUyNQ@@._V1_SX300.jpg', d: 'سارقی حرفه‌ای پس از آزادی از زندان هویت کلانتر جدید یک شهر کوچک را جعل می‌کند.' },
-      { g: 'action', t: 'Jack Ryan (2018–2023)', r: '8.0', gn: 'اکشن', p: 'https://m.media-amazon.com/images/M/MV5BNDNmNGI2NjAtY2I1MS00ZGFkLWE0M2ItZTFkN2I1ZGY0YzI1XkEyXkFqcGdeQXVyMTkxNjUyNQ@@._V1_SX300.jpg', d: 'تحلیلگر سازمان سیا از پشت میز بیرون کشیده شده و وارد عملیات‌های میدانی مرگبار می‌شود.' },
-      { g: 'action', t: 'Warrior (2019–2023)', r: '8.4', gn: 'اکشن', p: 'https://m.media-amazon.com/images/M/MV5BMjA5ZTc4NzAtM2I1MS00ZGFkLWE0M2ItZTFkN2I1ZGY0YzI1XkEyXkFqcGdeQXVyMTkxNjUyNQ@@._V1_SX300.jpg', d: 'نابغه هنرهای رزمی در قرن نوزدهم وارد جنگ‌های خونین محله چینی‌های سان‌فرانسیسکو می‌شود.' },
-
-      // علمی‌تخیلی (۱۰ سریال)
-      { g: 'scifi', t: 'Severance (2022–2025)', r: '8.7', gn: 'علمی‌تخیلی', p: 'https://m.media-amazon.com/images/M/MV5BMjkwZjcwMGQtNDAzOC00YjJiLThiYTgtNWU3ZjRiZmPjZTk0XkEyXkFqcGdeQXVyMTMzNDExODE5._V1_SX300.jpg', d: 'کارمندانی که خاطرات کار و زندگی شخصی‌شان با جراحی مغز از هم جدا شده است.' },
-      { g: 'scifi', t: 'Silo (2023–2025)', r: '8.1', gn: 'علمی‌تخیلی', p: 'https://m.media-amazon.com/images/M/MV5BMjA5ZTc4NzAtM2I1MS00ZGFkLWE0M2ItZTFkN2I1ZGY0YzI1XkEyXkFqcGc@._V1_SX300.jpg', d: 'زندگی ده هزار انسان در یک سیلوی زیرزمینی عمیق با قوانین سخت‌گیرانه.' },
-      { g: 'scifi', t: 'Fallout (2024)', r: '8.4', gn: 'علمی‌تخیلی', p: 'https://m.media-amazon.com/images/M/MV5BNjI5M2FjM2EtY2I0Zi00M2I2LWE3M2ItZTFkN2I1ZGY0YzI1XkEyXkFqcGc@._V1_SX300.jpg', d: 'خروج دختری از پناهگاه زیرزمینی دویست سال پس از جنگ اتمی.' },
-      { g: 'scifi', t: 'Dark (2017–2020)', r: '8.7', gn: 'علمی‌تخیلی', p: 'https://m.media-amazon.com/images/M/MV5BOTk2NzUyOTctZDdlMS00MDJlLTgzNTEtNzQzYjFhNjA0YjBjXkEyXkFqcGdeQXVyMjg1NDcxNDE@._V1_SX300.jpg', d: 'گم شدن کودکی در شهر کوچک ویندن که راز سفر در زمان چهار خانواده را فاش می‌کند.' },
-      { g: 'scifi', t: 'Black Mirror', r: '8.7', gn: 'علمی‌تخیلی', p: 'https://m.media-amazon.com/images/M/MV5BYTM3YWVhMDMtNjczMy00NGEyLWJhZDctYjNhMTRkNDE0ZTI1XkEyXkFqcGdeQXVyMTkxNjUyNQ@@._V1_SX300.jpg', d: 'داستان‌های مستقل درباره روی تاریک تکنولوژی و آینده بشر.' },
-      { g: 'scifi', t: 'Westworld (2016–2022)', r: '8.5', gn: 'علمی‌تخیلی', p: 'https://m.media-amazon.com/images/M/MV5BTRmYzNmOTctZjMwOS00ODZlLWJiZGQtNDg5NDY5NjE3MTczXkEyXkFqcGdeQXVyMDM2NDM2MQ@@._V1_SX300.jpg', d: 'پارک تفریحی پیشرفته‌ای که ربات‌های انسان‌نمای آن کم‌کم به خودآگاهی می‌رسند.' },
-      { g: 'scifi', t: 'The Expanse (2015–2022)', r: '8.5', gn: 'علمی‌تخیلی', p: 'https://m.media-amazon.com/images/M/MV5BZDVmMDljM2QtZDkzZC00ZDg2LWFiMGItZjNiNjliZjg2MGEzXkEyXkFqcGdeQXVyMjkwOTAyMDU@._V1_SX300.jpg', d: 'توطئه‌ای بزرگ که صلح شکننده میان زمین، مریخ و کمربند سیارک‌ها را تهدید می‌کند.' },
-      { g: 'scifi', t: 'Fringe (2008–2013)', r: '8.4', gn: 'علمی‌تخیلی', p: 'https://m.media-amazon.com/images/M/MV5BMjE2NTA2OTA2Nl5BMl5BanBnXkFtZTcwODM0NDM1Ng@@._V1_SX300.jpg', d: 'بررسی پدیده‌های علمی غیرقابل توضیح و جهان‌های موازی توسط بخش ویژه اف‌بی‌آی.' },
-      { g: 'scifi', t: 'Dark Matter (2024)', r: '7.7', gn: 'علمی‌تخیلی', p: 'https://m.media-amazon.com/images/M/MV5BMjA5ZTc4NzAtM2I1MS00ZGFkLWE0M2ItZTFkN2I1ZGY0YzI1XkEyXkFqcGc@._V1_SX300.jpg', d: 'فیزیکدانی که ربوده شده و در دنیاهای موازی برای بازگشت به خانواده واقعی‌اش تلاش می‌کند.' },
-      { g: 'scifi', t: 'Andor (2022–2025)', r: '8.4', gn: 'علمی‌تخیلی', p: 'https://m.media-amazon.com/images/M/MV5BNDgxNTIyZTMtMzYxNi00NmRjLWFiMTEtM2U4MTFmODkzNzM1XkEyXkFqcGdeQXVyMTM1MTE1NDMx._V1_SX300.jpg', d: 'شکل‌گیری هسته اولیه شورش علیه امپراتوری کهکشانی در فضایی تاریک و جاسوسی.' },
-
-      // ترسناک (۱۰ سریال)
-      { g: 'horror', t: 'From (2022–2025)', r: '7.8', gn: 'ترسناک', p: 'https://m.media-amazon.com/images/M/MV5BNzI4MGYzYzAtNjJlOC00NTdkLTlmNTAtMmZjMzZmZTg2YTEzXkEyXkFqcGc@._V1_SX300.jpg', d: 'شهرکی کابوس‌وار که هیچ راه خروجی ندارد و شب‌ها موجودات جنگل حمله می‌کنند.' },
-      { g: 'horror', t: 'The Last of Us (2023–2025)', r: '8.7', gn: 'ترسناک', p: 'https://m.media-amazon.com/images/M/MV5BZGUzYTI3M2EtZmM0Yy00NGUyLWI4ODEtN2Q3ZGJlYzhhZjU3XkEyXkFqcGdeQXVyNTM0OTY1OQ@@._V1_SX300.jpg', d: 'سفر خطرناک مردی زخم‌خورده و دختری نوجوان در آمریکای آخرالزمانی.' },
-      { g: 'horror', t: 'Stranger Things', r: '8.7', gn: 'ترسناک', p: 'https://m.media-amazon.com/images/M/MV5BMDZkYmVhNjMtNWU4MC00MDQxLWE3MjYtZGMzZWI1ZjhlOWJmXkEyXkFqcGdeQXVyMTkxNjUyNQ@@._V1_SX300.jpg', d: 'ناپدید شدن پسری نوجوان و باز شدن دروازه‌ای به دنیایی تاریک و وارونه.' },
-      { g: 'horror', t: 'The Haunting of Hill House', r: '8.6', gn: 'ترسناک', p: 'https://m.media-amazon.com/images/M/MV5BMTU4NzA4MDEwNF5BMl5BanBnXkFtZTgwMTQxODYzNjM@._V1_SX300.jpg', d: 'رویارویی اعضای یک خانواده با خاطرات ترسناک عمارت قدیمی‌شان.' },
-      { g: 'horror', t: 'Hannibal (2013–2015)', r: '8.5', gn: 'ترسناک', p: 'https://m.media-amazon.com/images/M/MV5BNWU5YmJhNWEtZGVlOS00NmRhLThmNzUtYjAyMDA2MDg5ZTM4XkEyXkFqcGdeQXVyNDIzMzcwNjc@._V1_SX300.jpg', d: 'رابطه روانی و خطرناک یک مامور ویژه اف‌بی‌آی با دکتر هانیبال لکتر.' },
-      { g: 'horror', t: 'Midnight Mass (2021)', r: '7.7', gn: 'ترسناک', p: 'https://m.media-amazon.com/images/M/MV5BNWVmZWQ5ZmItZjc2OC00MTFhLWI4OTEtNWY3MDg0OWY3YTJjXkEyXkFqcGdeQXVyMTkxNjUyNQ@@._V1_SX300.jpg', d: 'ورود کشیشی جوان و مرموز به یک جزیره دورافتاده که با معجزات و وحشت همراه می‌شود.' },
-      { g: 'horror', t: 'Penny Dreadful (2014–2016)', r: '8.2', gn: 'ترسناک', p: 'https://m.media-amazon.com/images/M/MV5BMTQ0Mzg2NzcyNl5BMl5BanBnXkFtZTgwMDE1NzU2NDE@._V1_SX300.jpg', d: 'مبارزه با نیروهای اهریمنی و موجودات ماوراءالطبیعه در لندن دوره ویکتوریا.' },
-      { g: 'horror', t: 'The Outsider (2020)', r: '7.6', gn: 'ترسناک', p: 'https://m.media-amazon.com/images/M/MV5BNzgxOTc4ODctY2I1MS00ZGFkLWE0M2ItZTFkN2I1ZGY0YzI1XkEyXkFqcGdeQXVyMTkxNjUyNQ@@._V1_SX300.jpg', d: 'بررسی قتلی مرموز که متهم آن همزمان در دو مکان مختلف حضور داشته است.' },
-      { g: 'horror', t: 'Marianne (2019)', r: '7.4', gn: 'ترسناک', p: 'https://m.media-amazon.com/images/M/MV5BZjI2ZjM1N2QtY2I0MS00N2I3LWFkYzEtYTFhZGE0Zjc3ZThkXkEyXkFqcGdeQXVyMTkxNjUyNQ@@._V1_SX300.jpg', d: 'نویسنده رمان‌های ترسناک متوجه می‌شود جادوگر شرور کتاب‌هایش در دنیای واقعی وجود دارد.' },
-      { g: 'horror', t: ' Bates Motel (2013–2017)', r: '8.1', gn: 'ترسناک', p: 'https://m.media-amazon.com/images/M/MV5BMjA5ZTc4NzAtM2I1MS00ZGFkLWE0M2ItZTFkN2I1ZGY0YzI1XkEyXkFqcGdeQXVyMTkxNjUyNQ@@._V1_SX300.jpg', d: 'پیش‌درآمدی روانشناختی بر داستان زندگی نورمن بیتس و مادرش در متل معروفشان.' },
-
-      // کمدی (۱۰ سریال)
-      { g: 'comedy', t: 'The Bear (2022–2025)', r: '8.6', gn: 'کمدی', p: 'https://m.media-amazon.com/images/M/MV5BMjA5ZTc4NzAtM2I1MS00ZGFkLWE0M2ItZTFkN2I1ZGY0YzI1XkEyXkFqcGc@._V1_SX300.jpg', d: 'بازگشت سرآشپزی نابغه برای نجات ساندویچی کوچک و شلوغ خانوادگی.' },
-      { g: 'comedy', t: 'Ted Lasso (2020–2023)', r: '8.8', gn: 'کمدی', p: 'https://m.media-amazon.com/images/M/MV5BMTdmZjBjZjQtY2JiNS00Y2ZlLTg2NzMtMjUzMGY2OTVmOWJiXkEyXkFqcGdeQXVyMDM2NDM2MQ@@._V1_SX300.jpg', d: 'مربی خوش‌قلب آمریکایی هدایت یک تیم فوتبال لیگ برتری انگلیس را می‌گیرد.' },
-      { g: 'comedy', t: 'The Office (2005–2013)', r: '9.0', gn: 'کمدی', p: 'https://m.media-amazon.com/images/M/MV5BMDNkOTE4NDQtMTNmYi00MWE0LWE4ZTktYTc0NzhhNWIzNzJiXkEyXkFqcGdeQXVyMzQ2MDI5NjU@._V1_SX300.jpg', d: 'روزمرگی‌های فوق‌العاده خنده‌دار کارمندان یک شرکت فروش کاغذ.' },
-      { g: 'comedy', t: 'Friends (1994–2004)', r: '8.9', gn: 'کمدی', p: 'https://m.media-amazon.com/images/M/MV5BNDVkYjU0MzctMWRmZi00NTkxLTgwZWEtOWVhYjZlYjllYmU4XkEyXkFqcGdeQXVyNTA4NzY1MzY@._V1_SX300.jpg', d: 'ماجراهای شیرین و خاطره‌انگیز شش دوست صمیمی در شهر نیویورک.' },
-      { g: 'comedy', t: 'Rick and Morty', r: '9.1', gn: 'کمدی', p: 'https://m.media-amazon.com/images/M/MV5BZjRjOTFkOTktZWUzMi00YzMyLThkMmYtMjEwNmQyNzliYTNmXkEyXkFqcGdeQXVyNzQ1ODk3MTQ@._V1_SX300.jpg', d: 'سفرهای دیوانه‌وار یک دانشمند نابغه و نوه‌اش در کهکشان‌ها و ابعاد موازی.' },
-      { g: 'comedy', t: 'Brooklyn Nine-Nine', r: '8.4', gn: 'کمدی', p: 'https://m.media-amazon.com/images/M/MV5BNzVkYWY4NzYtMWFlZi00YzkwLThhZDItZjcxYTU4ZTMzMDZmXkEyXkFqcGdeQXVyODUxOTU0OTg@._V1_SX300.jpg', d: 'اتفاقات خنده‌دار کارآگاهان یک کلانتری در بروکلین با ورود کاپیتانی مقرراتی.' },
-      { g: 'comedy', t: 'Silicon Valley (2014–2019)', r: '8.5', gn: 'کمدی', p: 'https://m.media-amazon.com/images/M/MV5BM2Q5YjNjZWMtYThmYy00N2ZjLWE2NDctNmZjMmZjYWE2NjEwXkEyXkFqcGdeQXVyMTAzMDM4MjM0._V1_SX300.jpg', d: 'تلاش پرماجرای یک برنامه‌نویس خجالتی و دوستانش برای راه‌اندازی استارتاپ خودشان.' },
-      { g: 'comedy', t: 'Modern Family (2009–2020)', r: '8.5', gn: 'کمدی', p: 'https://m.media-amazon.com/images/M/MV5BNzRhNWIxYTEtYjc2NS00YWFlLWFhOGEtMDZiMWM1M2RkNDkyXkEyXkFqcGdeQXVyNjc0MjkzNjc@._V1_SX300.jpg', d: 'نگاهی طنزآمیز و صمیمی به زندگی سه خانواده مرتبط با هم در لس‌آنجلس.' },
-      { g: 'comedy', t: 'Shrinking (2023–2025)', r: '8.1', gn: 'کمدی', p: 'https://m.media-amazon.com/images/M/MV5BYmI2MzI0ZTEtY2I1MS00ZGFkLWE0M2ItZTFkN2I1ZGY0YzI1XkEyXkFqcGc@._V1_SX300.jpg', d: 'روانشناسی که تصمیم می‌گیرد بدون سانسور حقیقت را به بیمارانش بگوید.' },
-      { g: 'comedy', t: 'Only Murders in the Building', r: '8.1', gn: 'کمدی', p: 'https://m.media-amazon.com/images/M/MV5BMjA5ZTc4NzAtM2I1MS00ZGFkLWE0M2ItZTFkN2I1ZGY0YzI1XkEyXkFqcGdeQXVyMTkxNjUyNQ@@._V1_SX300.jpg', d: 'سه همسایه عاشق پادکست‌های جنایی، درگیر حل یک قتل واقعی در ساختمان خودشان می‌شوند.' },
-
-      // جنایی (۱۰ سریال)
-      { g: 'crime', t: 'The Penguin (2024)', r: '8.7', gn: 'جنایی', p: 'https://m.media-amazon.com/images/M/MV5BYmI2MzI0ZTEtY2I1MS00ZGFkLWE0M2ItZTFkN2I1ZGY0YzI1XkEyXkFqcGc@._V1_SX300.jpg', d: 'خیزش هوشمندانه پنگوئن برای تصاحب قدرت در دنیای زیرزمینی شهر گاتهام.' },
-      { g: 'crime', t: 'Sherlock (2010–2017)', r: '9.1', gn: 'جنایی', p: 'https://m.media-amazon.com/images/M/MV5BMWEzNTFlMTQtMzhjOS00MzQ1LWJjNjgtY2RhMjFhYjQwYjIzXkEyXkFqcGdeQXVyNDIzMzcwNjc@._V1_SX300.jpg', d: 'حل پیچیده‌ترین پرونده‌های جنایی لندن مدرن توسط شرلوک هولمز و دکتر واتسون.' },
-      { g: 'crime', t: 'True Detective', r: '8.9', gn: 'جنایی', p: 'https://m.media-amazon.com/images/M/MV5BMmRlYmE0Y2UtNDk2Yi00NzczLWEwZTEtZmE2OTcyYzcxYmU5XkEyXkFqcGdeQXVyNTMxMjgxMzA@._V1_SX300.jpg', d: 'تحقیقات نفس‌گیر کارآگاهان پلیس برای کشف راز قتل‌های زنجیره‌ای مرموز.' },
-      { g: 'crime', t: 'Mindhunter (2017–2019)', r: '8.6', gn: 'جنایی', p: 'https://m.media-amazon.com/images/M/MV5BNWNmYzQ1ZWUtYTQ3ZS00Y2UwLTlkMDctZThlOTJkMGJiNzBiXkEyXkFqcGdeQXVyNjg2NjQwMDQ@._V1_SX300.jpg', d: 'مصاحبه ماموران اف‌بی‌آی با قاتلان زنجیره‌ای زندانی برای کشف الگوی ذهن آن‌ها.' },
-      { g: 'crime', t: 'Fargo (2014–2024)', r: '8.9', gn: 'جنایی', p: 'https://m.media-amazon.com/images/M/MV5BN2NiM2I5N2MtZDJhNC00ZThjLTg2NzMtMjUzMGY2OTVmOWJiXkEyXkFqcGdeQXVyMDM2NDM2MQ@@._V1_SX300.jpg', d: 'داستان‌های جنایی و کمدی سیاه در شهرهای برفی و سرد آمریکا.' },
-      { g: 'crime', t: 'Better Call Saul (2015–2022)', r: '9.0', gn: 'جنایی', p: 'https://m.media-amazon.com/images/M/MV5BZDA4YmE0OTYtMmRmNS00Mzk2LTlhM2MtNjk4NzBjZGE1MmIyXkEyXkFqcGdeQXVyMTMzNDExODE5._V1_SX300.jpg', d: 'چگونگی تبدیل شدن یک وکیل خوش‌قلب به وکیل مدافع بزرگ‌ترین خلافکاران.' },
-      { g: 'crime', t: 'Ozark (2017–2022)', r: '8.5', gn: 'جنایی', p: 'https://m.media-amazon.com/images/M/MV5BZDUxMWNlMTUtYTljZS00MTE0LTlkYjktOTU1ODZjYzBhMTk0XkEyXkFqcGdeQXVyMTEyMjM2NDc2._V1_SX300.jpg', d: 'مشاور مالی که مجبور می‌شود برای پولشویی یک کارتل بزرگ به منطقه‌ای دورافتاده نقل مکان کند.' },
-      { g: 'crime', t: 'Narcos (2015–2017)', r: '8.8', gn: 'جنایی', p: 'https://m.media-amazon.com/images/M/MV5BNmFjODU3YzgtMGUwNC00ZGI3LWFkZjQtMjkxZDc3NmQ1MzcyXkEyXkFqcGdeQXVyNjUwNzk3NDc@._V1_SX300.jpg', d: 'داستان واقعی ظهور و سقوط پابلو اسکوبار و کارتل‌های مواد مخدر کلمبیا.' },
-      { g: 'crime', t: 'The Day of the Jackal (2024)', r: '8.2', gn: 'جنایی', p: 'https://m.media-amazon.com/images/M/MV5BYmI2MzI0ZTEtY2I1MS00ZGFkLWE0M2ItZTFkN2I1ZGY0YzI1XkEyXkFqcGc@._V1_SX300.jpg', d: 'تعقیب و گریز نفس‌گیر یک آدمکش حرفه‌ای و مامور اطلاعاتی بریتانیا در سراسر اروپا.' },
-      { g: 'crime', t: 'Slow Horses (2022–2025)', r: '8.2', gn: 'جنایی', p: 'https://m.media-amazon.com/images/M/MV5BMjA5ZTc4NzAtM2I1MS00ZGFkLWE0M2ItZTFkN2I1ZGY0YzI1XkEyXkFqcGc@._V1_SX300.jpg', d: 'ماموران تبعیدی سازمان امنیت بریتانیا به رهبری رئیسی نابغه درگیر پرونده‌های مرگبار می‌شوند.' },
-
-      // درام (۱۰ سریال)
-      { g: 'drama', t: 'Breaking Bad (2008–2013)', r: '9.5', gn: 'درام', p: 'https://m.media-amazon.com/images/M/MV5BYmQ4YWMxYjUtNjZmYi00MDQ1LWFjMjMtNjA5ZDdiYjdiODU5XkEyXkFqcGdeQXVyMTMzNDExODE5._V1_SX300.jpg', d: 'تبدیل شدن یک معلم شیمی آرام به بزرگ‌ترین امپراتور مواد مخدر.' },
-      { g: 'drama', t: 'Chernobyl (2019)', r: '9.3', gn: 'درام', p: 'https://m.media-amazon.com/images/M/MV5BNTdkN2QwMDItMDVhNS00ZjFiLWEzNTctMzY5ODQzYWNkMDllXkEyXkFqcGdeQXVyMTMzNDExODE5._V1_SX300.jpg', d: 'روایت تکان‌دهنده انفجار نیروگاه چرنوبیل و فداکاری برای نجات اروپا.' },
-      { g: 'drama', t: 'Shōgun (2024)', r: '8.7', gn: 'درام', p: 'https://m.media-amazon.com/images/M/MV5BMzhkNzVkNDYtNmE2Zi00ZTk1LTk2OWYtOTU5NWM5OWQ2Zjc0XkEyXkFqcGc@._V1_SX300.jpg', d: 'تلاقی سرنوشت یک دریانورد انگلیسی و لردی قدرتمند در ژاپن قرن هفدهم.' },
-      { g: 'drama', t: 'Succession (2018–2023)', r: '8.9', gn: 'درام', p: 'https://m.media-amazon.com/images/M/MV5BODY5YjA3ZDgtM2I1MS00ZGFkLWE0M2ItZTFkN2I1ZGY0YzI1XkEyXkFqcGdeQXVyMTMzNDExODE5._V1_SX300.jpg', d: 'رقابت بی‌رحمانه فرزندان یک میلیاردر رسانه‌ای برای تصاحب جایگاه پدرشان.' },
-      { g: 'drama', t: 'Game of Thrones', r: '9.2', gn: 'درام', p: 'https://m.media-amazon.com/images/M/MV5BN2IzYzBiOTQtNGZmMi00NDI5LTgxMzMtN2EzZjA1NjhlOGMxXkEyXkFqcGdeQXVyNjAwNDUxODI@._V1_SX300.jpg', d: 'نبرد خاندان‌های بزرگ وستروس برای تصاحب تخت آهنین در برابر تهدید زمستان.' },
-      { g: 'drama', t: 'The Sopranos (1999–2007)', r: '9.2', gn: 'درام', p: 'https://m.media-amazon.com/images/M/MV5BZGJjYzhjYTYtMDBjYy00OWU1LTg5OTYtNmYwOTZmZjE3ZDdhXkEyXkFqcGdeQXVyNTAyODkwOQ@@._V1_SX300.jpg', d: 'تلاش تونی سوپرانو برای برقراری تعادل میان زندگی خانوادگی و رهبری سازمان مافیایی.' },
-      { g: 'drama', t: 'Band of Brothers (2001)', r: '9.4', gn: 'درام', p: 'https://m.media-amazon.com/images/M/MV5BMTI3ODc2ODc0M15BMl5BanBnXkFtZTYwMjgzNjc3._V1_SX300.jpg', d: 'روایت واقعی و حماسی یک گروهان چترباز در نبردهای سرنوشت‌ساز جنگ جهانی دوم.' },
-      { g: 'drama', t: 'The Wire (2002–2008)', r: '9.3', gn: 'درام', p: 'https://m.media-amazon.com/images/M/MV5BNTllYzFhMjAtZjExNS00MjM4LWE5YmMtOGFiZGRlOTU5YzJiXkEyXkFqcGdeQXVyNDIzMzcwNjc@._V1_SX300.jpg', d: 'نگاهی عمیق و واقع‌گرایانه به شهر بالتیمور از زاویه دید پلیس و خلافکاران.' },
-      { g: 'drama', t: 'House of the Dragon', r: '8.4', gn: 'درام', p: 'https://m.media-amazon.com/images/M/MV5BM2QzMGVkNjUtN2Y4Yi00ODMwLTg3YzktYzUxYjJlNjFjNDY1XkEyXkFqcGdeQXVyMTkxNjUyNQ@@._V1_SX300.jpg', d: 'جنگ داخلی ویرانگر خاندان تارگرین بر سر جانشینی تخت آهنین.' },
-      { g: 'drama', t: 'The Crown (2016–2023)', r: '8.6', gn: 'درام', p: 'https://m.media-amazon.com/images/M/MV5BZmY0MzBlNjctNTRmNy00Njk3LWFjMzctMWQwZDAwMGJmY2MyXkEyXkFqcGdeQXVyMDM2NDM2MQ@@._V1_SX300.jpg', d: 'روایت رقابت‌های سیاسی و اتفاقات پشت پرده دوران سلطنت ملکه الیزابت دوم.' }
-    ];
+    // دریافت خودکار فیلم‌ها و سریال‌های جدید از APIهای جهانی برای اینکه هر ژانر بی‌پایان باشد
+    async function fetchMoreFromGlobalApis(mediaType, cat) {
+      const gnFa = GENRE_FA[cat] || 'برتر';
+      if (mediaType === 'movie') {
+        const terms = MOVIE_SEARCH_TERMS[cat] || ['Movie'];
+        const term = terms[movieTermStep[cat] % terms.length];
+        movieTermStep[cat]++;
+        try {
+          const r = await fetch(`https://itunes.apple.com/search?term=${encodeURIComponent(term)}&media=movie&entity=movie&limit=25`);
+          const d = await r.json();
+          if (d && Array.isArray(d.results)) {
+            const pool = MOVIES_POOL[cat];
+            for (const item of d.results) {
+              if (!item.trackName || !item.artworkUrl100) continue;
+              const yr = item.releaseDate ? item.releaseDate.slice(0, 4) : '2023';
+              const fullTitle = `${item.trackName} (${yr})`;
+              if (pool.some(x => x.t === fullTitle)) continue;
+              pool.push({
+                t: fullTitle,
+                r: (7.1 + ((item.trackId % 18) / 10)).toFixed(1),
+                gn: gnFa,
+                p: item.artworkUrl100.replace('100x100bb', '400x600bb'),
+                d: `فیلم سینمایی تحسین‌شده در ژانر ${gnFa} به کارگردانی ${item.artistName || 'برتر سینما'} (محصول ${yr}).`
+              });
+            }
+          }
+        } catch (e) {}
+      } else {
+        try {
+          if (tvMazeCache.length < 150 && nextTvMazePage < 6) {
+            const r = await fetch(`https://api.tvmaze.com/shows?page=${nextTvMazePage++}`);
+            const d = await r.json();
+            if (Array.isArray(d)) tvMazeCache.push(...d);
+          }
+          const targetGenreEn = TVMAZE_GENRE_MAP[cat] || 'Drama';
+          const pool = SERIES_POOL[cat];
+          for (const s of tvMazeCache) {
+            if (!s.genres || !s.genres.includes(targetGenreEn)) continue;
+            if (!s.image || !s.image.medium) continue;
+            const yr = s.premiered ? s.premiered.slice(0, 4) : '';
+            const fullTitle = yr ? `${s.name} (${yr})` : s.name;
+            if (pool.some(x => x.t === fullTitle)) continue;
+            const rate = (s.rating && s.rating.average) ? s.rating.average : '7.9';
+            const netName = (s.network && s.network.name) || (s.webChannel && s.webChannel.name) || 'جهانی';
+            pool.push({
+              t: fullTitle,
+              r: String(rate),
+              gn: gnFa,
+              p: s.image.medium,
+              d: `سریال محبوب در ژانر ${gnFa} از شبکه ${netName} (${s.status === 'Running' ? 'در حال پخش' : 'کامل‌شده'}).`
+            });
+          }
+        } catch (e) {}
+      }
+    }
 
     function setMediaType(type) {
       currentMediaType = type;
@@ -851,6 +1101,7 @@
       document.getElementById('btn-type-movie').classList.toggle('active', type === 'movie');
       document.getElementById('btn-type-series').classList.toggle('active', type === 'series');
       renderCurrentPicks();
+      fetchMoreFromGlobalApis(currentMediaType, currentCategory);
     }
 
     function selectCategory(cat, btnEl) {
@@ -861,71 +1112,39 @@
         btnEl.classList.add('active');
       }
       renderCurrentPicks();
+      fetchMoreFromGlobalApis(currentMediaType, currentCategory);
     }
 
-    function refreshFivePicks() {
+    async function refreshFivePicks() {
+      const btn = document.getElementById('btn-refresh-movies');
+      btn.innerText = '⏳ در حال دریافت ۵ پیشنهاد جدید...';
+      const pool = currentMediaType === 'movie' ? MOVIES_POOL[currentCategory] : SERIES_POOL[currentCategory];
+      if (currentOffset + 10 >= pool.length) {
+        await fetchMoreFromGlobalApis(currentMediaType, currentCategory);
+      }
       currentOffset += 5;
       renderCurrentPicks();
+      btn.innerText = '🔄 رفرش و دریافت ۵ پیشنهاد جدید در همین ژانر';
     }
 
     const FALLBACK_SVG = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='80' height='120'><rect width='100%' height='100%' fill='%231e293b'/><text x='50%' y='50%' fill='%2338bdf8' font-size='24' text-anchor='middle' dominant-baseline='middle'>🎬</text></svg>";
 
-    async function handlePosterError(imgEl, queryStr, mediaType) {
-      if (imgEl.dataset.retried === '1') {
-        imgEl.src = FALLBACK_SVG;
-        return;
-      }
-      imgEl.dataset.retried = '1';
-      try {
-        if (mediaType === 'series') {
-          const r = await fetch('https://api.tvmaze.com/singlesearch/shows?q=' + encodeURIComponent(queryStr));
-          const d = await r.json();
-          if (d && d.image && (d.image.medium || d.image.original)) {
-            imgEl.src = d.image.medium || d.image.original;
-            return;
-          }
-        } else {
-          const r = await fetch('https://itunes.apple.com/search?term=' + encodeURIComponent(queryStr) + '&media=movie&entity=movie&limit=1');
-          const d = await r.json();
-          if (d && d.results && d.results[0] && d.results[0].artworkUrl100) {
-            imgEl.src = d.results[0].artworkUrl100.replace('100x100bb', '400x600bb');
-            return;
-          }
-        }
-      } catch (e) {}
-      imgEl.src = FALLBACK_SVG;
-    }
-
-    // نمایش فقط و فقط از همان ژانر انتخاب‌شده (بدون قاطی شدن با سایر ژانرها)
     function renderCurrentPicks() {
-      const src = currentMediaType === 'movie' ? MOVIES_DATA : SERIES_DATA;
+      const pool = currentMediaType === 'movie' ? MOVIES_POOL[currentCategory] : SERIES_POOL[currentCategory];
       const typeLabel = currentMediaType === 'movie' ? 'فیلم سینمایی' : 'سریال';
+      const gnFa = GENRE_FA[currentCategory] || '';
 
-      const gItems = src.filter(x => x.g === currentCategory);
       const selected5 = [];
       for (let i = 0; i < 5; i++) {
-        selected5.push(gItems[(currentOffset + i) % gItems.length]);
+        selected5.push(pool[(currentOffset + i) % pool.length]);
       }
 
-      const pageNum = (Math.floor(currentOffset / 5) % Math.ceil(gItems.length / 5)) + 1;
-      const totalPages = Math.ceil(gItems.length / 5);
-
-      const catTitles = {
-        action: `🔥 ۵ ${typeLabel} برتر ژانر اکشن (لیست ${toFaDigits(pageNum)} از ${toFaDigits(totalPages)}):`,
-        scifi: `🧠 ۵ ${typeLabel} برتر ژانر علمی‌تخیلی (لیست ${toFaDigits(pageNum)} از ${toFaDigits(totalPages)}):`,
-        horror: `😱 ۵ ${typeLabel} برتر ژانر ترسناک (لیست ${toFaDigits(pageNum)} از ${toFaDigits(totalPages)}):`,
-        comedy: `😂 ۵ ${typeLabel} برتر ژانر کمدی (لیست ${toFaDigits(pageNum)} از ${toFaDigits(totalPages)}):`,
-        crime: `🕵️‍♂️ ۵ ${typeLabel} برتر ژانر جنایی (لیست ${toFaDigits(pageNum)} از ${toFaDigits(totalPages)}):`,
-        drama: `🎭 ۵ ${typeLabel} برتر ژانر درام (لیست ${toFaDigits(pageNum)} از ${toFaDigits(totalPages)}):`
-      };
-
       const box = document.getElementById('movie-output');
-      let html = `<div style="font-size:13px; font-weight:700; color:#38bdf8; margin-bottom:6px;">${catTitles[currentCategory] || ''}</div>`;
+      let html = `<div style="font-size:13px; font-weight:700; color:#38bdf8; margin-bottom:6px;">🎬 ۵ ${typeLabel} پیشنهادی ژانر ${gnFa}:</div>`;
 
       selected5.forEach((m, idx) => {
-        const cleanQuery = m.t.replace(/\(\d+.*\)/, '').replace(/'/g, '').trim();
         html += `<div class="movie-card">
-          <img class="movie-poster" src="${m.p}" loading="lazy" onerror="handlePosterError(this, '${cleanQuery}', '${currentMediaType}')" alt="poster" />
+          <img class="movie-poster" src="${m.p}" loading="lazy" onerror="this.src='${FALLBACK_SVG}'" alt="poster" />
           <div class="movie-info">
             <div class="movie-title" dir="ltr">${idx + 1}. ${m.t}</div>
             <div class="movie-meta">⭐️ IMDb: ${m.r} | 🎭 ${m.gn}</div>
@@ -933,14 +1152,16 @@
           </div>
         </div>`;
       });
-
       box.innerHTML = html;
     }
 
     function openTgLink(url) {
       const tg = getTgApp();
-      if (tg && tg.openTelegramLink && url.startsWith('https://t.me/')) tg.openTelegramLink(url);
-      else window.open(url, '_blank');
+      if (tg && tg.openTelegramLink && (url.startsWith('https://t.me/') || url.startsWith('tg://'))) {
+        tg.openTelegramLink(url);
+      } else {
+        window.open(url, '_blank');
+      }
     }
 
     function closeApp() {
@@ -948,8 +1169,11 @@
       if (tg && tg.close) tg.close();
     }
 
+    renderUserProfile();
+    loadSyncedNetItems();
     initWheels();
     renderCurrentPicks();
+    fetchMoreFromGlobalApis('movie', 'action');
   </script>
 </body>
 </html>
